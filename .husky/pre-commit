@@ -1,1 +1,1 @@
-npx lint-staged --config .lintstagedrc
+npx lint-staged --config .lintstagedrc --no-stash
