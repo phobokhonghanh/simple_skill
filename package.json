@@ -7,7 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "./node_modules/.bin/next lint . && stylelint \"**/*.css\"",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "lint": "next lint",
     "format": "prettier --write .",
     "depcheck": "depcheck",
     "prepare": "husky"
