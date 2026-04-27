@@ -1,0 +1,18 @@
+{
+  "common": {
+    "title": "Nguyễn Đình Nguyên",
+    "rule": "Developer - Data Engineer",
+    "description": "Góc nhỏ này sẽ là nơi bắt đầu của những điều nhỏ nhặt, nhưng đủ để giúp mình không bị FOMO trước những thứ to lớn ngoài kia khi AI đang phát triển quá nhanh. \n Đây cũng là nơi mình có thể giới thiệu về bản thân, chia sẻ góc nhìn và hiểu biết của mình - vừa để sau này dễ dàng nhìn lại, vừa để bạn nào tình cờ ghé qua có thể tham khảo, biết đâu cũng hữu ích.",
+    "welcome": "Ở đây có gì ?",
+    "theme": "Chủ đề",
+    "language": "Ngôn ngữ",
+    "experience": "Kinh nghiệm",
+    "experience_desc": "Ở đây có một vài thông tin về kinh nghiệm của mình với số năm ít ỏi khi đi làm \"culi\".",
+    "homelab": "Homelab",
+    "homelab_desc": "Ở đây có vài thứ linh tinh về các dự án & hạ tầng self-host..."
+  },
+  "locales": {
+    "en": "English",
+    "vi": "Tiếng Việt"
+  }
+}

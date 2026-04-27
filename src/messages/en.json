@@ -1,0 +1,18 @@
+{
+  "common": {
+    "title": "Nguyen Dinh Nguyen",
+    "rule": "Developer - Data Engineer",
+    "description": "This little corner is where small things begin—just enough to keep me from feeling FOMO in the face of all the big things happening out there as AI evolves so quickly. \n It’s also a place where I can introduce myself, share my perspectives and what I’ve learned—so I can easily look back on it later, and maybe it’ll be useful for anyone who happens to stop by and take a look.",
+    "welcome": "What's here?",
+    "theme": "Theme",
+    "language": "Language",
+    "experience": "Experience",
+    "experience_desc": "Here’s a bit about my experience—with just a few humble years working as a \"culi\".",
+    "homelab": "Home Lab",
+    "homelab_desc": "Here are a few random things about prod & infra self-host..."
+  },
+  "locales": {
+    "en": "English",
+    "vi": "Tiếng Việt"
+  }
+}
