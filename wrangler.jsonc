@@ -6,5 +6,9 @@
   "observability": {
     "enabled": true
   },
-  "pages_build_output_dir": ".worker"
+  "main": ".open-next/worker.js",
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  }
 }
