@@ -12,7 +12,7 @@ Xây dựng một sản phẩm web bền vững, dễ mở rộng và bảo trì
 - **Theme System**: Tích hợp `next-themes` hỗ trợ Light/Dark/System mode đồng bộ Tailwind v4.
 - **Analytics**: Sử dụng Google Analytics (GA4), Google Tag Manager (GTM) và Microsoft Clarity để theo dõi hành vi người dùng toàn diện.
 - **State Management**: Ưu tiên React Server Components (RSC) cho dữ liệu và Client Components với Hooks cho tương tác.
-- **Styling Strategy**: Tailwind CSS (v4) với `tw-animate-css` và `shadcn/tailwind.css`. Đảm bảo các file config (`postcss.config.mjs`, v.v.) luôn nằm ở root để bộ công cụ Next.js/Turbopack nhận diện chính xác.
+- **Styling Strategy**: Tailwind CSS (v4) với `tw-animate-css` và `shadcn/tailwind.css`. Đảm bảo các file config (`postcss.config.mjs`, v.v.) luôn nằm ở root để bộ công cụ Next.js nhận diện chính xác.
 - **Network access**: Đã cấu hình `allowedDevOrigins` trong `next.config.ts` để cho phép truy cập qua địa chỉ IP mạng nội bộ.
 
 ## 📍 Communication & Role Protocol (Luật giao thông)
@@ -52,7 +52,7 @@ Xây dựng một sản phẩm web bền vững, dễ mở rộng và bảo trì
 
 ## 🛠️ Operational Excellence
 
-- **Package Manager**: Yarn (v4 / Berry) - Linker: `node-modules` (Tối ưu cho Turbopack & Tailwind v4).
+- **Package Manager**: Yarn (v4 / Berry) - Linker: `node-modules` (Tối ưu cho Tailwind v4).
 - **Automated Quality**: Hệ thống Linting (ESLint), Formatting (Prettier), Stylelint được tự động thực thi qua Husky/Lint-staged trước mỗi commit.
 - **Single Source of Truth**: Mọi thay đổi kỹ thuật phải được phản chiếu trong `docs/`.
 - **Maintainability**: Mỗi component/function mới phải đảm bảo tính dễ đọc (Scalability) và có JSDoc cho các logic phức tạp.
