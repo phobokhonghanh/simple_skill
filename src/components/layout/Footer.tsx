@@ -1,0 +1,55 @@
+'use client';
+
+import { Github, Linkedin, Mail } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+const SOCIAL_LINKS = [
+  {
+    name: 'GitHub',
+    href: 'https://github.com/phobokhonghanh',
+    icon: <Github className="h-5 w-5" />,
+  },
+  {
+    name: 'LinkedIn',
+    href: 'https://linkedin.com/in/ndinhnguyende/',
+    icon: <Linkedin className="h-5 w-5" />,
+  },
+  {
+    name: 'Email',
+    href: 'mailto:ndinhnguyen.work@gmail.com',
+    icon: <Mail className="h-5 w-5" />,
+  },
+];
+
+export function Footer() {
+  return (
+    <footer className="w-full py-6 mt-auto border-t bg-background/50 backdrop-blur-sm">
+      <div className="container mx-auto flex flex-col items-center justify-center gap-4 px-4">
+        <div className="flex items-center gap-2">
+          {SOCIAL_LINKS.map((link) => (
+            <Button
+              key={link.name}
+              variant="ghost"
+              size="icon"
+              asChild
+              className="rounded-full hover:bg-primary/10 hover:text-primary transition-all duration-300"
+            >
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={link.name}
+              >
+                {link.icon}
+                <span className="sr-only">{link.name}</span>
+              </a>
+            </Button>
+          ))}
+        </div>
+        <p className="text-sm text-muted-foreground">
+          © {new Date().getFullYear()} Nguyen Dinh Nguyen
+        </p>
+      </div>
+    </footer>
+  );
+}

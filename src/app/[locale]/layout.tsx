@@ -4,6 +4,7 @@ import Script from 'next/script';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { routing } from '@/i18n/routing';
 import { Providers } from '@/components/providers/Providers';
+import { Footer } from '@/components/layout/Footer';
 import { cn } from '@/lib/utils';
 import { Geist, Geist_Mono, Inter } from 'next/font/google';
 import '@/app/globals.css';
@@ -46,7 +47,10 @@ export default async function LocaleLayout({
         )}
       >
         <Providers locale={locale} messages={messages}>
-          <div className="relative flex min-h-screen flex-col">{children}</div>
+          <div className="relative flex min-h-screen flex-col">
+            <div className="flex-1">{children}</div>
+            <Footer />
+          </div>
         </Providers>
         <GoogleAnalytics
           gaId={process.env.NEXT_PUBLIC_GA_ID || 'G-XXXXXXXXXX'}

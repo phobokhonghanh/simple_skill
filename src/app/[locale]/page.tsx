@@ -9,7 +9,6 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import { InfoBox } from '@/components/ui/info-box';
-import { SettingBox } from '@/components/ui/setting-box';
 
 /**
  * Enhanced IndexPage using standardized components.
@@ -61,7 +60,7 @@ export default function IndexPage() {
           </div>
 
           {/* Standardized Settings Grid */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-2 gap-4">
             <SettingBox label={t('language')}>
               <LanguageSwitcher />
             </SettingBox>
@@ -69,7 +68,7 @@ export default function IndexPage() {
             <SettingBox label={t('theme')}>
               <ThemeToggle />
             </SettingBox>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
     </main>
