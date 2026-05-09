@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ThemeToggle } from '@/components/features/theme/ThemeToggle';
 import { LanguageSwitcher } from '@/components/features/i18n/LanguageSwitcher';
 import {
@@ -14,8 +14,15 @@ import { InfoBox } from '@/components/ui/info-box';
  * Enhanced IndexPage using standardized components.
  * Follows Atomic Design for scalability.
  */
-export default function IndexPage() {
-  const t = useTranslations('common');
+export default async function IndexPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const t = await getTranslations({ locale, namespace: 'common' });
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-background transition-colors duration-300">
