@@ -6,7 +6,7 @@ import type {
   CategoryTreeNode,
   Bookmark,
   PaginationMetadata,
-} from './types';
+} from '@/features/bookmarks/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') ?? '';
 

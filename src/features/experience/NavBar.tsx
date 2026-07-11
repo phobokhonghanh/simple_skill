@@ -2,8 +2,8 @@
 
 import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/routing';
-import { LanguageSwitcher } from '@/components/features/i18n/LanguageSwitcher';
-import { ThemeToggle } from '@/components/features/theme/ThemeToggle';
+import { LanguageSwitcher } from '@/features/i18n/LanguageSwitcher';
+import { ThemeToggle } from '@/features/theme/ThemeToggle';
 
 const NAV_LINK_KEYS = [
   { key: 'nav_home', href: '/' as const },

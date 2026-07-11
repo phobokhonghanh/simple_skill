@@ -1,13 +1,14 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import {
   CATEGORY_COLOR_PRESETS,
   DEFAULT_CATEGORY_COLOR,
   getCategoryColorPreset,
-} from '@/lib/bookmarks/colors';
-import type { CategoryTreeNode } from '@/lib/bookmarks/types';
-import type { BookmarkDashboardLabels, PanelMode } from './types';
+} from '@/features/bookmarks/colors';
+import type { CategoryTreeNode } from '@/features/bookmarks/types';
+import type { BookmarkDashboardLabels, PanelMode } from '@/features/bookmarks/types';
 
 interface BookmarkFormsProps {
   panelMode: Exclude<PanelMode, null>;
@@ -88,14 +89,15 @@ export function BookmarkForms({
 }: BookmarkFormsProps) {
   if (panelMode.type === 'bookmark') {
     return (
-      <div className="rounded-lg border bg-muted/25 p-4">
-        <div className="mb-4 border-b pb-3">
-          <p className="text-sm font-semibold">{labels.editingBookmark}</p>
-          <p className="mt-1 text-xs text-muted-foreground">
+      <Card className="bg-muted/25 border rounded-lg p-0 gap-0">
+        <CardHeader className="px-4 py-3 border-b">
+          <CardTitle className="text-sm font-semibold">{labels.editingBookmark}</CardTitle>
+          <CardDescription className="text-xs text-muted-foreground mt-0">
             {labels.descriptionOptional}
-          </p>
-        </div>
-        <form
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-4">
+          <form
           className="grid gap-3 md:grid-cols-2"
           onSubmit={(event) => {
             event.preventDefault();
@@ -155,7 +157,8 @@ export function BookmarkForms({
             </Button>
           </div>
         </form>
-      </div>
+        </CardContent>
+      </Card>
     );
   }
 
@@ -164,14 +167,15 @@ export function BookmarkForms({
     getCategoryColorPreset(DEFAULT_CATEGORY_COLOR).id;
 
   return (
-    <div className="rounded-lg border bg-muted/25 p-4">
-      <div className="mb-4 border-b pb-3">
-        <p className="text-sm font-semibold">{labels.editingCategory}</p>
-        <p className="mt-1 text-xs text-muted-foreground">
+    <Card className="bg-muted/25 border rounded-lg p-0 gap-0">
+      <CardHeader className="px-4 py-3 border-b">
+        <CardTitle className="text-sm font-semibold">{labels.editingCategory}</CardTitle>
+        <CardDescription className="text-xs text-muted-foreground mt-0">
           {labels.parentCategory}
-        </p>
-      </div>
-      <form
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="p-4">
+        <form
         className="grid gap-3 md:grid-cols-2"
         onSubmit={(event) => {
           event.preventDefault();
@@ -212,6 +216,7 @@ export function BookmarkForms({
           </Button>
         </div>
       </form>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

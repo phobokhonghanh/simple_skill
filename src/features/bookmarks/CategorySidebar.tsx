@@ -13,9 +13,9 @@ import { Button } from '@/components/ui/button';
 import {
   getCategoryColorPreset,
   type CategoryColorId,
-} from '@/lib/bookmarks/colors';
-import type { CategoryTreeNode } from '@/lib/bookmarks/types';
-import type { BookmarkDashboardLabels } from './types';
+} from '@/features/bookmarks/colors';
+import type { CategoryTreeNode } from '@/features/bookmarks/types';
+import type { BookmarkDashboardLabels } from '@/features/bookmarks/types';
 
 interface CategorySidebarProps {
   nodes: CategoryTreeNode[];

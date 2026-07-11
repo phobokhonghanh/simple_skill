@@ -3,8 +3,8 @@
 import * as React from 'react';
 import { LogOut, Bookmark as BookmarkIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { LanguageSwitcher } from '@/components/features/i18n/LanguageSwitcher';
-import { ThemeToggle } from '@/components/features/theme/ThemeToggle';
+import { LanguageSwitcher } from '@/features/i18n/LanguageSwitcher';
+import { ThemeToggle } from '@/features/theme/ThemeToggle';
 import {
   createBookmark,
   createCategory,
@@ -13,18 +13,18 @@ import {
   loadBookmarkDashboard,
   updateBookmark,
   updateCategory,
-} from '@/lib/bookmarks/api';
-import { BOOKMARK_TOKEN_STORAGE_KEY } from '@/lib/bookmarks/constants';
+} from '@/features/bookmarks/api';
+import { BOOKMARK_TOKEN_STORAGE_KEY } from '@/features/bookmarks/constants';
 import type {
   Bookmark,
   BookmarkActionResult,
   BookmarkDashboardData,
-} from '@/lib/bookmarks/types';
-import { BookmarkAuthDialog } from './BookmarkAuthDialog';
-import { BookmarkForms } from './BookmarkForms';
-import { BookmarkList } from './BookmarkList';
-import { CategorySidebar } from './CategorySidebar';
-import type { BookmarkDashboardLabels, PanelMode } from './types';
+} from '@/features/bookmarks/types';
+import { BookmarkAuthDialog } from '@/features/bookmarks/BookmarkAuthDialog';
+import { BookmarkForms } from '@/features/bookmarks/BookmarkForms';
+import { BookmarkList } from '@/features/bookmarks/BookmarkList';
+import { CategorySidebar } from '@/features/bookmarks/CategorySidebar';
+import type { BookmarkDashboardLabels, PanelMode } from '@/features/bookmarks/types';
 
 interface BookmarkDashboardProps {
   labels: BookmarkDashboardLabels;

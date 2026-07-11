@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { KeyRound, LockKeyhole } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import type { BookmarkDashboardLabels } from './types';
+import type { BookmarkDashboardLabels } from '@/features/bookmarks/types';
 
 interface BookmarkAuthDialogProps {
   labels: BookmarkDashboardLabels;

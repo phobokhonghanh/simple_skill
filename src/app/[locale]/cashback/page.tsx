@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import Script from 'next/script';
 import { routing } from '@/i18n/routing';
-import { NavBar } from '@/components/features/cashback/NavBar';
-import CashbackDashboardWrapper from '@/components/features/cashback/CashbackDashboardWrapper';
+import CashbackDashboardWrapper from '@/features/cashback/CashbackDashboardWrapper';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -31,11 +31,15 @@ export default async function CashbackPage({
 
   return (
     <main className="min-h-screen bg-background transition-colors duration-300">
-      {/* Sticky NavBar specific to cashback layout */}
-      <NavBar />
+      {/* Load Google Identity Services client script */}
+      <Script
+        src={`https://accounts.google.com/gsi/client?hl=${locale}`}
+        strategy="afterInteractive"
+      />
 
       {/* Main Cashback Portal Content */}
       <CashbackDashboardWrapper />
     </main>
   );
 }
+

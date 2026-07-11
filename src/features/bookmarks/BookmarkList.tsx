@@ -9,17 +9,16 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
-  ChevronLeft,
-  ChevronRight,
   Search,
   Loader2,
   ChevronDown,
   Plus,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { getCategoryColorPreset } from '@/lib/bookmarks/colors';
-import type { Bookmark, PaginationMetadata, BookmarkFilters } from '@/lib/bookmarks/types';
-import type { BookmarkDashboardLabels } from './types';
+import { Card } from '@/components/ui/card';
+import { getCategoryColorPreset } from '@/features/bookmarks/colors';
+import type { Bookmark, PaginationMetadata, BookmarkFilters } from '@/features/bookmarks/types';
+import type { BookmarkDashboardLabels } from '@/features/bookmarks/types';
 
 interface BookmarkListProps {
   bookmarks: Bookmark[];
@@ -36,7 +35,6 @@ interface BookmarkListProps {
 
 export function BookmarkList({
   bookmarks,
-  pagination,
   filters,
   labels,
   isLoading,
@@ -118,7 +116,7 @@ export function BookmarkList({
   return (
     <div className="flex flex-col gap-4 p-4 sm:p-5">
       {/* 1. Card Search & Advanced API Sort */}
-      <div className="flex flex-col overflow-hidden rounded-md border bg-background shadow-sm transition-colors focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+      <Card className="rounded-md border bg-background shadow-sm transition-colors focus-within:border-primary focus-within:ring-1 focus-within:ring-primary p-0 gap-0">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-1.5 gap-2">
           <form
             className="flex w-full flex-1 items-center gap-1"
@@ -190,10 +188,10 @@ export function BookmarkList({
             </select>
           </div>
         )}
-      </div>
+      </Card>
 
       {/* 2. Card Bookmarks List & Local Sort */}
-      <div className="flex flex-col overflow-hidden rounded-md border bg-card shadow-sm">
+      <Card className="rounded-md border bg-card shadow-sm p-0 gap-0">
         {/* Header of the list card */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-b bg-muted/30 px-3 py-2">
           {/* Add Button (Left) */}
@@ -313,7 +311,7 @@ export function BookmarkList({
 
         </>
       )}
-      </div>
+      </Card>
     </div>
   );
 }

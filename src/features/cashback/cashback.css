@@ -110,16 +110,11 @@
 }
 
 .aff-history-item {
-  border-bottom: 1px solid var(--aff-border);
   transition: background-color 0.2s ease;
 }
 
 .aff-history-item:hover {
   background-color: var(--aff-history-item-hover);
-}
-
-.aff-history-item:last-child {
-  border-bottom: none;
 }
 
 /* Skeleton Loading Animation */
@@ -136,4 +131,92 @@
 .aff-skeleton {
   animation: aff-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   background-color: var(--aff-border);
+}
+
+/* === 2D Coin Animations & Themes === */
+
+@keyframes coin-spin-2d {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.coin-2d-spin {
+  animation: coin-spin-2d 12s linear infinite;
+}
+
+/* Hover effect on Summary Cards */
+.aff-summary-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.aff-summary-card:hover .coin-2d {
+  transform: scale(1.1) rotate(15deg);
+}
+
+.coin-2d {
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Falling Coin Animation */
+@keyframes coin-fall-down {
+  0% {
+    top: -50px;
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.5;
+  }
+  85% {
+    opacity: 0.5;
+  }
+  100% {
+    top: 105vh;
+    opacity: 0;
+  }
+}
+
+.falling-coin {
+  position: fixed;
+  pointer-events: none;
+  z-index: 5;
+  animation: coin-fall-down 6s linear forwards;
+}
+
+/* Coin Burst Particle Animation */
+@keyframes coin-burst-2d {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0.5) rotate(120deg);
+  }
+}
+
+.burst-coin {
+  position: absolute;
+  pointer-events: none;
+  z-index: 20;
+  animation: coin-burst-2d 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Coming Soon screen style */
+.payment-coming-soon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px dashed var(--aff-border);
+  background-color: var(--aff-surface);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }

@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
-import { ThemeToggle } from '@/components/features/theme/ThemeToggle';
-import { LanguageSwitcher } from '@/components/features/i18n/LanguageSwitcher';
+import { ThemeToggle } from '@/features/theme/ThemeToggle';
+import { LanguageSwitcher } from '@/features/i18n/LanguageSwitcher';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
