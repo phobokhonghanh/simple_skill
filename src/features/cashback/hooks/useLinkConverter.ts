@@ -115,10 +115,10 @@ export function useLinkConverter(user: User | null) {
         setAffiliateLink(affLink);
 
         if (product) {
-          const formattedImageUrl = formatShopeeImageUrl(product.imageUrl);
-          const updatedProduct = {
+          const formattedImageUrl = formatShopeeImageUrl(product.image);
+          const updatedProduct: Product = {
             ...product,
-            imageUrl: formattedImageUrl,
+            image: formattedImageUrl,
           };
 
           setProductInfo(updatedProduct);
@@ -131,13 +131,13 @@ export function useLinkConverter(user: User | null) {
             timestamp: Date.now(),
             product: {
               itemId: product.itemId || null,
-              productName: product.productName,
-              imageUrl: formattedImageUrl,
+              name: product.name,
+              image: formattedImageUrl,
               price: product.price,
               commission: product.commission || 0,
               rating: product.rating,
               sales: product.sales,
-              shopName: product.shopName,
+              shop: product.shop,
               lastUpdate: product.lastUpdate || null,
             },
           };
@@ -196,6 +196,23 @@ export function useLinkConverter(user: User | null) {
     setCurrentUrl(item.url);
   };
 
+  const handleClearInput = () => {
+    setInputUrl('');
+    setValidationError(null);
+  };
+
+  const handlePasteInput = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text) {
+        setInputUrl(text);
+        validateLink(text);
+      }
+    } catch (e) {
+      console.warn('Failed to read clipboard', e);
+    }
+  };
+
   return {
     inputUrl,
     loading,
@@ -212,5 +229,7 @@ export function useLinkConverter(user: User | null) {
     handleCopy,
     handleClearHistory,
     handleSelectHistory,
+    handleClearInput,
+    handlePasteInput,
   };
 }

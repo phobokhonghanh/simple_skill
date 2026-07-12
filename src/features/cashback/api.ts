@@ -13,8 +13,9 @@ export const API_ENDPOINTS = {
   authLogout: '/api/auth/google/logout',
   userCashbacks: '/api/cashbacks',
   adminCashbacks: '/api/admin/cashbacks',
-  shopeeConversions: '/api/shopee/conversions',
-  shopeeSync: '/api/shopee/cashbacks/sync',
+  userShopeeConversions: '/api/shopee/conversions',
+  adminShopeeConversions: '/api/admin/shopee/conversions',
+  shopeeSync: '/api/admin/shopee/conversions/sync',
 } as const;
 
 export const generateCashbackLink = async ({
@@ -162,8 +163,44 @@ export const getAdminCashbacks = async (
   }
 };
 
+// User: Get and sync user-specific Shopee conversions
+export const getUserShopeeConversions = async (
+  token: string,
+  params: {
+    page_size?: number;
+    page_num?: number;
+    purchase_time_s: number;
+    purchase_time_e: number;
+  },
+): Promise<ConversionReportEnvelope> => {
+  try {
+    const query = new URLSearchParams();
+    if (params.page_size) query.set('page_size', params.page_size.toString());
+    if (params.page_num) query.set('page_num', params.page_num.toString());
+    query.set('purchase_time_s', params.purchase_time_s.toString());
+    query.set('purchase_time_e', params.purchase_time_e.toString());
+
+    const suffix = `?${query.toString()}`;
+    const response = await fetch(`${API_URL}${API_ENDPOINTS.userShopeeConversions}${suffix}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      return { ok: false, code: 'fetch_failed' };
+    }
+
+    return (await response.json()) as ConversionReportEnvelope;
+  } catch (err) {
+    console.error('getUserShopeeConversions error:', err);
+    return { ok: false, code: 'network_error' };
+  }
+};
+
 // Admin: Get all user Shopee conversions
-export const getShopeeConversions = async (
+export const getAdminShopeeConversions = async (
   token: string,
   params: {
     page_size?: number;
@@ -182,7 +219,7 @@ export const getShopeeConversions = async (
     if (params.purchase_time_e) query.set('purchase_time_e', params.purchase_time_e.toString());
 
     const suffix = query.toString() ? `?${query.toString()}` : '';
-    const response = await fetch(`${API_URL}${API_ENDPOINTS.shopeeConversions}${suffix}`, {
+    const response = await fetch(`${API_URL}${API_ENDPOINTS.adminShopeeConversions}${suffix}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -195,7 +232,7 @@ export const getShopeeConversions = async (
 
     return (await response.json()) as ConversionReportEnvelope;
   } catch (err) {
-    console.error('getShopeeConversions error:', err);
+    console.error('getAdminShopeeConversions error:', err);
     return { ok: false, code: 'network_error' };
   }
 };

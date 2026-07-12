@@ -14,6 +14,7 @@ import { AdminConversionsView } from '@/features/cashback/AdminConversionsView';
 import { AdminCashbacksView } from '@/features/cashback/AdminCashbacksView';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { FormattedDateInput } from '@/features/cashback/FormattedDateInput';
 
 interface AdminTabProps {
   token: string | null;
@@ -155,12 +156,11 @@ export function AdminTab({
                   <Calendar className="w-3.5 h-3.5" />
                   <span>{t('sync_start_time')}</span>
                 </label>
-                <input
-                  type="date"
+                <FormattedDateInput
                   required
                   value={syncStart}
-                  onChange={(e) => setSyncStart(e.target.value)}
-                  className="aff-input w-full px-3 py-2 rounded-xl text-xs sm:text-sm"
+                  onChange={setSyncStart}
+                  className="w-full px-3 py-2 text-xs sm:text-sm"
                 />
               </div>
 
@@ -169,12 +169,11 @@ export function AdminTab({
                   <Calendar className="w-3.5 h-3.5" />
                   <span>{t('sync_end_time')}</span>
                 </label>
-                <input
-                  type="date"
+                <FormattedDateInput
                   required
                   value={syncEnd}
-                  onChange={(e) => setSyncEnd(e.target.value)}
-                  className="aff-input w-full px-3 py-2 rounded-xl text-xs sm:text-sm"
+                  onChange={setSyncEnd}
+                  className="w-full px-3 py-2 text-xs sm:text-sm"
                 />
               </div>
 

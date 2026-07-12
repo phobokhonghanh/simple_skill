@@ -12,13 +12,14 @@ import type { User } from '@/features/cashback/types';
 interface NavBarProps {
   user?: User | null;
   handleLogout?: () => void;
+  gsiBtnRef?: React.RefCallback<HTMLDivElement>;
 }
 
 /**
  * NavBar for Affiliate page.
  * Styled with warm orange borders, logo and integration with Lang/Theme toggles.
  */
-export function NavBar({ user, handleLogout }: NavBarProps = {}) {
+export function NavBar({ user, handleLogout, gsiBtnRef }: NavBarProps = {}) {
   const t = useTranslations('cashback');
   const [mounted, setMounted] = React.useState(false);
 
@@ -59,7 +60,7 @@ export function NavBar({ user, handleLogout }: NavBarProps = {}) {
           {mounted && (
             <>
               {!user ? (
-                <div id="gsi-btn-container" className="min-h-[32px] flex items-center" />
+                <div ref={gsiBtnRef} id="gsi-btn-container" className="min-h-[32px] min-w-[120px] flex items-center justify-center ml-2" />
               ) : (
                 <div className="flex items-center gap-3 pl-3 border-l border-[var(--aff-border)] ml-2">
                   {user.picture ? (

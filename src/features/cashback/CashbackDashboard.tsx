@@ -47,6 +47,7 @@ interface CustomWindow extends Window {
 
 export function CashbackDashboard() {
   const [activeTab, setActiveTab] = React.useState<'converter' | 'history' | 'payment' | 'admin'>('converter');
+  const gsiIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
 
   // Business logic hooks
   const auth = useCashbackAuth(
@@ -74,14 +75,21 @@ export function CashbackDashboard() {
     history.setUserHistoryPage(1);
   }, [history]);
 
-  // Google Identity Services (GSI) Initialization
-  React.useEffect(() => {
+  // Google Identity Services (GSI) Initialization Callback Ref
+  const gsiBtnRef = React.useCallback((node: HTMLDivElement | null) => {
+    if (gsiIntervalRef.current) {
+      clearInterval(gsiIntervalRef.current);
+      gsiIntervalRef.current = null;
+    }
+
+    if (!node || auth.user) return;
+
     const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
     if (!googleClientId) {
       console.warn('Google Client ID is not configured.');
     }
 
-    const initAndRenderGsi = () => {
+    const renderButton = (container: HTMLDivElement) => {
       const w = window as unknown as CustomWindow;
       if (w.google?.accounts?.id) {
         if (!w.__gsiInitialized) {
@@ -97,42 +105,51 @@ export function CashbackDashboard() {
           w.__gsiInitialized = true;
         }
 
-        if (!auth.user) {
-          const btnContainer = document.getElementById('gsi-btn-container');
-          if (btnContainer) {
-            btnContainer.innerHTML = ''; // Prevent duplicate buttons by clearing container first
-            w.google.accounts.id.renderButton(btnContainer, {
-              type: 'standard',
-              theme: 'outline',
-              size: 'medium',
-              text: 'signin',
-              shape: 'pill',
-            });
-          }
+        try {
+          w.google.accounts.id.renderButton(container, {
+            type: 'standard',
+            theme: 'outline',
+            size: 'medium',
+            text: 'signin',
+            shape: 'pill',
+          });
+        } catch (e) {
+          console.error('GSI rendering failed:', e);
         }
       }
     };
 
     const w = window as unknown as CustomWindow;
     if (w.google?.accounts?.id) {
-      initAndRenderGsi();
+      renderButton(node);
     } else {
-      const interval = setInterval(() => {
+      gsiIntervalRef.current = setInterval(() => {
         const w = window as unknown as CustomWindow;
         if (w.google?.accounts?.id) {
-          clearInterval(interval);
-          initAndRenderGsi();
+          if (gsiIntervalRef.current) {
+            clearInterval(gsiIntervalRef.current);
+            gsiIntervalRef.current = null;
+          }
+          renderButton(node);
         }
       }, 300);
-      return () => clearInterval(interval);
     }
-  }, [auth.user, auth]);
+  }, [auth]);
+
+  // Cleanup interval on unmount
+  React.useEffect(() => {
+    return () => {
+      if (gsiIntervalRef.current) {
+        clearInterval(gsiIntervalRef.current);
+      }
+    };
+  }, []);
 
 
   return (
     <div className="affiliate-page-container relative overflow-x-hidden transition-colors duration-300 min-h-screen">
       {/* Sticky NavBar specific to cashback layout */}
-      <NavBar user={auth.user} handleLogout={handleLogout} />
+      <NavBar user={auth.user} handleLogout={handleLogout} gsiBtnRef={gsiBtnRef} />
 
       {/* Background falling coins */}
       {anim.fallingCoins.map((coin) => (
@@ -170,6 +187,8 @@ export function CashbackDashboard() {
             handleCopy={converter.handleCopy}
             handleClearHistory={converter.handleClearHistory}
             handleSelectHistory={converter.handleSelectHistory}
+            handleClearInput={converter.handleClearInput}
+            handlePasteInput={converter.handlePasteInput}
           />
         )}
 
@@ -198,6 +217,13 @@ export function CashbackDashboard() {
             processedUserHistory={history.processedUserHistory}
             uiTotalCashback={history.uiTotalCashback}
             burstCoins={anim.burstCoins}
+            userSyncLoading={history.userSyncLoading}
+            userSyncSuccess={history.userSyncSuccess}
+            userSyncMessage={history.userSyncMessage}
+            userSyncData={history.userSyncData}
+            showUserSyncModal={history.showUserSyncModal}
+            setShowUserSyncModal={history.setShowUserSyncModal}
+            handleUserSync={history.handleUserSync}
           />
         )}
 

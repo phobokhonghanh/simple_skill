@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { formatShopeeImageUrl, formatPrice, formatDate } from '@/features/cashback/utils';
 import { StatusBadge } from '@/features/cashback/StatusBadge';
+import { FormattedDateInput } from '@/features/cashback/FormattedDateInput';
 
 interface AdminConversionsViewProps {
   adminConversions: ConversionRecord[];
@@ -70,31 +71,29 @@ export function AdminConversionsView({
       {/* Filters Form */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end mb-6 text-left">
         <div className="space-y-1.5">
-          <label className="text-2xs font-bold text-[var(--aff-muted)]">Sub ID Filter</label>
+          <label className="text-2xs font-bold text-[var(--aff-muted)]">{t('filter_sub_id')}</label>
           <input
             type="text"
-            placeholder="Filter by User / Sub ID"
+            placeholder={t('filter_sub_id')}
             value={filterSubId}
             onChange={(e) => setFilterSubId(e.target.value)}
             className="aff-input w-full px-3 py-1.5 rounded-xl text-xs"
           />
         </div>
         <div className="space-y-1.5">
-          <label className="text-2xs font-bold text-[var(--aff-muted)]">Từ ngày</label>
-          <input
-            type="date"
+          <label className="text-2xs font-bold text-[var(--aff-muted)]">{t('start_date')}</label>
+          <FormattedDateInput
             value={filterStart}
-            onChange={(e) => setFilterStart(e.target.value)}
-            className="aff-input w-full px-3 py-1.5 rounded-xl text-xs"
+            onChange={setFilterStart}
+            className="w-full px-3 py-1.5 text-xs"
           />
         </div>
         <div className="space-y-1.5">
-          <label className="text-2xs font-bold text-[var(--aff-muted)]">Đến ngày</label>
-          <input
-            type="date"
+          <label className="text-2xs font-bold text-[var(--aff-muted)]">{t('end_date')}</label>
+          <FormattedDateInput
             value={filterEnd}
-            onChange={(e) => setFilterEnd(e.target.value)}
-            className="aff-input w-full px-3 py-1.5 rounded-xl text-xs"
+            onChange={setFilterEnd}
+            className="w-full px-3 py-1.5 text-xs"
           />
         </div>
         <div className="flex gap-2">
@@ -106,7 +105,7 @@ export function AdminConversionsView({
             className="aff-btn-primary py-1.5 px-4 rounded-xl text-xs cursor-pointer flex items-center justify-center gap-1 font-bold flex-1 sm:flex-initial"
           >
             <Search className="w-3.5 h-3.5" />
-            <span>Tìm</span>
+            <span>{t('search')}</span>
           </Button>
           <Button
             variant="secondary"
@@ -121,7 +120,7 @@ export function AdminConversionsView({
             }}
             className="bg-neutral-200 dark:bg-neutral-800 text-[var(--aff-text)] hover:bg-neutral-300 dark:hover:bg-neutral-700 py-1.5 px-4 rounded-xl text-xs cursor-pointer font-bold flex-1 sm:flex-initial hover:bg-transparent"
           >
-            Xóa
+            {t('clear')}
           </Button>
         </div>
       </div>
@@ -129,11 +128,11 @@ export function AdminConversionsView({
       {loadingAdminConversions ? (
         <div className="py-12 flex flex-col items-center justify-center gap-2">
           <Loader2 className="w-8 h-8 text-[var(--aff-orange)] animate-spin" />
-          <p className="text-xs text-[var(--aff-muted)]">Đang tải...</p>
+          <p className="text-xs text-[var(--aff-muted)]">{t('loading_history')}</p>
         </div>
       ) : adminError ? (
         <div className="py-8 text-center text-red-500 text-xs sm:text-sm">{adminError}</div>
-      ) : adminConversions.length === 0 ? (
+      ) : (!adminConversions || adminConversions.length === 0) ? (
         <div className="py-12 text-center text-xs sm:text-sm text-[var(--aff-muted)] border border-dashed border-[var(--aff-border)] rounded-xl">
           {t('no_conversions')}
         </div>
@@ -144,16 +143,16 @@ export function AdminConversionsView({
             <table className="w-full text-left border-collapse text-xs sm:text-sm">
               <thead>
                 <tr className="border-b border-[var(--aff-border)] text-[var(--aff-muted)] font-semibold">
-                  <th className="py-3 px-2">Ngày Mua</th>
-                  <th className="py-3 px-2">Sub ID (User)</th>
-                  <th className="py-3 px-2">Checkout ID</th>
-                  <th className="py-3 px-2">Tổng Đơn</th>
-                  <th className="py-3 px-2">Hoa Hồng (Shopee)</th>
-                  <th className="py-3 px-2 text-right">Trạng Thái</th>
+                  <th className="py-3 px-2">{t('purchase_time')}</th>
+                  <th className="py-3 px-2">{t('sub_id_user')}</th>
+                  <th className="py-3 px-2">{t('checkout_id')}</th>
+                  <th className="py-3 px-2">{t('total_order')}</th>
+                  <th className="py-3 px-2">{t('shopee_commission')}</th>
+                  <th className="py-3 px-2 text-right">{t('status')}</th>
                 </tr>
               </thead>
               <tbody>
-                {adminConversions.map((rec) => {
+                {adminConversions?.map((rec) => {
                   const purchaseDateStr = formatDate(rec.purchase_time);
                   const totalItems = rec.orders?.reduce((acc, o) => acc + (o.items?.length || 0), 0) || 0;
                   const isExpanded = expandedAdminRecordId === rec.checkout_id;
@@ -180,10 +179,10 @@ export function AdminConversionsView({
                         <td className="py-4 px-2">
                           <span className="font-semibold block">{formatPrice(totalAmount)}</span>
                           <span className="text-[10px] text-[var(--aff-muted)]">
-                            ({totalItems} sản phẩm)
+                            ({t('products_count', { count: totalItems })})
                           </span>
                         </td>
-                        <td className="py-4 px-2 font-bold text-orange-600 dark:text-orange-500">
+                        <td className="py-4 px-2 font-bold text-amber-500 dark:text-amber-400">
                           {rec.affiliate_net_commission
                             ? parseFloat(rec.affiliate_net_commission).toLocaleString('vi-VN') + ' ₫'
                             : '0 ₫'}
@@ -205,56 +204,65 @@ export function AdminConversionsView({
                           >
                             <div className="space-y-4 pl-2 text-left">
                               <h4 className="font-bold text-xs uppercase tracking-wider text-[var(--aff-muted)]">
-                                Danh sách đơn hàng shopee
+                                {t('shopee_order_list')}
                               </h4>
                               <div className="divide-y divide-[var(--aff-border)]">
-                                {rec.orders?.map((ord, oIdx) => (
-                                  <div key={ord.order_id || oIdx} className="py-3">
-                                    <div className="flex justify-between items-center text-2xs mb-2">
-                                      <span className="font-mono text-[var(--aff-muted)]">
-                                        Mã Đơn: {ord.order_id}
-                                      </span>
-                                      <StatusBadge status={ord.order_status} />
-                                    </div>
-                                    <div className="space-y-2.5">
-                                      {ord.items?.map((item, itemIdx) => (
-                                        <div key={itemIdx} className="flex justify-between items-start gap-4">
-                                          <div className="flex gap-2 flex-1 min-w-0">
-                                            <div className="w-8 h-8 rounded bg-white border border-[var(--aff-border)] flex-shrink-0 flex items-center justify-center overflow-hidden">
-                                              {item.img_code ? (
-                                                // eslint-disable-next-line @next/next/no-img-element
-                                                <img
-                                                  src={formatShopeeImageUrl(item.img_code)}
-                                                  alt=""
-                                                  className="w-full h-full object-contain p-0.5"
-                                                  loading="lazy"
-                                                />
-                                              ) : (
-                                                <ShoppingBag className="w-4 h-4 text-orange-500" />
-                                              )}
+                                {rec.orders?.map((ord, oIdx) => {
+                                  const orderIdVal = ord.id || ord.order_sn || ord.order_id;
+                                  return (
+                                    <div key={orderIdVal || oIdx} className="py-3">
+                                      <div className="flex justify-between items-center text-2xs mb-2">
+                                        <span className="font-mono text-[var(--aff-muted)]">
+                                          {t('order_code_prefix', { id: orderIdVal || '—' })}
+                                        </span>
+                                        <StatusBadge status={ord.order_status} />
+                                      </div>
+                                      <div className="space-y-2.5">
+                                        {ord.items?.map((item, itemIdx) => {
+                                          const imgVal = item.product?.image || item.img_code;
+                                          const nameVal = item.product?.name || item.item_name;
+                                          const shopVal = item.product?.shop || item.shop_name || 'N/A';
+                                          const commissionVal = item.product?.commission || item.item_commission;
+                                          return (
+                                            <div key={itemIdx} className="flex justify-between items-start gap-4">
+                                              <div className="flex gap-2 flex-1 min-w-0">
+                                                <div className="w-8 h-8 rounded bg-white border border-[var(--aff-border)] flex-shrink-0 flex items-center justify-center overflow-hidden">
+                                                  {imgVal ? (
+                                                    // eslint-disable-next-line @next/next/no-img-element
+                                                    <img
+                                                      src={formatShopeeImageUrl(imgVal)}
+                                                      alt=""
+                                                      className="w-full h-full object-contain p-0.5"
+                                                      loading="lazy"
+                                                    />
+                                                  ) : (
+                                                    <ShoppingBag className="w-4 h-4 text-orange-500" />
+                                                  )}
+                                                </div>
+                                                <div className="min-w-0">
+                                                  <p className="text-xs font-bold text-[var(--aff-heading)] line-clamp-1">
+                                                    {nameVal || '—'}
+                                                  </p>
+                                                  <span className="text-3xs text-[var(--aff-muted)]">
+                                                    {t('qty_shop_prefix', { qty: item.qty ?? 0, shop: shopVal })}
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              <div className="text-right">
+                                                <p className="text-xs font-semibold">
+                                                  {formatPrice(item.actual_amount)}
+                                                </p>
+                                                <span className="text-3xs text-amber-500 dark:text-amber-400 font-bold block">
+                                                  {t('commission_suffix', { amount: formatPrice(commissionVal) })}
+                                                </span>
+                                              </div>
                                             </div>
-                                            <div className="min-w-0">
-                                              <p className="text-xs font-bold text-[var(--aff-heading)] line-clamp-1">
-                                                {item.item_name}
-                                              </p>
-                                              <span className="text-3xs text-[var(--aff-muted)]">
-                                                SL: {item.qty} • Shop: {item.shop_name || 'N/A'}
-                                              </span>
-                                            </div>
-                                          </div>
-                                          <div className="text-right">
-                                            <p className="text-xs font-semibold">
-                                              {formatPrice(item.actual_amount)}
-                                            </p>
-                                            <span className="text-3xs text-orange-600 font-bold block">
-                                              +{formatPrice(item.item_commission)} hoa hồng
-                                            </span>
-                                          </div>
-                                        </div>
-                                      ))}
+                                          );
+                                        })}
+                                      </div>
                                     </div>
-                                  </div>
-                                ))}
+                                  );
+                                })}
                               </div>
                             </div>
                           </td>
@@ -269,7 +277,7 @@ export function AdminConversionsView({
 
           {/* Mobile View Cards Stack */}
           <div className="sm:hidden space-y-4 max-w-full overflow-hidden">
-            {adminConversions.map((rec) => {
+            {adminConversions?.map((rec) => {
               const purchaseDateStr = formatDate(rec.purchase_time);
               const totalItems = rec.orders?.reduce((acc, o) => acc + (o.items?.length || 0), 0) || 0;
               const isExpanded = expandedAdminRecordId === rec.checkout_id;
@@ -292,7 +300,7 @@ export function AdminConversionsView({
                   <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[var(--aff-border)] text-xs">
                     <div>
                       <span className="text-3xs uppercase tracking-wider text-[var(--aff-muted)] block">
-                        Sub ID (User)
+                        {t('sub_id_user')}
                       </span>
                       <span className="font-bold truncate max-w-[120px] block">
                         {rec.utm_content || 'system'}
@@ -300,9 +308,9 @@ export function AdminConversionsView({
                     </div>
                     <div className="text-right">
                       <span className="text-3xs uppercase tracking-wider text-[var(--aff-muted)] block">
-                        Hoa Hồng Shopee
+                        {t('shopee_commission')}
                       </span>
-                      <span className="font-extrabold text-orange-600 dark:text-orange-500 block">
+                      <span className="font-bold text-amber-500 dark:text-amber-400 block">
                         {rec.affiliate_net_commission
                           ? parseFloat(rec.affiliate_net_commission).toLocaleString('vi-VN') + ' ₫'
                           : '0 ₫'}
@@ -315,52 +323,60 @@ export function AdminConversionsView({
                     onClick={() => setExpandedAdminRecordId(isExpanded ? null : (rec.checkout_id || null))}
                     className="w-full h-auto py-1.5 border border-[var(--aff-border)] rounded-lg text-3xs font-bold text-[var(--aff-muted)] flex items-center justify-center gap-1 cursor-pointer active:bg-orange-500/5 hover:text-orange-500 hover:border-orange-500/20 hover:bg-transparent"
                   >
-                    <span>{isExpanded ? 'Ẩn chi tiết' : `Xem chi tiết (${totalItems} sản phẩm)`}</span>
+                    <span>{isExpanded ? t('hide_details') : t('show_details', { count: totalItems })}</span>
                     {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                   </Button>
 
                   {/* Mobile Expanded Items */}
                   {isExpanded && (
                     <div className="pt-2 border-t border-dashed border-[var(--aff-border)] space-y-3 animate-in fade-in duration-200">
-                      {rec.orders?.map((ord, oIdx) => (
-                        <div key={ord.order_id || oIdx} className="space-y-2.5">
-                          <div className="flex justify-between items-center text-3xs font-mono text-[var(--aff-muted)] gap-2">
-                            <span className="truncate max-w-[140px]">Mã đơn: {ord.order_id}</span>
-                            <StatusBadge status={ord.order_status} />
-                          </div>
-                          <div className="space-y-3">
-                            {ord.items?.map((item, itemIdx) => (
-                              <div key={itemIdx} className="flex gap-2 items-start justify-between min-w-0">
-                                <div className="flex gap-2 min-w-0 flex-1">
-                                  <div className="w-7 h-7 rounded bg-white border border-[var(--aff-border)] flex-shrink-0 flex items-center justify-center overflow-hidden">
-                                    {item.img_code ? (
-                                      // eslint-disable-next-line @next/next/no-img-element
-                                      <img
-                                        src={formatShopeeImageUrl(item.img_code)}
-                                        alt=""
-                                        className="w-full h-full object-contain"
-                                      />
-                                    ) : (
-                                      <ShoppingBag className="w-3.5 h-3.5 text-orange-500" />
-                                    )}
-                                  </div>
-                                  <div className="min-w-0 flex-1">
-                                    <p className="text-3xs font-bold text-[var(--aff-heading)] line-clamp-1 break-words">
-                                      {item.item_name}
-                                    </p>
-                                    <span className="text-4xs text-[var(--aff-muted)] block">
-                                      SL: {item.qty} • {formatPrice(item.actual_amount)}
+                      {rec.orders?.map((ord, oIdx) => {
+                        const orderIdVal = ord.id || ord.order_sn || ord.order_id;
+                        return (
+                          <div key={orderIdVal || oIdx} className="space-y-2.5">
+                            <div className="flex justify-between items-center text-3xs font-mono text-[var(--aff-muted)] gap-2">
+                              <span className="truncate max-w-[140px]">{t('order_id_prefix', { id: orderIdVal || '—' })}</span>
+                              <StatusBadge status={ord.order_status} />
+                            </div>
+                            <div className="space-y-3">
+                              {ord.items?.map((item, itemIdx) => {
+                                const imgVal = item.product?.image || item.img_code;
+                                const nameVal = item.product?.name || item.item_name;
+                                const commissionVal = item.product?.commission || item.item_commission;
+                                return (
+                                  <div key={itemIdx} className="flex gap-2 items-start justify-between min-w-0">
+                                    <div className="flex gap-2 min-w-0 flex-1">
+                                      <div className="w-7 h-7 rounded bg-white border border-[var(--aff-border)] flex-shrink-0 flex items-center justify-center overflow-hidden">
+                                        {imgVal ? (
+                                          // eslint-disable-next-line @next/next/no-img-element
+                                          <img
+                                            src={formatShopeeImageUrl(imgVal)}
+                                            alt=""
+                                            className="w-full h-full object-contain"
+                                          />
+                                        ) : (
+                                          <ShoppingBag className="w-3.5 h-3.5 text-orange-500" />
+                                        )}
+                                      </div>
+                                      <div className="min-w-0 flex-1">
+                                        <p className="text-3xs font-bold text-[var(--aff-heading)] line-clamp-1 break-words">
+                                          {nameVal || '—'}
+                                        </p>
+                                        <span className="text-4xs text-[var(--aff-muted)] block">
+                                          {t('qty_prefix', { qty: item.qty ?? 0 })} • {formatPrice(item.actual_amount)}
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <span className="text-3xs font-bold text-amber-500 dark:text-amber-400 whitespace-nowrap flex-shrink-0">
+                                      +{formatPrice(commissionVal)}
                                     </span>
                                   </div>
-                                </div>
-                                <span className="text-3xs font-bold text-orange-600 whitespace-nowrap flex-shrink-0">
-                                  +{formatPrice(item.item_commission)}
-                                </span>
-                              </div>
-                            ))}
+                                );
+                              })}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -369,10 +385,10 @@ export function AdminConversionsView({
           </div>
 
           {/* Pagination Controls */}
-          {adminTotalPages > 1 && (
+          {adminTotalPages > 0 && (
             <div className="flex items-center justify-between border-t border-[var(--aff-border)] pt-4 mt-4 text-xs">
               <span className="text-2xs text-[var(--aff-muted)]">
-                Tổng cộng: <span className="font-bold text-[var(--aff-text)]">{adminTotal}</span> bản ghi
+                {t('total_records_prefix', { total: adminTotal })}
               </span>
 
               <div className="flex items-center gap-1">
@@ -389,7 +405,7 @@ export function AdminConversionsView({
                   <ChevronLeft className="w-4 h-4" />
                 </Button>
                 <span className="text-2xs px-2 font-semibold">
-                  Trang {adminPage} / {adminTotalPages}
+                  {t('page_indicator_prefix', { page: adminPage, totalPages: adminTotalPages })}
                 </span>
                 <Button
                   variant="outline"

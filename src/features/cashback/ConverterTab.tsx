@@ -12,7 +12,9 @@ import {
   Sparkles,
   Check,
   Loader2,
-  AlertTriangle
+  AlertTriangle,
+  Clipboard,
+  X
 } from 'lucide-react';
 import type { Product, HistoryItem } from '@/features/cashback/types';
 import { Button } from '@/components/ui/button';
@@ -32,6 +34,8 @@ interface ConverterTabProps {
   handleCopy: () => void;
   handleClearHistory: () => void;
   handleSelectHistory: (item: HistoryItem) => void;
+  handleClearInput: () => void;
+  handlePasteInput: () => void;
 }
 
 
@@ -49,6 +53,8 @@ export function ConverterTab({
   handleCopy,
   handleClearHistory,
   handleSelectHistory,
+  handleClearInput,
+  handlePasteInput,
 }: ConverterTabProps) {
   const t = useTranslations('cashback');
 
@@ -101,7 +107,7 @@ export function ConverterTab({
               <div className="relative flex-1">
                 <input
                   type="text"
-                  className={`aff-input w-full pl-4 pr-4 py-3 rounded-xl text-sm sm:text-base ${
+                  className={`aff-input w-full pl-4 pr-24 py-3 rounded-xl text-sm sm:text-base ${
                     validationError
                       ? 'border-red-500 focus:border-red-500 focus:ring-red-500/10'
                       : ''
@@ -111,10 +117,32 @@ export function ConverterTab({
                   onChange={handleInputChange}
                   disabled={loading}
                 />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                  {inputUrl ? (
+                    <button
+                      type="button"
+                      onClick={handleClearInput}
+                      disabled={loading}
+                      className="p-1 rounded-md text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-400 transition-colors cursor-pointer select-none"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handlePasteInput}
+                      disabled={loading}
+                      className="flex items-center gap-1 px-2 py-1 rounded-md text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-400 transition-colors text-xs font-semibold cursor-pointer select-none bg-gray-100/50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800"
+                    >
+                      <Clipboard className="w-3.5 h-3.5" />
+                      <span>{t('btn_paste')}</span>
+                    </button>
+                  )}
+                </div>
               </div>
               <Button
                 type="submit"
-                className="aff-btn-primary py-3 px-6 rounded-xl flex items-center justify-center gap-2 font-bold text-sm sm:text-base cursor-pointer select-none disabled:opacity-50"
+                className="aff-btn-primary h-auto py-3 px-6 rounded-xl flex items-center justify-center gap-2 font-bold text-sm sm:text-base cursor-pointer select-none disabled:opacity-50"
                 disabled={loading || !!validationError || !inputUrl.trim()}
               >
                 {loading ? (
@@ -187,11 +215,11 @@ export function ConverterTab({
                 <div className="flex flex-col sm:flex-row gap-5">
                   {/* Product Image */}
                   <div className="w-full sm:w-32 h-32 rounded-xl bg-white border border-[var(--aff-border)] overflow-hidden flex items-center justify-center flex-shrink-0">
-                    {productInfo.imageUrl ? (
+                    {productInfo.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={formatShopeeImageUrl(productInfo.imageUrl)}
-                        alt={productInfo.productName}
+                        src={formatShopeeImageUrl(productInfo.image)}
+                        alt={productInfo.name}
                         className="w-full h-full object-contain p-1"
                         loading="lazy"
                       />
@@ -204,15 +232,15 @@ export function ConverterTab({
                   <div className="flex-1 min-w-0 text-left space-y-2">
                     <div className="flex items-start justify-between gap-4">
                       <h2 className="font-extrabold text-sm sm:text-base text-[var(--aff-heading)] leading-snug line-clamp-2">
-                        {productInfo.productName}
+                        {productInfo.name}
                       </h2>
                     </div>
 
                     {/* Info Pills */}
                     <div className="flex flex-wrap gap-2 pt-1 text-3xs font-semibold">
-                      {productInfo.shopName && (
+                      {productInfo.shop && (
                         <span className="px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-[var(--aff-muted)]">
-                          Shop: {productInfo.shopName}
+                          Shop: {productInfo.shop}
                         </span>
                       )}
                       {productInfo.rating !== undefined && productInfo.rating !== null && (
@@ -339,10 +367,10 @@ export function ConverterTab({
                 >
                   {/* Image Thumbnail */}
                   <div className="w-12 h-12 rounded-lg border border-[var(--aff-border)] bg-white overflow-hidden flex-shrink-0 flex items-center justify-center">
-                    {item.product?.imageUrl ? (
+                    {item.product?.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={formatShopeeImageUrl(item.product.imageUrl)}
+                        src={formatShopeeImageUrl(item.product.image)}
                         alt=""
                         className="w-full h-full object-contain p-0.5"
                         loading="lazy"
@@ -355,7 +383,7 @@ export function ConverterTab({
                   {/* Text Info */}
                   <div className="flex-1 min-w-0">
                     <h4 className="text-xs font-bold text-[var(--aff-heading)] truncate leading-normal text-left">
-                      {item.product?.productName || ''}
+                      {item.product?.name || ''}
                     </h4>
                     <div className="flex justify-between items-center mt-1">
                       <span className="text-xs font-semibold text-orange-600 dark:text-orange-500">

@@ -31,9 +31,9 @@ export default async function CashbackPage({
 
   return (
     <main className="min-h-screen bg-background transition-colors duration-300">
-      {/* Load Google Identity Services client script */}
+      {/* Load Google Identity Services client script statically in English to prevent script re-evaluation on locale changes */}
       <Script
-        src={`https://accounts.google.com/gsi/client?hl=${locale}`}
+        src="https://accounts.google.com/gsi/client?hl=en"
         strategy="afterInteractive"
       />
 

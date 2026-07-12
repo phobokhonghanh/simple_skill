@@ -2,9 +2,19 @@
 
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
-import { getShopeeConversions, getAdminCashbacks, syncShopeeCashbacks } from '@/features/cashback/api';
+import { getAdminShopeeConversions, getAdminCashbacks, syncShopeeCashbacks } from '@/features/cashback/api';
 import type { ConversionRecord, CashbackRecord } from '@/features/cashback/types';
 import { dateToUnixSeconds } from '@/features/cashback/utils';
+
+const getStartOfCurrentMonthStr = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`;
+};
+
+const getCurrentDateStr = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
 
 export function useAdminPortal(token: string | null, userRole: string | undefined, activeTab: string) {
   const t = useTranslations('cashback');
@@ -13,8 +23,8 @@ export function useAdminPortal(token: string | null, userRole: string | undefine
   const [adminSubTab, setAdminSubTab] = React.useState<'conversions' | 'cashbacks'>('conversions');
 
   // Sync parameters
-  const [syncStart, setSyncStart] = React.useState('');
-  const [syncEnd, setSyncEnd] = React.useState('');
+  const [syncStart, setSyncStart] = React.useState(getStartOfCurrentMonthStr());
+  const [syncEnd, setSyncEnd] = React.useState(getCurrentDateStr());
   const [syncSubId, setSyncSubId] = React.useState('');
   const [syncLoading, setSyncLoading] = React.useState(false);
   const [syncMessage, setSyncMessage] = React.useState<string | null>(null);
@@ -32,8 +42,8 @@ export function useAdminPortal(token: string | null, userRole: string | undefine
 
   // Admin Filters for conversions
   const [filterSubId, setFilterSubId] = React.useState('');
-  const [filterStart, setFilterStart] = React.useState('');
-  const [filterEnd, setFilterEnd] = React.useState('');
+  const [filterStart, setFilterStart] = React.useState(getStartOfCurrentMonthStr());
+  const [filterEnd, setFilterEnd] = React.useState(getCurrentDateStr());
 
   // Admin Cashbacks List States
   const [adminCashbacks, setAdminCashbacks] = React.useState<CashbackRecord[]>([]);
@@ -43,6 +53,7 @@ export function useAdminPortal(token: string | null, userRole: string | undefine
   const [adminCashbacksTotal, setAdminCashbacksTotal] = React.useState(0);
   const [adminCashbacksTotalPages, setAdminCashbacksTotalPages] = React.useState(0);
   const [searchUserId, setSearchUserId] = React.useState('');
+  const [adminCashbacksLoaded, setAdminCashbacksLoaded] = React.useState(false);
 
   // Admin conversions report query
   const fetchAdminConversions = React.useCallback(async () => {
@@ -54,7 +65,7 @@ export function useAdminPortal(token: string | null, userRole: string | undefine
     const eTime = dateToUnixSeconds(filterEnd, true);
 
     try {
-      const res = await getShopeeConversions(token, {
+      const res = await getAdminShopeeConversions(token, {
         page_num: adminPage,
         page_size: adminPageSize,
         sub_id: filterSubId || undefined,
@@ -63,13 +74,20 @@ export function useAdminPortal(token: string | null, userRole: string | undefine
       });
 
       if (res.ok && res.data) {
-        setAdminConversions(res.data.list);
-        setAdminTotal(res.data.total_count);
-        setAdminTotalPages(Math.ceil(res.data.total_count / adminPageSize));
+        setAdminConversions(res.data);
+        if (res.pagination) {
+          setAdminTotal(res.pagination.total);
+          setAdminTotalPages(res.pagination.totalPages);
+        } else {
+          setAdminTotal(res.data.length);
+          setAdminTotalPages(1);
+        }
       } else {
+        setAdminConversions([]);
         setAdminError(t('not_found'));
       }
     } catch {
+      setAdminConversions([]);
       setAdminError(t('not_found'));
     } finally {
       setLoadingAdminConversions(false);
@@ -87,6 +105,7 @@ export function useAdminPortal(token: string | null, userRole: string | undefine
         pageSize: 20,
         userId: searchUserId.trim() || undefined,
       });
+      setAdminCashbacksLoaded(true);
       if (res.ok && res.data) {
         setAdminCashbacks(res.data);
         if (res.pagination) {
@@ -106,19 +125,17 @@ export function useAdminPortal(token: string | null, userRole: string | undefine
     }
   }, [token, userRole, adminCashbacksPage, searchUserId, t]);
 
-  // Fetch admin data on tab change
+  // Fetch admin data on tab change (only auto-fetch cashbacks, NOT conversions)
   React.useEffect(() => {
     if (activeTab === 'admin' && token && userRole === 'admin') {
       const timer = setTimeout(() => {
-        if (adminSubTab === 'conversions') {
-          void fetchAdminConversions();
-        } else {
+        if (adminSubTab === 'cashbacks' && !adminCashbacksLoaded) {
           void fetchAdminCashbacks();
         }
       }, 0);
       return () => clearTimeout(timer);
     }
-  }, [activeTab, token, userRole, adminSubTab, fetchAdminConversions, fetchAdminCashbacks]);
+  }, [activeTab, token, userRole, adminSubTab, adminCashbacksLoaded, fetchAdminCashbacks]);
 
   // Admin Manual Sync
   const handleAdminSync = async (e: React.FormEvent) => {

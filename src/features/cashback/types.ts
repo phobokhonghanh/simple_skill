@@ -1,10 +1,10 @@
 export interface Product {
   itemId?: string | number | null;
-  productName: string;
-  shopName?: string | null;
+  name: string;
+  shop?: string | null;
   price: number;
   sales?: number | null;
-  imageUrl?: string | null;
+  image?: string | null;
   rating?: number | Record<string, unknown> | null;
   commission?: number | null;
   lastUpdate?: string | null;
@@ -48,6 +48,12 @@ export interface LoginResponse {
 }
 
 export interface ConversionItem {
+  product?: Product | null;
+  qty?: number | null;
+  actual_amount?: number | null;
+  is_fraud?: number | null;
+
+  // Backward compatibility fields
   display_item_status?: string | null;
   affiliate_item_status?: number | null;
   shop_id?: number | null;
@@ -57,15 +63,14 @@ export interface ConversionItem {
   item_price?: number | null;
   item_commission?: number | null;
   img_code?: string | null;
-  actual_amount?: number | null;
-  qty?: number | null;
-  is_fraud?: number | null;
   fraud_reason?: string | null;
   fraud_status?: number | null;
   platform_commission_rate?: number | null;
 }
 
 export interface ConversionOrder {
+  id?: string | null;
+  order_sn?: string | null;
   order_id?: string | null;
   order_status?: string | null;
   display_order_status?: number | null;
@@ -98,7 +103,8 @@ export interface ConversionReportData {
 export interface ConversionReportEnvelope {
   ok: boolean;
   code: string;
-  data?: ConversionReportData | null;
+  data?: ConversionRecord[] | null;
+  pagination?: Pagination | null;
 }
 
 export interface Pagination {

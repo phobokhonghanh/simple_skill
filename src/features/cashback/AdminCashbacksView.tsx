@@ -42,8 +42,6 @@ export function AdminCashbacksView({
 }: AdminCashbacksViewProps) {
   const t = useTranslations('cashback');
 
-
-
   return (
     <Card className="aff-card p-4 sm:p-5 rounded-2xl max-w-full overflow-hidden border-0 bg-transparent py-0 gap-0 shadow-none">
       <h3 className="font-extrabold text-base sm:text-lg text-[var(--aff-heading)] flex items-center gap-2 border-b border-[var(--aff-border)] pb-3 mb-5">
@@ -59,7 +57,7 @@ export function AdminCashbacksView({
           </label>
           <input
             type="text"
-            placeholder="Search by User ID"
+            placeholder={t('search_user_id')}
             value={searchUserId}
             onChange={(e) => setSearchUserId(e.target.value)}
             className="aff-input w-full px-3 py-1.5 rounded-xl text-xs"
@@ -74,7 +72,7 @@ export function AdminCashbacksView({
             className="flex-1 sm:flex-initial aff-btn-primary py-1.5 px-4 rounded-xl text-xs cursor-pointer flex items-center justify-center gap-1 font-bold"
           >
             <Search className="w-3.5 h-3.5" />
-            <span>Tìm</span>
+            <span>{t('search')}</span>
           </Button>
           <Button
             variant="secondary"
@@ -87,7 +85,7 @@ export function AdminCashbacksView({
             }}
             className="flex-1 sm:flex-initial bg-neutral-200 dark:bg-neutral-800 text-[var(--aff-text)] hover:bg-neutral-300 dark:hover:bg-neutral-700 py-1.5 px-4 rounded-xl text-xs cursor-pointer font-bold hover:bg-transparent"
           >
-            Xóa
+            {t('clear')}
           </Button>
         </div>
       </div>
@@ -95,13 +93,13 @@ export function AdminCashbacksView({
       {loadingAdminCashbacks ? (
         <div className="py-12 flex flex-col items-center justify-center gap-2">
           <Loader2 className="w-8 h-8 text-[var(--aff-orange)] animate-spin" />
-          <p className="text-xs text-[var(--aff-muted)]">Đang tải...</p>
+          <p className="text-xs text-[var(--aff-muted)]">{t('loading')}</p>
         </div>
       ) : adminCashbacksError ? (
         <div className="py-8 text-center text-red-500 text-xs sm:text-sm">{adminCashbacksError}</div>
       ) : adminCashbacks.length === 0 ? (
         <div className="py-12 text-center text-xs sm:text-sm text-[var(--aff-muted)] border border-dashed border-[var(--aff-border)] rounded-xl">
-          Không tìm thấy bản ghi cashback nào
+          {t('empty_cashbacks')}
         </div>
       ) : (
         <div className="space-y-4 max-w-full overflow-hidden">
@@ -110,17 +108,18 @@ export function AdminCashbacksView({
             <table className="w-full text-left border-collapse text-xs sm:text-sm">
               <thead>
                 <tr className="border-b border-[var(--aff-border)] text-[var(--aff-muted)] font-semibold">
-                  <th className="py-3 px-2">Ngày Tạo</th>
-                  <th className="py-3 px-2">User ID</th>
-                  <th className="py-3 px-2">Checkout ID</th>
-                  <th className="py-3 px-2">Sàn</th>
-                  <th className="py-3 px-2">Hoàn Tiền</th>
-                  <th className="py-3 px-2 text-right">Trạng Thái</th>
+                  <th className="py-3 px-2">{t('table_date')}</th>
+                  <th className="py-3 px-2">{t('table_user_id')}</th>
+                  <th className="py-3 px-2">{t('table_checkout_id')}</th>
+                  <th className="py-3 px-2">{t('table_platform')}</th>
+                  <th className="py-3 px-2">{t('table_cashback')}</th>
+                  <th className="py-3 px-2 text-right">{t('table_status')}</th>
                 </tr>
               </thead>
               <tbody>
                 {adminCashbacks.map((rec) => {
                   const dateStr = formatDate(rec.createdAt);
+                  const isShopee = rec.platform?.toLowerCase() === 'shopee';
                   return (
                     <tr
                       key={rec.id}
@@ -133,10 +132,10 @@ export function AdminCashbacksView({
                       <td className="py-4 px-2 font-mono text-2xs truncate max-w-[120px]">
                         {rec.checkoutId}
                       </td>
-                      <td className="py-4 px-2 uppercase font-bold text-2xs">
+                      <td className={`py-4 px-2 uppercase font-bold text-2xs ${isShopee ? 'text-[var(--aff-orange)]' : 'text-[var(--aff-text)]'}`}>
                         {rec.platform}
                       </td>
-                      <td className="py-4 px-2 font-bold text-orange-600 dark:text-orange-500">
+                      <td className="py-4 px-2 font-bold text-amber-500 dark:text-amber-400">
                         {formatPrice(rec.cashback)}
                       </td>
                       <td className="py-4 px-2 text-right">
@@ -153,6 +152,7 @@ export function AdminCashbacksView({
           <div className="sm:hidden space-y-4 max-w-full overflow-hidden">
             {adminCashbacks.map((rec) => {
               const dateStr = formatDate(rec.createdAt);
+              const isShopee = rec.platform?.toLowerCase() === 'shopee';
               return (
                 <div
                   key={rec.id}
@@ -160,9 +160,9 @@ export function AdminCashbacksView({
                 >
                   <div className="flex justify-between items-start gap-2">
                     <div className="min-w-0 flex-1">
-                      <p className="text-3xs text-[var(--aff-muted)] font-bold">User: {rec.userId}</p>
+                      <p className="text-3xs text-[var(--aff-muted)] font-bold">{t('user_prefix', { id: rec.userId })}</p>
                       <p className="text-2xs font-mono text-[var(--aff-muted)] truncate max-w-[140px] break-all">
-                        Checkout: {rec.checkoutId}
+                        {t('checkout_prefix', { id: rec.checkoutId })}
                       </p>
                       <p className="text-3xs text-[var(--aff-muted)] mt-0.5">{dateStr}</p>
                     </div>
@@ -170,9 +170,12 @@ export function AdminCashbacksView({
                   </div>
                   <div className="flex justify-between items-center pt-2 border-t border-[var(--aff-border)] text-xs">
                     <span className="uppercase text-3xs font-bold text-[var(--aff-muted)]">
-                      Sàn: {rec.platform}
+                      {t('table_platform')}:{' '}
+                      <span className={isShopee ? 'text-[var(--aff-orange)] font-extrabold' : 'text-[var(--aff-text)]'}>
+                        {rec.platform}
+                      </span>
                     </span>
-                    <span className="font-bold text-orange-600 dark:text-orange-500">
+                    <span className="font-bold text-amber-500 dark:text-amber-400">
                       {formatPrice(rec.cashback)}
                     </span>
                   </div>
@@ -182,10 +185,10 @@ export function AdminCashbacksView({
           </div>
 
           {/* Pagination */}
-          {adminCashbacksTotalPages > 1 && (
+          {adminCashbacksTotalPages > 0 && (
             <div className="flex items-center justify-between border-t border-[var(--aff-border)] pt-4 mt-4">
               <span className="text-2xs text-[var(--aff-muted)]">
-                Tổng cộng: <span className="font-bold text-[var(--aff-text)]">{adminCashbacksTotal}</span> bản ghi
+                {t('total_records_prefix', { total: adminCashbacksTotal })}
               </span>
 
               <div className="flex items-center gap-1">
@@ -202,7 +205,7 @@ export function AdminCashbacksView({
                   <ChevronLeft className="w-4 h-4" />
                 </Button>
                 <span className="text-2xs px-2 font-semibold">
-                  Trang {adminCashbacksPage} / {adminCashbacksTotalPages}
+                  {t('page_indicator_prefix', { page: adminCashbacksPage, totalPages: adminCashbacksTotalPages })}
                 </span>
                 <Button
                   variant="outline"
