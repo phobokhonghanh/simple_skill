@@ -66,7 +66,29 @@ export function ConverterTab({
     }
     return '—';
   };
+  const onSelectHistoryItem = (item: HistoryItem) => {
+    handleSelectHistory(item);
+    if (typeof window !== 'undefined') {
+      setTimeout(() => {
+        const section = document.getElementById('converted-product-section');
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 50);
+    }
+  };
 
+  const onFormSubmit = (e: React.FormEvent) => {
+    handleSubmit(e);
+    if (typeof window !== 'undefined') {
+      setTimeout(() => {
+        const section = document.getElementById('converted-product-section');
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 50);
+    }
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
@@ -74,7 +96,7 @@ export function ConverterTab({
       <div className="lg:col-span-2 space-y-6">
         {/* Search Card */}
         <div className="aff-card p-5 sm:p-6 rounded-2xl">
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={onFormSubmit} className="space-y-4">
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="relative flex-1">
                 <input
@@ -122,126 +144,165 @@ export function ConverterTab({
           </div>
         )}
 
-        {/* Converted Product View */}
-        {productInfo && (
-          <div className="aff-card p-5 sm:p-6 rounded-2xl space-y-5 animate-in fade-in duration-300">
-            <div className="flex flex-col sm:flex-row gap-5">
-              {/* Product Image */}
-              <div className="w-full sm:w-32 h-32 rounded-xl bg-white border border-[var(--aff-border)] overflow-hidden flex items-center justify-center flex-shrink-0">
-                {productInfo.imageUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={formatShopeeImageUrl(productInfo.imageUrl)}
-                    alt={productInfo.productName}
-                    className="w-full h-full object-contain p-1"
-                    loading="lazy"
-                  />
-                ) : (
-                  <Sparkles className="w-8 h-8 text-[var(--aff-orange)]" />
-                )}
+        {/* Converted Product View or Skeleton Loading */}
+        <section id="converted-product-section" className="scroll-mt-20">
+          {loading ? (
+            <div className="aff-card p-5 sm:p-6 rounded-2xl space-y-5 animate-pulse">
+              <div className="flex flex-col sm:flex-row gap-5">
+                {/* Image Skeleton */}
+                <div className="w-full sm:w-32 h-32 rounded-xl bg-neutral-200 dark:bg-neutral-800/60 flex-shrink-0" />
+                
+                {/* Text Skeleton */}
+                <div className="flex-1 space-y-3 py-1 text-left">
+                  <div className="h-4.5 bg-neutral-200 dark:bg-neutral-800/60 rounded-md w-3/4" />
+                  <div className="h-3 bg-neutral-200 dark:bg-neutral-800/60 rounded-md w-1/2" />
+                  
+                  <div className="flex gap-2 pt-2">
+                    <div className="h-5 bg-neutral-200 dark:bg-neutral-800/60 rounded-full w-20" />
+                    <div className="h-5 bg-neutral-200 dark:bg-neutral-800/60 rounded-full w-16" />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4 pt-4 border-t border-[var(--aff-border)]">
+                    <div className="space-y-1.5">
+                      <div className="h-2.5 bg-neutral-200 dark:bg-neutral-800/60 rounded-md w-10" />
+                      <div className="h-4 bg-neutral-200 dark:bg-neutral-800/60 rounded-md w-24" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <div className="h-2.5 bg-neutral-200 dark:bg-neutral-800/60 rounded-md w-10" />
+                      <div className="h-4 bg-neutral-200 dark:bg-neutral-800/60 rounded-md w-24" />
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              {/* Product Text Details */}
-              <div className="flex-1 min-w-0 text-left space-y-2">
-                <div className="flex items-start justify-between gap-4">
-                  <h2 className="font-extrabold text-sm sm:text-base text-[var(--aff-heading)] leading-snug line-clamp-2">
-                    {productInfo.productName}
-                  </h2>
-                </div>
-
-                {/* Info Pills */}
-                <div className="flex flex-wrap gap-2 pt-1 text-3xs font-semibold">
-                  {productInfo.shopName && (
-                    <span className="px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-[var(--aff-muted)]">
-                      Shop: {productInfo.shopName}
-                    </span>
-                  )}
-                  {productInfo.rating !== undefined && productInfo.rating !== null && (
-                    <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center gap-0.5">
-                      <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" />
-                      {formatRating(productInfo.rating)}
-                    </span>
-                  )}
-                  {productInfo.sales && (
-                    <span className="px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-[var(--aff-muted)]">
-                      {t('sales_count', { count: productInfo.sales })}
-                    </span>
-                  )}
-                </div>
-
-                {/* Price and Commission */}
-                <div className="grid grid-cols-2 gap-4 pt-3 border-t border-[var(--aff-border)]">
-                  <div>
-                    <span className="text-3xs uppercase tracking-wider text-[var(--aff-muted)] font-bold">
-                      {t('product_price')}
-                    </span>
-                    <p className="text-sm sm:text-base font-extrabold text-[var(--aff-text)] mt-0.5">
-                      {formatPrice(productInfo.price)}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-3xs uppercase tracking-wider text-[var(--aff-muted)] font-bold">
-                      {t('commission_rate')}
-                    </span>
-                    <p className="text-sm sm:text-base font-black text-emerald-600 dark:text-emerald-400 mt-0.5">
-                      {formatPrice(productInfo.commission)}
-                    </p>
-                  </div>
-                </div>
-
-                {productInfo.lastUpdate && (
-                  <p className="text-4xs text-[var(--aff-muted)] pt-1 text-right">
-                    {t('updated_at', { date: formatDate(productInfo.lastUpdate) })}
-                  </p>
-                )}
+              
+              {/* Button Skeleton */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-[var(--aff-border)]">
+                <div className="h-11 bg-neutral-200 dark:bg-neutral-800/60 rounded-xl w-full" />
+                <div className="h-11 bg-neutral-200 dark:bg-neutral-800/60 rounded-xl w-full" />
               </div>
             </div>
-
-            {/* Call To Actions */}
-            {affiliateLink && (
-              <div className="space-y-3 pt-4 border-t border-[var(--aff-border)]">
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <a
-                    href={affiliateLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="aff-btn-primary py-3 px-6 rounded-xl flex items-center justify-center gap-2 font-bold text-sm sm:text-base select-none cursor-pointer flex-[2]"
-                  >
-                    <span>{t('btn_buy')}</span>
-                    <ExternalLink className="w-4.5 h-4.5" />
-                  </a>
-                  <Button
-                    onClick={handleCopy}
-                    className="aff-btn-secondary py-3 px-5 rounded-xl flex items-center justify-center gap-2 flex-1 font-bold text-sm sm:text-base select-none cursor-pointer"
-                  >
-                    {copied ? (
-                      <>
-                        <Check className="w-4.5 h-4.5 text-green-500" />
-                        <span className="text-green-600 dark:text-green-400">
-                          {t('btn_copied')}
-                        </span>
-                      </>
+          ) : (
+            productInfo && (
+              <div className="aff-card p-5 sm:p-6 rounded-2xl space-y-5 animate-in fade-in duration-300">
+                <div className="flex flex-col sm:flex-row gap-5">
+                  {/* Product Image */}
+                  <div className="w-full sm:w-32 h-32 rounded-xl bg-white border border-[var(--aff-border)] overflow-hidden flex items-center justify-center flex-shrink-0">
+                    {productInfo.imageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={formatShopeeImageUrl(productInfo.imageUrl)}
+                        alt={productInfo.productName}
+                        className="w-full h-full object-contain p-1"
+                        loading="lazy"
+                      />
                     ) : (
-                      <>
-                        <Copy className="w-4.5 h-4.5" />
-                        <span>{t('btn_copy')}</span>
-                      </>
+                      <Sparkles className="w-8 h-8 text-[var(--aff-orange)]" />
                     )}
-                  </Button>
+                  </div>
+
+                  {/* Product Text Details */}
+                  <div className="flex-1 min-w-0 text-left space-y-2">
+                    <div className="flex items-start justify-between gap-4">
+                      <h2 className="font-extrabold text-sm sm:text-base text-[var(--aff-heading)] leading-snug line-clamp-2">
+                        {productInfo.productName}
+                      </h2>
+                    </div>
+
+                    {/* Info Pills */}
+                    <div className="flex flex-wrap gap-2 pt-1 text-3xs font-semibold">
+                      {productInfo.shopName && (
+                        <span className="px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-[var(--aff-muted)]">
+                          Shop: {productInfo.shopName}
+                        </span>
+                      )}
+                      {productInfo.rating !== undefined && productInfo.rating !== null && (
+                        <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center gap-0.5">
+                          <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" />
+                          {formatRating(productInfo.rating)}
+                        </span>
+                      )}
+                      {productInfo.sales && (
+                        <span className="px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-[var(--aff-muted)]">
+                          {t('sales_count', { count: productInfo.sales })}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Price and Commission */}
+                    <div className="grid grid-cols-2 gap-4 pt-3 border-t border-[var(--aff-border)]">
+                      <div>
+                        <span className="text-3xs uppercase tracking-wider text-[var(--aff-muted)] font-bold">
+                          {t('product_price')}
+                        </span>
+                        <p className="text-sm sm:text-base font-extrabold text-[var(--aff-text)] mt-0.5">
+                          {formatPrice(productInfo.price)}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-3xs uppercase tracking-wider text-[var(--aff-muted)] font-bold">
+                          {t('commission_rate')}
+                        </span>
+                        <p className="text-sm sm:text-base font-black text-emerald-600 dark:text-emerald-400 mt-0.5">
+                          {formatPrice(productInfo.commission)}
+                        </p>
+                      </div>
+                    </div>
+
+                    {productInfo.lastUpdate && (
+                      <p className="text-4xs text-[var(--aff-muted)] pt-1 text-right">
+                        {t('updated_at', { date: formatDate(productInfo.lastUpdate) })}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
-                {/* Voucher Exclusive Offer Alert */}
-                <div className="text-left px-1">
-                  <p className="text-[11px] sm:text-xs text-red-500 font-medium italic leading-relaxed">
-                    {t('voucher_notice_prefix')}
-                    <span className="font-bold text-[var(--aff-orange)]">{t('voucher_notice_highlight')}</span>
-                    {t('voucher_notice_suffix')}
-                  </p>
-                </div>
+                {/* Call To Actions */}
+                {affiliateLink && (
+                  <div className="space-y-3 pt-4 border-t border-[var(--aff-border)]">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <a
+                        href={affiliateLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="aff-btn-primary py-3 px-6 rounded-xl flex items-center justify-center gap-2 font-bold text-sm sm:text-base select-none cursor-pointer flex-[2]"
+                      >
+                        <span>{t('btn_buy')}</span>
+                        <ExternalLink className="w-4.5 h-4.5" />
+                      </a>
+                      <Button
+                        onClick={handleCopy}
+                        className="aff-btn-secondary py-3 px-5 rounded-xl flex items-center justify-center gap-2 flex-1 font-bold text-sm sm:text-base select-none cursor-pointer"
+                      >
+                        {copied ? (
+                          <>
+                            <Check className="w-4.5 h-4.5 text-green-500" />
+                            <span className="text-green-600 dark:text-green-400">
+                              {t('btn_copied')}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-4.5 h-4.5" />
+                            <span>{t('btn_copy')}</span>
+                          </>
+                        )}
+                      </Button>
+                    </div>
+
+                    {/* Voucher Exclusive Offer Alert */}
+                    <div className="text-left px-1">
+                      <p className="text-[11px] sm:text-xs text-red-500 font-medium italic leading-relaxed">
+                        {t('voucher_notice_prefix')}
+                        <span className="font-bold text-[var(--aff-orange)]">{t('voucher_notice_highlight')}</span>
+                        {t('voucher_notice_suffix')}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        )}
+            )
+          )}
+        </section>
       </div>
 
       {/* Right Column: Search History */}
@@ -273,7 +334,7 @@ export function ConverterTab({
               {history.map((item, index) => (
                 <div
                   key={item.url + index}
-                  onClick={() => handleSelectHistory(item)}
+                  onClick={() => onSelectHistoryItem(item)}
                   className="aff-history-item p-3 rounded-xl border border-[var(--aff-border)] flex gap-3 cursor-pointer select-none"
                 >
                   {/* Image Thumbnail */}

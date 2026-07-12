@@ -100,6 +100,7 @@ export function CashbackDashboard() {
         if (!auth.user) {
           const btnContainer = document.getElementById('gsi-btn-container');
           if (btnContainer) {
+            btnContainer.innerHTML = ''; // Prevent duplicate buttons by clearing container first
             w.google.accounts.id.renderButton(btnContainer, {
               type: 'standard',
               theme: 'outline',
