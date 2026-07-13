@@ -17,7 +17,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { getCategoryColorPreset } from '@/features/bookmarks/colors';
-import type { Bookmark, PaginationMetadata, BookmarkFilters } from '@/features/bookmarks/types';
+import type {
+  Bookmark,
+  PaginationMetadata,
+  BookmarkFilters,
+} from '@/features/bookmarks/types';
 import type { BookmarkDashboardLabels } from '@/features/bookmarks/types';
 
 interface BookmarkListProps {
@@ -45,8 +49,12 @@ export function BookmarkList({
   onCreateBookmark,
 }: BookmarkListProps) {
   // Client-side local sorting states
-  const [localSortBy, setLocalSortBy] = React.useState<'createdAt' | 'title' | 'url'>(filters.sortBy ?? 'createdAt');
-  const [localSortOrder, setLocalSortOrder] = React.useState<'asc' | 'desc'>(filters.sortOrder ?? 'desc');
+  const [localSortBy, setLocalSortBy] = React.useState<
+    'createdAt' | 'title' | 'url'
+  >(filters.sortBy ?? 'createdAt');
+  const [localSortOrder, setLocalSortOrder] = React.useState<'asc' | 'desc'>(
+    filters.sortOrder ?? 'desc',
+  );
   const [isAdvancedSortOpen, setIsAdvancedSortOpen] = React.useState(false);
   const [prevBookmarks, setPrevBookmarks] = React.useState(bookmarks);
 
@@ -66,7 +74,10 @@ export function BookmarkList({
     }
   };
 
-  const renderLocalSortHeader = (field: 'createdAt' | 'title' | 'url', label: string) => {
+  const renderLocalSortHeader = (
+    field: 'createdAt' | 'title' | 'url',
+    label: string,
+  ) => {
     const isSorted = localSortBy === field;
     const isAsc = localSortOrder === 'asc';
 
@@ -74,8 +85,9 @@ export function BookmarkList({
       <button
         type="button"
         onClick={() => handleLocalSort(field)}
-        className={`flex items-center gap-1 text-xs font-semibold uppercase tracking-wider outline-none transition-colors hover:text-foreground ${isSorted ? 'text-foreground font-bold' : 'text-muted-foreground'
-          }`}
+        className={`flex items-center gap-1 text-xs font-semibold uppercase tracking-wider outline-none transition-colors hover:text-foreground ${
+          isSorted ? 'text-foreground font-bold' : 'text-muted-foreground'
+        }`}
       >
         {label}
         {isSorted ? (
@@ -111,8 +123,6 @@ export function BookmarkList({
     });
   }, [bookmarks, localSortBy, localSortOrder]);
 
-
-
   return (
     <div className="flex flex-col gap-4 p-4 sm:p-5">
       {/* 1. Card Search & Advanced API Sort */}
@@ -124,7 +134,10 @@ export function BookmarkList({
               event.preventDefault();
               const formData = new FormData(event.currentTarget);
               const value = formData.get('q');
-              onUpdateFilters({ query: typeof value === 'string' ? value.trim() : '', page: 1 });
+              onUpdateFilters({
+                query: typeof value === 'string' ? value.trim() : '',
+                page: 1,
+              });
             }}
           >
             <div className="relative flex-1 flex items-center">
@@ -159,7 +172,9 @@ export function BookmarkList({
               className="flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               <span>{labels.advancedSort}</span>
-              <ChevronDown className={`h-3.5 w-3.5 transition-transform ${isAdvancedSortOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown
+                className={`h-3.5 w-3.5 transition-transform ${isAdvancedSortOpen ? 'rotate-180' : ''}`}
+              />
             </button>
           </div>
         </div>
@@ -171,7 +186,12 @@ export function BookmarkList({
             </span>
             <select
               value={filters.sortBy ?? 'createdAt'}
-              onChange={(e) => onUpdateFilters({ sortBy: e.target.value as 'createdAt' | 'title' | 'url', page: 1 })}
+              onChange={(e) =>
+                onUpdateFilters({
+                  sortBy: e.target.value as 'createdAt' | 'title' | 'url',
+                  page: 1,
+                })
+              }
               className="h-7 rounded bg-background px-2 text-xs outline-none border border-input focus:ring-1 focus:ring-ring"
             >
               <option value="createdAt">{labels.sortCreatedAt}</option>
@@ -180,7 +200,12 @@ export function BookmarkList({
             </select>
             <select
               value={filters.sortOrder ?? 'desc'}
-              onChange={(e) => onUpdateFilters({ sortOrder: e.target.value as 'asc' | 'desc', page: 1 })}
+              onChange={(e) =>
+                onUpdateFilters({
+                  sortOrder: e.target.value as 'asc' | 'desc',
+                  page: 1,
+                })
+              }
               className="h-7 rounded bg-background px-2 text-xs outline-none border border-input focus:ring-1 focus:ring-ring"
             >
               <option value="asc">{labels.sortAsc}</option>
@@ -218,99 +243,97 @@ export function BookmarkList({
           </div>
         </div>
 
-      {sortedBookmarks.length === 0 ? (
-        <p className="px-4 py-10 text-center text-sm text-muted-foreground">
-          {labels.emptyBookmarks}
-        </p>
-      ) : (
-        <>
-          <ul className="divide-y">
-            {sortedBookmarks.map((bookmark) => {
-              const color = getCategoryColorPreset(bookmark.categoryColor);
+        {sortedBookmarks.length === 0 ? (
+          <p className="px-4 py-10 text-center text-sm text-muted-foreground">
+            {labels.emptyBookmarks}
+          </p>
+        ) : (
+          <>
+            <ul className="divide-y">
+              {sortedBookmarks.map((bookmark) => {
+                const color = getCategoryColorPreset(bookmark.categoryColor);
 
-              return (
-                <li
-                  key={bookmark.id}
-                  className="grid gap-3 border-l-4 bg-background px-4 py-4 transition-colors hover:bg-muted/30 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center"
-                  style={{
-                    borderLeftColor: color.foreground,
-                    backgroundColor: color.background,
-                  }}
-                >
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="truncate text-base font-semibold tracking-tight">
-                        {bookmark.title}
-                      </h3>
-                      <span
-                        className="rounded-md border px-2 py-0.5 text-xs font-medium"
-                        style={{
-                          borderColor: color.border,
-                          color: color.foreground,
-                          backgroundColor: color.background,
-                        }}
-                      >
-                        {bookmark.categoryName}
-                      </span>
-                    </div>
-                    <a
-                      href={bookmark.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-1 flex min-w-0 items-center gap-1 text-sm text-primary transition-colors hover:text-primary/80 hover:underline"
-                    >
-                      <LinkIcon className="h-3.5 w-3.5 shrink-0" />
-                      <span className="truncate">{bookmark.url}</span>
-                    </a>
-                    {bookmark.description && (
-                      <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-                        {bookmark.description}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 lg:justify-end">
-                    <Button
-                      variant="outline"
-                      size="icon-sm"
-                      asChild
-                      title={labels.open}
-                    >
+                return (
+                  <li
+                    key={bookmark.id}
+                    className="grid gap-3 border-l-4 bg-background px-4 py-4 transition-colors hover:bg-muted/30 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center"
+                    style={{
+                      borderLeftColor: color.foreground,
+                      backgroundColor: color.background,
+                    }}
+                  >
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="truncate text-base font-semibold tracking-tight">
+                          {bookmark.title}
+                        </h3>
+                        <span
+                          className="rounded-md border px-2 py-0.5 text-xs font-medium"
+                          style={{
+                            borderColor: color.border,
+                            color: color.foreground,
+                            backgroundColor: color.background,
+                          }}
+                        >
+                          {bookmark.categoryName}
+                        </span>
+                      </div>
                       <a
                         href={bookmark.url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="mt-1 flex min-w-0 items-center gap-1 text-sm text-primary transition-colors hover:text-primary/80 hover:underline"
                       >
-                        <ExternalLink className="h-4 w-4" />
+                        <LinkIcon className="h-3.5 w-3.5 shrink-0" />
+                        <span className="truncate">{bookmark.url}</span>
                       </a>
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon-sm"
-                      title={labels.edit}
-                      onClick={() => onEdit(bookmark)}
-                    >
-                      <Edit3 className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="icon-sm"
-                      title={labels.delete}
-                      onClick={() => onDelete(bookmark.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+                      {bookmark.description && (
+                        <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                          {bookmark.description}
+                        </p>
+                      )}
+                    </div>
 
-
-        </>
-      )}
+                    <div className="flex flex-wrap gap-2 lg:justify-end">
+                      <Button
+                        variant="outline"
+                        size="icon-sm"
+                        asChild
+                        title={labels.open}
+                      >
+                        <a
+                          href={bookmark.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                        </a>
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon-sm"
+                        title={labels.edit}
+                        onClick={() => onEdit(bookmark)}
+                      >
+                        <Edit3 className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="icon-sm"
+                        title={labels.delete}
+                        onClick={() => onDelete(bookmark.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        )}
       </Card>
     </div>
   );

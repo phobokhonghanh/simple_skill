@@ -4,47 +4,136 @@
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.2.4-000000?style=flat-square&logo=nextdotjs&logoColor=white) ![React](https://img.shields.io/badge/React-19.2.4-61DAFB?style=flat-square&logo=react&logoColor=0B1F2A) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white) ![Yarn](https://img.shields.io/badge/Yarn-4.9.2-2C8EBB?style=flat-square&logo=yarn&logoColor=white) ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare_Pages-F38020?style=flat-square&logo=cloudflarepages&logoColor=white)
 
+This is a modern, sustainable, and highly optimized personal portfolio and web tools hub built using **Next.js 16 (App Router)** and **React 19**. It features dual-language support, custom design tokens, and integrates with a standalone Python FastAPI + D1 backend for stateful features.
+
 ---
 
-## Routes
+## Key Features
+
+- **Multi-language Support (i18n)**: Fully localized in English (`en`) and Vietnamese (`vi`) using `next-intl`.
+- **Advanced Portfolio & Experience**: Timeline structure, categorised tech skills, and certification details with dynamic theme adjustment.
+- **Bookmarks Manager**: Interactive dashboard to search, filter, and manage links inside nested categories. Protected with admin token authentication.
+- **Shopee Cashback Portal**: Shopee affiliate converter with conversion reports, local search history, interactive coin dropping effects, Google Identity Services (GSI) authentication, and manual/automated conversion synchronization for admins.
+- **Modern UI & Design System**: Custom theme providers (`next-themes`), Tailwind CSS v4, and standard UI primitives based on `shadcn/ui`.
+
+---
+
+## Repository Structure
+
+```text
+.
+├── src/
+│   ├── app/                  # Next.js App Router (locale routing inside [locale])
+│   ├── components/           # UI, features, and layout components
+│   ├── features/             # Feature-specific components, hooks, and helpers
+│   ├── i18n/                 # next-intl configuration and routing utilities
+│   ├── lib/                  # Shared utilities and runtime config
+│   └── messages/             # Localization JSON files (en.json, vi.json)
+├── docs/                     # Documentation (dev.md, rule.md, deploy.md)
+├── public/                   # Static assets and redirection files
+├── package.json              # Scripts and project dependencies
+└── README.md                 # Main workspace documentation
+```
+
+---
+
+## Routes Matrix
 
 | Route                   | Type                     | Description                                                                                  |
 | ----------------------- | ------------------------ | -------------------------------------------------------------------------------------------- |
-| `/`                     | Redirect                 | Redirects to `/en/` via `public/_redirects`, with a client fallback in `src/app/page.tsx`.   |
-| `/bookmarks/`           | Client redirect          | Legacy entry point that sends visitors to `/en/bookmarks`.                                   |
-| `/experience/`          | Client redirect          | Legacy entry point that sends visitors to `/en/experience`.                                  |
-| `/[locale]/`            | Static page              | Landing page with language switcher, theme toggle, and links to the main sections.           |
-| `/[locale]/bookmarks/`  | Static page + client API | Bookmark dashboard shell; the UI loads bookmark data from the Python Worker API after login. |
-| `/[locale]/cashback/`   | Static page              | Cashback portal dashboard with its own navigation and localized metadata.                    |
-| `/[locale]/experience/` | Static page              | Profile and experience page with hero, tech stack, and experience sections.                  |
+| `/`                     | Redirect                 | Redirects to `/en/` via `public/_redirects` (or client fallback in `src/app/page.tsx`).       |
+| `/bookmarks/`           | Client redirect          | Legacy entry point forwarding visitors to `/en/bookmarks`.                                   |
+| `/experience/`          | Client redirect          | Legacy entry point forwarding visitors to `/en/experience`.                                   |
+| `/[locale]/`            | Static page              | Landing page with localized greetings, language selection, and theme options.                |
+| `/[locale]/bookmarks/`  | Static page + client API | Bookmarks manager interface loading data from the FastAPI backend.                           |
+| `/[locale]/cashback/`   | Static page + client API | Shopee affiliate cashback portal with login, order list, and sync tools.                    |
+| `/[locale]/experience/` | Static page              | Interactive resume showing professional timeline, education, and credentials.                |
 
 ---
 
-## Development
+## Environment Variables
+
+Copy `.env.example` to `.env.local` and define the required values:
 
 ```bash
-cp .env.example .env.local
+# Public URL of the FastAPI backend worker
+NEXT_PUBLIC_API_URL=https://api.yourdomain.workers.dev
+
+# Google OAuth Client ID for Cashback Portal authentication
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-oauth-client-id.apps.googleusercontent.com
+
+# Optional Analytics IDs
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
+NEXT_PUBLIC_CLARITY_ID=xxxxxxxxxx
+
+# Build-time Timezone
+APP_TIME_ZONE=Asia/Ho_Chi_Minh
+```
+
+---
+
+## Development & Operations
+
+### Installation
+
+```bash
 yarn install
-yarn dev
 ```
 
-Set `NEXT_PUBLIC_API_URL` to the Worker URL. Build the Pages artifact with:
+### Dev Mode
+
+Start the Next.js development server:
 
 ```bash
-yarn lint
-yarn build
+yarn dev          # Runs with Webpack
+yarn dev:turbo    # Runs with Turbopack (recommended for faster reloads)
 ```
 
-> Cloudflare Pages must publish the generated `out` directory. Deployment and
-> API integration are documented in [docs/deploy.md](docs/deploy.md).
+### Build & Linting
+
+Compile code, check for TypeScript/Linter issues, and prepare static output:
+
+```bash
+yarn lint         # Verify code style and formatting
+yarn format       # Apply Prettier formatting across files
+yarn depcheck     # Verify unused or missing package dependencies
+yarn build        # Generate static production build under "out/" folder
+```
 
 ---
 
-## Route Check
+## Code Quality & Git Workflow
 
-Static export was checked locally from `out` on `http://127.0.0.1:3001`.
+This repository enforces high-quality standards using pre-commit hooks (Husky, lint-staged) and Conventional Commits.
 
-- `GET /[locale]/` -> `200 OK`, title `Nguyen Dinh Nguyen`
-- `GET /[locale]/bookmarks/` -> `200 OK`, title `Bookmarks — Nguyen Dinh Nguyen`
-- `GET /[locale]/experience/` -> `200 OK`, title `Experience — Nguyen Dinh Nguyen`
-- `GET /` is redirected to `/en/` in Cloudflare Pages via `public/_redirects`
+### Commit Messages Format
+
+```text
+<type>(<scope>): <description>
+```
+
+Common types:
+- `feat`: A new feature
+- `fix`: A bug fix
+- `docs`: Documentation changes
+- `style`: Formatting, missing semi-colons, etc.
+- `refactor`: Refactoring production code (no new features/bug fixes)
+- `perf`: Performance improvements
+- `build`: Changes to build configurations or dependencies
+- `chore`: General maintenance tasks
+
+---
+
+## Deployment & Verification
+
+Deployments are set up as a **static export** compiled into the `out` directory and hosted on **Cloudflare Pages**. 
+
+Verification check status of standard output:
+- `GET /[locale]/` -> `200 OK`, Title: `Nguyen Dinh Nguyen`
+- `GET /[locale]/bookmarks/` -> `200 OK`, Title: `Bookmarks — Nguyen Dinh Nguyen`
+- `GET /[locale]/experience/` -> `200 OK`, Title: `Experience — Nguyen Dinh Nguyen`
+- `GET /[locale]/cashback/` -> `200 OK`, Title: `Cashback — Nguyen Dinh Nguyen`
+- `GET /` -> Redirects correctly to `/en/` using `_redirects` directives.
+
+Refer to [docs/deploy.md](docs/deploy.md) for step-by-step setup details.

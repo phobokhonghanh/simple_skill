@@ -7,9 +7,12 @@ import {
   Loader2,
   ShieldCheck,
   AlertTriangle,
-  RotateCw
+  RotateCw,
 } from 'lucide-react';
-import type { ConversionRecord, CashbackRecord } from '@/features/cashback/types';
+import type {
+  ConversionRecord,
+  CashbackRecord,
+} from '@/features/cashback/types';
 import { AdminConversionsView } from '@/features/cashback/AdminConversionsView';
 import { AdminCashbacksView } from '@/features/cashback/AdminCashbacksView';
 import { Button } from '@/components/ui/button';
@@ -150,7 +153,10 @@ export function AdminTab({
               <span>{t('sync_shopee_conversions')}</span>
             </h3>
 
-            <form onSubmit={handleAdminSync} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <form
+              onSubmit={handleAdminSync}
+              className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end"
+            >
               <div className="space-y-1.5 text-left">
                 <label className="text-xs font-bold text-[var(--aff-muted)] flex items-center gap-1">
                   <Calendar className="w-3.5 h-3.5" />

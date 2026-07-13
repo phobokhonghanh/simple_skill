@@ -7,7 +7,7 @@ import {
   Loader2,
   CircleDollarSign,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
 } from 'lucide-react';
 import type { CashbackRecord } from '@/features/cashback/types';
 import { Button } from '@/components/ui/button';
@@ -96,7 +96,9 @@ export function AdminCashbacksView({
           <p className="text-xs text-[var(--aff-muted)]">{t('loading')}</p>
         </div>
       ) : adminCashbacksError ? (
-        <div className="py-8 text-center text-red-500 text-xs sm:text-sm">{adminCashbacksError}</div>
+        <div className="py-8 text-center text-red-500 text-xs sm:text-sm">
+          {adminCashbacksError}
+        </div>
       ) : adminCashbacks.length === 0 ? (
         <div className="py-12 text-center text-xs sm:text-sm text-[var(--aff-muted)] border border-dashed border-[var(--aff-border)] rounded-xl">
           {t('empty_cashbacks')}
@@ -132,7 +134,9 @@ export function AdminCashbacksView({
                       <td className="py-4 px-2 font-mono text-2xs truncate max-w-[120px]">
                         {rec.checkoutId}
                       </td>
-                      <td className={`py-4 px-2 uppercase font-bold text-2xs ${isShopee ? 'text-[var(--aff-orange)]' : 'text-[var(--aff-text)]'}`}>
+                      <td
+                        className={`py-4 px-2 uppercase font-bold text-2xs ${isShopee ? 'text-[var(--aff-orange)]' : 'text-[var(--aff-text)]'}`}
+                      >
                         {rec.platform}
                       </td>
                       <td className="py-4 px-2 font-bold text-amber-500 dark:text-amber-400">
@@ -160,18 +164,28 @@ export function AdminCashbacksView({
                 >
                   <div className="flex justify-between items-start gap-2">
                     <div className="min-w-0 flex-1">
-                      <p className="text-3xs text-[var(--aff-muted)] font-bold">{t('user_prefix', { id: rec.userId })}</p>
+                      <p className="text-3xs text-[var(--aff-muted)] font-bold">
+                        {t('user_prefix', { id: rec.userId })}
+                      </p>
                       <p className="text-2xs font-mono text-[var(--aff-muted)] truncate max-w-[140px] break-all">
                         {t('checkout_prefix', { id: rec.checkoutId })}
                       </p>
-                      <p className="text-3xs text-[var(--aff-muted)] mt-0.5">{dateStr}</p>
+                      <p className="text-3xs text-[var(--aff-muted)] mt-0.5">
+                        {dateStr}
+                      </p>
                     </div>
                     <StatusBadge status={rec.status} />
                   </div>
                   <div className="flex justify-between items-center pt-2 border-t border-[var(--aff-border)] text-xs">
                     <span className="uppercase text-3xs font-bold text-[var(--aff-muted)]">
                       {t('table_platform')}:{' '}
-                      <span className={isShopee ? 'text-[var(--aff-orange)] font-extrabold' : 'text-[var(--aff-text)]'}>
+                      <span
+                        className={
+                          isShopee
+                            ? 'text-[var(--aff-orange)] font-extrabold'
+                            : 'text-[var(--aff-text)]'
+                        }
+                      >
                         {rec.platform}
                       </span>
                     </span>
@@ -205,14 +219,19 @@ export function AdminCashbacksView({
                   <ChevronLeft className="w-4 h-4" />
                 </Button>
                 <span className="text-2xs px-2 font-semibold">
-                  {t('page_indicator_prefix', { page: adminCashbacksPage, totalPages: adminCashbacksTotalPages })}
+                  {t('page_indicator_prefix', {
+                    page: adminCashbacksPage,
+                    totalPages: adminCashbacksTotalPages,
+                  })}
                 </span>
                 <Button
                   variant="outline"
                   size="icon-sm"
                   disabled={adminCashbacksPage >= adminCashbacksTotalPages}
                   onClick={() => {
-                    setAdminCashbacksPage((p) => Math.min(adminCashbacksTotalPages, p + 1));
+                    setAdminCashbacksPage((p) =>
+                      Math.min(adminCashbacksTotalPages, p + 1),
+                    );
                     setTimeout(() => void fetchAdminCashbacks(), 0);
                   }}
                   className="p-1.5 rounded-lg border border-[var(--aff-border)] text-[var(--aff-muted)] hover:text-orange-500 hover:border-orange-500/30 disabled:opacity-40 cursor-pointer hover:bg-transparent"

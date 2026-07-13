@@ -2,8 +2,14 @@
 
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { CERTIFICATIONS, type Certification } from '@/features/experience/data/certifications';
-import { TECH_SKILLS, type TechSkill } from '@/features/experience/data/techSkills';
+import {
+  CERTIFICATIONS,
+  type Certification,
+} from '@/features/experience/data/certifications';
+import {
+  TECH_SKILLS,
+  type TechSkill,
+} from '@/features/experience/data/techSkills';
 
 function TechSkillCard({ skill }: { skill: TechSkill }) {
   return (

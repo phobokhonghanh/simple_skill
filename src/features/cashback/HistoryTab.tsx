@@ -11,12 +11,19 @@ import {
   ChevronRight,
   ChevronDown,
   ChevronUp,
-  Search
+  Search,
 } from 'lucide-react';
-import type { CashbackRecord, ConversionRecord } from '@/features/cashback/types';
+import type {
+  CashbackRecord,
+  ConversionRecord,
+} from '@/features/cashback/types';
 import Coin from '@/features/cashback/Coin';
 import { Button } from '@/components/ui/button';
-import { formatShopeeImageUrl, formatPrice, formatDate } from '@/features/cashback/utils';
+import {
+  formatShopeeImageUrl,
+  formatPrice,
+  formatDate,
+} from '@/features/cashback/utils';
 import { StatusBadge } from '@/features/cashback/StatusBadge';
 import { CashbackCard } from '@/features/cashback/CashbackCard';
 import { FormattedDateInput } from '@/features/cashback/FormattedDateInput';
@@ -52,7 +59,6 @@ interface HistoryTabProps {
   setShowUserSyncModal: (show: boolean) => void;
   handleUserSync: (startDate: string, endDate: string) => Promise<void>;
 }
-
 
 export function HistoryTab({
   loadingHistory,
@@ -91,7 +97,9 @@ export function HistoryTab({
   const [prevHistoryEnd, setPrevHistoryEnd] = React.useState(historyEnd);
   const [tempStart, setTempStart] = React.useState(historyStart);
   const [tempEnd, setTempEnd] = React.useState(historyEnd);
-  const [expandedSyncRecordId, setExpandedSyncRecordId] = React.useState<string | null>(null);
+  const [expandedSyncRecordId, setExpandedSyncRecordId] = React.useState<
+    string | null
+  >(null);
 
   if (historyStart !== prevHistoryStart || historyEnd !== prevHistoryEnd) {
     setPrevHistoryStart(historyStart);
@@ -136,10 +144,12 @@ export function HistoryTab({
               <div
                 key={coin.id}
                 className="burst-coin"
-                style={{
-                  '--tx': `${coin.tx}px`,
-                  '--ty': `${coin.ty}px`,
-                } as React.CSSProperties}
+                style={
+                  {
+                    '--tx': `${coin.tx}px`,
+                    '--ty': `${coin.ty}px`,
+                  } as React.CSSProperties
+                }
               >
                 <Coin size={12} animate={false} />
               </div>
@@ -293,7 +303,9 @@ export function HistoryTab({
             disabled={userSyncLoading}
             className="bg-[var(--aff-orange)] hover:bg-[var(--aff-orange-hover)] text-white font-bold text-xs py-2 px-4 rounded-xl flex items-center gap-2 transition-all self-start md:self-center shrink-0 cursor-pointer h-10 shadow-sm"
           >
-            <RefreshCw className={`w-4 h-4 ${userSyncLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw
+              className={`w-4 h-4 ${userSyncLoading ? 'animate-spin' : ''}`}
+            />
             <span>{t('manual_sync')}</span>
           </Button>
         </div>
@@ -301,10 +313,14 @@ export function HistoryTab({
         {loadingHistory ? (
           <div className="py-12 flex flex-col items-center justify-center gap-2">
             <Loader2 className="w-8 h-8 text-[var(--aff-orange)] animate-spin" />
-            <p className="text-xs text-[var(--aff-muted)]">{t('loading_history')}</p>
+            <p className="text-xs text-[var(--aff-muted)]">
+              {t('loading_history')}
+            </p>
           </div>
         ) : historyError ? (
-          <div className="py-8 text-center text-red-500 text-xs sm:text-sm">{historyError}</div>
+          <div className="py-8 text-center text-red-500 text-xs sm:text-sm">
+            {historyError}
+          </div>
         ) : processedUserHistory.length === 0 ? (
           <div className="py-12 text-center text-xs sm:text-sm text-[var(--aff-muted)] border border-dashed border-[var(--aff-border)] rounded-xl">
             {t('no_cashback')}
@@ -327,26 +343,41 @@ export function HistoryTab({
                 <tbody>
                   {processedUserHistory.map((rec) => {
                     const totalItems =
-                      rec.conversion?.orders?.reduce((acc, o) => acc + (o.items?.length || 0), 0) || 0;
+                      rec.conversion?.orders?.reduce(
+                        (acc, o) => acc + (o.items?.length || 0),
+                        0,
+                      ) || 0;
                     const purchaseTime =
                       rec.conversion?.purchase_time ??
-                      (rec.createdAt ? Math.floor(new Date(rec.createdAt).getTime() / 1000) : null);
+                      (rec.createdAt
+                        ? Math.floor(new Date(rec.createdAt).getTime() / 1000)
+                        : null);
                     const purchaseDateStr = formatDate(purchaseTime);
                     const isExpanded = expandedRecordId === rec.checkoutId;
                     const totalAmount =
                       rec.conversion?.orders?.reduce(
                         (acc, o) =>
-                          acc + (o.items?.reduce((sum, item) => sum + (item.actual_amount || 0), 0) || 0),
+                          acc +
+                          (o.items?.reduce(
+                            (sum, item) => sum + (item.actual_amount || 0),
+                            0,
+                          ) || 0),
                         0,
                       ) || 0;
 
                     return (
                       <React.Fragment key={rec.id || rec.checkoutId}>
                         <tr
-                          onClick={() => setExpandedRecordId(isExpanded ? null : (rec.checkoutId || null))}
+                          onClick={() =>
+                            setExpandedRecordId(
+                              isExpanded ? null : rec.checkoutId || null,
+                            )
+                          }
                           className="border-b border-[var(--aff-border)] hover:bg-neutral-50 dark:hover:bg-neutral-900/40 cursor-pointer transition-colors"
                         >
-                          <td className="py-4.5 px-2 font-medium">{purchaseDateStr}</td>
+                          <td className="py-4.5 px-2 font-medium">
+                            {purchaseDateStr}
+                          </td>
                           <td className="py-4.5 px-2 font-mono text-2xs truncate max-w-[120px]">
                             {rec.checkoutId}
                           </td>
@@ -355,14 +386,20 @@ export function HistoryTab({
                               {totalItems} SP
                             </span>
                           </td>
-                          <td className="py-4.5 px-2">{formatPrice(totalAmount)}</td>
+                          <td className="py-4.5 px-2">
+                            {formatPrice(totalAmount)}
+                          </td>
                           <td className="py-4.5 px-2 font-bold text-orange-600 dark:text-orange-500">
                             {formatPrice(rec.cashback)}
                           </td>
                           <td className="py-4.5 px-2 text-right">
                             <div className="flex items-center justify-end gap-1.5">
                               <StatusBadge status={rec.status} />
-                              {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                              {isExpanded ? (
+                                <ChevronUp className="w-4 h-4" />
+                              ) : (
+                                <ChevronDown className="w-4 h-4" />
+                              )}
                             </div>
                           </td>
                         </tr>
@@ -376,7 +413,10 @@ export function HistoryTab({
                             >
                               <div className="space-y-3 pl-2">
                                 {rec.conversion.orders?.map((ord, oIdx) => (
-                                  <div key={ord.order_id || oIdx} className="space-y-2 text-left">
+                                  <div
+                                    key={ord.order_id || oIdx}
+                                    className="space-y-2 text-left"
+                                  >
                                     <div className="flex justify-between items-center text-xs font-semibold text-[var(--aff-muted)] pb-1 border-b border-[var(--aff-border)]/50">
                                       <span>Mã đơn hàng: {ord.order_id}</span>
                                       <StatusBadge status={ord.order_status} />
@@ -392,7 +432,9 @@ export function HistoryTab({
                                               {item.img_code ? (
                                                 // eslint-disable-next-line @next/next/no-img-element
                                                 <img
-                                                  src={formatShopeeImageUrl(item.img_code)}
+                                                  src={formatShopeeImageUrl(
+                                                    item.img_code,
+                                                  )}
                                                   alt=""
                                                   className="w-full h-full object-contain"
                                                 />
@@ -405,7 +447,10 @@ export function HistoryTab({
                                                 {item.item_name}
                                               </p>
                                               <p className="text-3xs text-[var(--aff-muted)] mt-0.5">
-                                                Số lượng: {item.qty} • Đơn giá: {formatPrice(item.actual_amount)}
+                                                Số lượng: {item.qty} • Đơn giá:{' '}
+                                                {formatPrice(
+                                                  item.actual_amount,
+                                                )}
                                               </p>
                                             </div>
                                           </div>
@@ -433,11 +478,17 @@ export function HistoryTab({
               {processedUserHistory.map((rec) => {
                 const purchaseTime =
                   rec.conversion?.purchase_time ??
-                  (rec.createdAt ? Math.floor(new Date(rec.createdAt).getTime() / 1000) : null);
+                  (rec.createdAt
+                    ? Math.floor(new Date(rec.createdAt).getTime() / 1000)
+                    : null);
                 const totalAmount =
                   rec.conversion?.orders?.reduce(
                     (acc, o) =>
-                      acc + (o.items?.reduce((sum, item) => sum + (item.actual_amount || 0), 0) || 0),
+                      acc +
+                      (o.items?.reduce(
+                        (sum, item) => sum + (item.actual_amount || 0),
+                        0,
+                      ) || 0),
                     0,
                   ) || 0;
 
@@ -452,7 +503,11 @@ export function HistoryTab({
                     orders={rec.conversion?.orders}
                     isExpanded={expandedRecordId === rec.checkoutId}
                     onToggleExpand={() =>
-                      setExpandedRecordId(expandedRecordId === rec.checkoutId ? null : (rec.checkoutId || null))
+                      setExpandedRecordId(
+                        expandedRecordId === rec.checkoutId
+                          ? null
+                          : rec.checkoutId || null,
+                      )
                     }
                   />
                 );
@@ -471,19 +526,28 @@ export function HistoryTab({
                     variant="outline"
                     size="icon-sm"
                     disabled={userHistoryPage <= 1}
-                    onClick={() => setUserHistoryPage((p) => Math.max(1, p - 1))}
+                    onClick={() =>
+                      setUserHistoryPage((p) => Math.max(1, p - 1))
+                    }
                     className="p-1.5 rounded-lg border border-[var(--aff-border)] text-[var(--aff-muted)] hover:text-orange-500 hover:border-orange-500/30 disabled:opacity-40 cursor-pointer hover:bg-transparent"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </Button>
                   <span className="text-2xs px-2 font-semibold">
-                    {t('page_indicator', { page: userHistoryPage, totalPages: userHistoryTotalPages })}
+                    {t('page_indicator', {
+                      page: userHistoryPage,
+                      totalPages: userHistoryTotalPages,
+                    })}
                   </span>
                   <Button
                     variant="outline"
                     size="icon-sm"
                     disabled={userHistoryPage >= userHistoryTotalPages}
-                    onClick={() => setUserHistoryPage((p) => Math.min(userHistoryTotalPages, p + 1))}
+                    onClick={() =>
+                      setUserHistoryPage((p) =>
+                        Math.min(userHistoryTotalPages, p + 1),
+                      )
+                    }
                     className="p-1.5 rounded-lg border border-[var(--aff-border)] text-[var(--aff-muted)] hover:text-orange-500 hover:border-orange-500/30 disabled:opacity-40 cursor-pointer hover:bg-transparent"
                   >
                     <ChevronRight className="w-4 h-4" />
@@ -502,7 +566,9 @@ export function HistoryTab({
             {/* Header */}
             <div className="flex items-center justify-between border-b border-[var(--aff-border)] pb-3">
               <h4 className="font-extrabold text-sm sm:text-base text-[var(--aff-heading)] flex items-center gap-2">
-                <RefreshCw className={`w-4 h-4 text-[var(--aff-orange)] ${userSyncLoading ? 'animate-spin' : ''}`} />
+                <RefreshCw
+                  className={`w-4 h-4 text-[var(--aff-orange)] ${userSyncLoading ? 'animate-spin' : ''}`}
+                />
                 <span>{t('sync_modal_title')}</span>
               </h4>
               {!userSyncLoading && (
@@ -511,7 +577,9 @@ export function HistoryTab({
                   aria-label="Close"
                   className="text-[var(--aff-muted)] hover:text-[var(--aff-text)] transition-colors p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
                 >
-                  <span className="text-xl font-bold leading-none">&times;</span>
+                  <span className="text-xl font-bold leading-none">
+                    &times;
+                  </span>
                 </button>
               )}
             </div>
@@ -520,14 +588,18 @@ export function HistoryTab({
             <div className="space-y-4 py-2">
               <div className="p-3 bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-[var(--aff-border)] text-xs text-[var(--aff-muted)] space-y-1">
                 <div>
-                  {t('sync_modal_range', { range: `${formatDateString(tempStart)} - ${formatDateString(tempEnd)}` })}
+                  {t('sync_modal_range', {
+                    range: `${formatDateString(tempStart)} - ${formatDateString(tempEnd)}`,
+                  })}
                 </div>
               </div>
 
               {userSyncLoading ? (
                 <div className="py-8 flex flex-col items-center justify-center gap-3">
                   <Loader2 className="w-10 h-10 text-[var(--aff-orange)] animate-spin" />
-                  <p className="text-xs text-[var(--aff-muted)] text-center animate-pulse">{t('sync_modal_loading')}</p>
+                  <p className="text-xs text-[var(--aff-muted)] text-center animate-pulse">
+                    {t('sync_modal_loading')}
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -535,16 +607,24 @@ export function HistoryTab({
                     <div className="space-y-3">
                       <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-xl text-xs font-semibold flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                        {t('sync_modal_success_prefix', { count: userSyncData?.length ?? 0 })}
+                        {t('sync_modal_success_prefix', {
+                          count: userSyncData?.length ?? 0,
+                        })}
                       </div>
 
                       {userSyncData && userSyncData.length > 0 ? (
                         <div className="max-h-[24rem] overflow-y-auto space-y-3 pr-1">
                           {userSyncData.map((item, idx) => {
-                            const totalAmount = item.orders?.reduce(
-                              (acc, o) => acc + (o.items?.reduce((sum, it) => sum + (it.actual_amount || 0), 0) || 0),
-                              0,
-                            ) || 0;
+                            const totalAmount =
+                              item.orders?.reduce(
+                                (acc, o) =>
+                                  acc +
+                                  (o.items?.reduce(
+                                    (sum, it) => sum + (it.actual_amount || 0),
+                                    0,
+                                  ) || 0),
+                                0,
+                              ) || 0;
 
                             return (
                               <CashbackCard
@@ -553,18 +633,28 @@ export function HistoryTab({
                                 purchaseTime={item.purchase_time || null}
                                 status={item.checkout_status || 'pending'}
                                 totalAmount={totalAmount}
-                                cashback={Number(item.affiliate_net_commission || 0)}
+                                cashback={Number(
+                                  item.affiliate_net_commission || 0,
+                                )}
                                 orders={item.orders}
-                                isExpanded={expandedSyncRecordId === item.checkout_id}
+                                isExpanded={
+                                  expandedSyncRecordId === item.checkout_id
+                                }
                                 onToggleExpand={() =>
-                                  setExpandedSyncRecordId(expandedSyncRecordId === item.checkout_id ? null : (item.checkout_id || null))
+                                  setExpandedSyncRecordId(
+                                    expandedSyncRecordId === item.checkout_id
+                                      ? null
+                                      : item.checkout_id || null,
+                                  )
                                 }
                               />
                             );
                           })}
                         </div>
                       ) : (
-                        <p className="text-xs text-[var(--aff-muted)] text-center py-4">{t('sync_modal_empty')}</p>
+                        <p className="text-xs text-[var(--aff-muted)] text-center py-4">
+                          {t('sync_modal_empty')}
+                        </p>
                       )}
                     </div>
                   ) : (

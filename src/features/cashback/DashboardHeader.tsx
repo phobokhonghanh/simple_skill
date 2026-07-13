@@ -6,7 +6,7 @@ import {
   Sparkles,
   ShieldCheck,
   TrendingUp,
-  CircleDollarSign
+  CircleDollarSign,
 } from 'lucide-react';
 import type { User } from '@/features/cashback/types';
 import { Button } from '@/components/ui/button';
@@ -40,7 +40,9 @@ export function DashboardHeader({
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">
           <span className="text-[var(--aff-text)]">{firstWord}</span>
-          {restWords && <span className="aff-gradient-text ml-2">{restWords}</span>}
+          {restWords && (
+            <span className="aff-gradient-text ml-2">{restWords}</span>
+          )}
         </h1>
         <p className="text-sm sm:text-base text-[var(--aff-muted)]">
           {t('subtitle')}

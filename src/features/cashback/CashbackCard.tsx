@@ -5,7 +5,11 @@ import { useTranslations } from 'next-intl';
 import { ShoppingBag, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { StatusBadge } from '@/features/cashback/StatusBadge';
-import { formatShopeeImageUrl, formatPrice, formatDate } from '@/features/cashback/utils';
+import {
+  formatShopeeImageUrl,
+  formatPrice,
+  formatDate,
+} from '@/features/cashback/utils';
 import type { ConversionOrder } from '@/features/cashback/types';
 
 interface CashbackCardProps {
@@ -33,7 +37,8 @@ export function CashbackCard({
 }: CashbackCardProps) {
   const t = useTranslations('cashback');
   const purchaseDateStr = formatDate(purchaseTime);
-  const totalItems = orders?.reduce((acc, o) => acc + (o.items?.length || 0), 0) || 0;
+  const totalItems =
+    orders?.reduce((acc, o) => acc + (o.items?.length || 0), 0) || 0;
 
   return (
     <div
@@ -44,7 +49,9 @@ export function CashbackCard({
           <p className="text-2xs font-mono text-[var(--aff-muted)] truncate max-w-[150px] break-all">
             ID: {checkoutId}
           </p>
-          <p className="text-3xs text-[var(--aff-muted)] mt-0.5">{purchaseDateStr}</p>
+          <p className="text-3xs text-[var(--aff-muted)] mt-0.5">
+            {purchaseDateStr}
+          </p>
         </div>
         <StatusBadge status={status} />
       </div>
@@ -54,7 +61,9 @@ export function CashbackCard({
           <span className="text-3xs uppercase tracking-wider text-[var(--aff-muted)] font-bold">
             {t('amount')}
           </span>
-          <p className="font-bold text-[var(--aff-text)] mt-0.5">{formatPrice(totalAmount)}</p>
+          <p className="font-bold text-[var(--aff-text)] mt-0.5">
+            {formatPrice(totalAmount)}
+          </p>
         </div>
         <div className="text-right">
           <span className="text-3xs uppercase tracking-wider text-[var(--aff-muted)] font-bold">
@@ -76,7 +85,11 @@ export function CashbackCard({
             ? t('hide_details')
             : t('show_details', { count: totalItems })}
         </span>
-        {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+        {isExpanded ? (
+          <ChevronUp className="w-3.5 h-3.5" />
+        ) : (
+          <ChevronDown className="w-3.5 h-3.5" />
+        )}
       </Button>
 
       {/* Expanded products lists */}
@@ -87,16 +100,22 @@ export function CashbackCard({
             return (
               <div key={orderIdVal || oIdx} className="space-y-2.5">
                 <div className="flex justify-between items-center text-3xs font-mono text-[var(--aff-muted)] gap-2">
-                  <span className="truncate max-w-[140px]">{t('order_id')}: {orderIdVal || '—'}</span>
+                  <span className="truncate max-w-[140px]">
+                    {t('order_id')}: {orderIdVal || '—'}
+                  </span>
                   <StatusBadge status={ord.order_status} />
                 </div>
                 <div className="space-y-3">
                   {ord.items?.map((it, itemIdx) => {
                     const imgVal = it.product?.image || it.img_code;
                     const nameVal = it.product?.name || it.item_name;
-                    const commissionVal = it.product?.commission || it.item_commission;
+                    const commissionVal =
+                      it.product?.commission || it.item_commission;
                     return (
-                      <div key={itemIdx} className="flex gap-2 items-start justify-between min-w-0">
+                      <div
+                        key={itemIdx}
+                        className="flex gap-2 items-start justify-between min-w-0"
+                      >
                         <div className="flex gap-2 min-w-0 flex-1">
                           <div className="w-7 h-7 rounded bg-white border border-[var(--aff-border)] flex-shrink-0 flex items-center justify-center overflow-hidden">
                             {imgVal ? (
@@ -115,7 +134,8 @@ export function CashbackCard({
                               {nameVal || '—'}
                             </p>
                             <span className="text-4xs text-[var(--aff-muted)] block mt-0.5">
-                              {t('qty_prefix', { qty: it.qty ?? 0 })} • {formatPrice(it.actual_amount)}
+                              {t('qty_prefix', { qty: it.qty ?? 0 })} •{' '}
+                              {formatPrice(it.actual_amount)}
                             </span>
                           </div>
                         </div>

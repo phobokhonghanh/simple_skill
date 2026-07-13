@@ -60,7 +60,11 @@ export function NavBar({ user, handleLogout, gsiBtnRef }: NavBarProps = {}) {
           {mounted && (
             <>
               {!user ? (
-                <div ref={gsiBtnRef} id="gsi-btn-container" className="min-h-[32px] min-w-[120px] flex items-center justify-center ml-2" />
+                <div
+                  ref={gsiBtnRef}
+                  id="gsi-btn-container"
+                  className="min-h-[32px] min-w-[120px] flex items-center justify-center ml-2"
+                />
               ) : (
                 <div className="flex items-center gap-3 pl-3 border-l border-[var(--aff-border)] ml-2">
                   {user.picture ? (
@@ -111,4 +115,3 @@ export function NavBar({ user, handleLogout, gsiBtnRef }: NavBarProps = {}) {
     </header>
   );
 }
-

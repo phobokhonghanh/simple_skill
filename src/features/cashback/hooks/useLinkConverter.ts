@@ -10,7 +10,9 @@ export function useLinkConverter(user: User | null) {
   const t = useTranslations('cashback');
   const [inputUrl, setInputUrl] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-  const [validationError, setValidationError] = React.useState<string | null>(null);
+  const [validationError, setValidationError] = React.useState<string | null>(
+    null,
+  );
   const [apiError, setApiError] = React.useState<string | null>(null);
   const [productInfo, setProductInfo] = React.useState<Product | null>(null);
   const [affiliateLink, setAffiliateLink] = React.useState<string | null>(null);

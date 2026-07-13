@@ -2,8 +2,14 @@
 
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
-import { getUserCashbacks, getUserShopeeConversions } from '@/features/cashback/api';
-import type { CashbackRecord, ConversionRecord } from '@/features/cashback/types';
+import {
+  getUserCashbacks,
+  getUserShopeeConversions,
+} from '@/features/cashback/api';
+import type {
+  CashbackRecord,
+  ConversionRecord,
+} from '@/features/cashback/types';
 import { dateToUnixSeconds } from '@/features/cashback/utils';
 
 const getStartOfCurrentMonthStr = () => {
@@ -18,16 +24,24 @@ const getCurrentDateStr = () => {
 
 export function useUserHistory(token: string | null, activeTab: string) {
   const t = useTranslations('cashback');
-  const [cashbackHistory, setCashbackHistory] = React.useState<CashbackRecord[]>([]);
+  const [cashbackHistory, setCashbackHistory] = React.useState<
+    CashbackRecord[]
+  >([]);
   const [loadingHistory, setLoadingHistory] = React.useState(false);
   const [historyError, setHistoryError] = React.useState<string | null>(null);
-  const [expandedRecordId, setExpandedRecordId] = React.useState<string | null>(null);
-  
+  const [expandedRecordId, setExpandedRecordId] = React.useState<string | null>(
+    null,
+  );
+
   // User Sync states
   const [userSyncLoading, setUserSyncLoading] = React.useState(false);
   const [userSyncSuccess, setUserSyncSuccess] = React.useState(false);
-  const [userSyncMessage, setUserSyncMessage] = React.useState<string | null>(null);
-  const [userSyncData, setUserSyncData] = React.useState<ConversionRecord[] | null>(null);
+  const [userSyncMessage, setUserSyncMessage] = React.useState<string | null>(
+    null,
+  );
+  const [userSyncData, setUserSyncData] = React.useState<
+    ConversionRecord[] | null
+  >(null);
   const [showUserSyncModal, setShowUserSyncModal] = React.useState(false);
 
   // Pagination & Date Filters
@@ -36,7 +50,9 @@ export function useUserHistory(token: string | null, activeTab: string) {
   const [userHistoryTotal, setUserHistoryTotal] = React.useState(0);
   const [userHistoryTotalPages, setUserHistoryTotalPages] = React.useState(0);
 
-  const [historyStart, setHistoryStart] = React.useState(getStartOfCurrentMonthStr());
+  const [historyStart, setHistoryStart] = React.useState(
+    getStartOfCurrentMonthStr(),
+  );
   const [historyEnd, setHistoryEnd] = React.useState(getCurrentDateStr());
 
   // UI Filters (Local, no API calls)
@@ -44,43 +60,50 @@ export function useUserHistory(token: string | null, activeTab: string) {
   const [filterStatus, setFilterStatus] = React.useState('all');
   const [sortByTime, setSortByTime] = React.useState<'desc' | 'asc'>('desc');
 
-  const handleUserSync = React.useCallback(async (startDate: string, endDate: string) => {
-    if (!token) return;
-    setUserSyncLoading(true);
-    setUserSyncSuccess(false);
-    setUserSyncMessage(null);
-    setUserSyncData(null);
-    setShowUserSyncModal(true);
-
-    const sTime = dateToUnixSeconds(startDate);
-    const eTime = dateToUnixSeconds(endDate, true);
-
-    if (sTime === undefined || eTime === undefined) {
-      setUserSyncMessage(t('invalid_date') || 'Ngày tháng không hợp lệ');
-      setUserSyncLoading(false);
-      return;
-    }
-
-    try {
-      const res = await getUserShopeeConversions(token, {
-        purchase_time_s: sTime,
-        purchase_time_e: eTime,
-      });
-
-      if (res.ok && res.data) {
-        setUserSyncSuccess(true);
-        setUserSyncData(res.data);
-      } else {
-        setUserSyncSuccess(false);
-        setUserSyncMessage(t('sync_error') || 'Có lỗi xảy ra khi đồng bộ đơn hàng');
-      }
-    } catch {
+  const handleUserSync = React.useCallback(
+    async (startDate: string, endDate: string) => {
+      if (!token) return;
+      setUserSyncLoading(true);
       setUserSyncSuccess(false);
-      setUserSyncMessage(t('sync_error') || 'Có lỗi xảy ra khi đồng bộ đơn hàng');
-    } finally {
-      setUserSyncLoading(false);
-    }
-  }, [token, t]);
+      setUserSyncMessage(null);
+      setUserSyncData(null);
+      setShowUserSyncModal(true);
+
+      const sTime = dateToUnixSeconds(startDate);
+      const eTime = dateToUnixSeconds(endDate, true);
+
+      if (sTime === undefined || eTime === undefined) {
+        setUserSyncMessage(t('invalid_date') || 'Ngày tháng không hợp lệ');
+        setUserSyncLoading(false);
+        return;
+      }
+
+      try {
+        const res = await getUserShopeeConversions(token, {
+          purchase_time_s: sTime,
+          purchase_time_e: eTime,
+        });
+
+        if (res.ok && res.data) {
+          setUserSyncSuccess(true);
+          setUserSyncData(res.data);
+        } else {
+          setUserSyncSuccess(false);
+          setUserSyncMessage(
+            t('sync_error') || 'Có lỗi xảy ra khi đồng bộ đơn hàng',
+          );
+        }
+      } catch {
+        setUserSyncSuccess(false);
+        setUserSyncMessage(
+          t('sync_error') || 'Có lỗi xảy ra khi đồng bộ đơn hàng',
+        );
+      } finally {
+        setUserSyncLoading(false);
+      }
+    },
+    [token, t],
+  );
 
   const fetchUserHistory = React.useCallback(async () => {
     if (!token) return;
@@ -128,18 +151,22 @@ export function useUserHistory(token: string | null, activeTab: string) {
 
     if (filterPlatform !== 'all') {
       result = result.filter(
-        (rec) => rec.platform?.toLowerCase() === filterPlatform.toLowerCase()
+        (rec) => rec.platform?.toLowerCase() === filterPlatform.toLowerCase(),
       );
     }
     if (filterStatus !== 'all') {
       result = result.filter(
-        (rec) => rec.status?.toLowerCase() === filterStatus.toLowerCase()
+        (rec) => rec.status?.toLowerCase() === filterStatus.toLowerCase(),
       );
     }
 
     result.sort((a, b) => {
-      const timeA = a.conversion?.purchase_time ?? (a.createdAt ? new Date(a.createdAt).getTime() / 1000 : 0);
-      const timeB = b.conversion?.purchase_time ?? (b.createdAt ? new Date(b.createdAt).getTime() / 1000 : 0);
+      const timeA =
+        a.conversion?.purchase_time ??
+        (a.createdAt ? new Date(a.createdAt).getTime() / 1000 : 0);
+      const timeB =
+        b.conversion?.purchase_time ??
+        (b.createdAt ? new Date(b.createdAt).getTime() / 1000 : 0);
       return sortByTime === 'desc' ? timeB - timeA : timeA - timeB;
     });
 
@@ -147,7 +174,10 @@ export function useUserHistory(token: string | null, activeTab: string) {
   }, [cashbackHistory, filterPlatform, filterStatus, sortByTime]);
 
   const uiTotalCashback = React.useMemo(() => {
-    return processedUserHistory.reduce((acc, rec) => acc + (rec.cashback || 0), 0);
+    return processedUserHistory.reduce(
+      (acc, rec) => acc + (rec.cashback || 0),
+      0,
+    );
   }, [processedUserHistory]);
 
   return {

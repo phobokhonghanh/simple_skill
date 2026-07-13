@@ -6,7 +6,11 @@ interface CoinProps {
   animate?: boolean;
 }
 
-export const Coin: React.FC<CoinProps> = ({ size = 24, className = '', animate = true }) => {
+export const Coin: React.FC<CoinProps> = ({
+  size = 24,
+  className = '',
+  animate = true,
+}) => {
   return (
     <div
       className={`inline-block select-none pointer-events-none coin-2d ${animate ? 'coin-2d-spin' : ''} ${className}`}
@@ -19,7 +23,7 @@ export const Coin: React.FC<CoinProps> = ({ size = 24, className = '', animate =
         {/* Coin background gradient / layers */}
         <circle cx="50" cy="50" r="46" fill="#d97706" />
         <circle cx="50" cy="50" r="43" fill="#f59e0b" />
-        
+
         {/* Dashed detail border */}
         <circle
           cx="50"
@@ -30,11 +34,11 @@ export const Coin: React.FC<CoinProps> = ({ size = 24, className = '', animate =
           strokeDasharray="6 4"
           fill="none"
         />
-        
+
         {/* Inner coin plate */}
         <circle cx="50" cy="50" r="30" fill="#fbbf24" />
         <circle cx="50" cy="50" r="27" fill="#fef08a" />
-        
+
         {/* Symbol */}
         <text
           x="50"

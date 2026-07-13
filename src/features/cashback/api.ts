@@ -5,7 +5,9 @@ import type {
   CashbackListResponse,
 } from '@/features/cashback/types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') ?? 'http://localhost:8787';
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') ??
+  'http://localhost:8787';
 
 export const API_ENDPOINTS = {
   shopeeAffiliate: '/api/shopee/affiliate',
@@ -55,7 +57,9 @@ export const generateCashbackLink = async ({
 };
 
 // Login with Google OAuth ID Token
-export const loginWithGoogle = async (idToken: string): Promise<LoginResponse> => {
+export const loginWithGoogle = async (
+  idToken: string,
+): Promise<LoginResponse> => {
   try {
     const response = await fetch(`${API_URL}${API_ENDPOINTS.authLogin}`, {
       method: 'POST',
@@ -77,12 +81,14 @@ export const loginWithGoogle = async (idToken: string): Promise<LoginResponse> =
 };
 
 // Logout
-export const logoutWithGoogle = async (token: string): Promise<{ ok: boolean }> => {
+export const logoutWithGoogle = async (
+  token: string,
+): Promise<{ ok: boolean }> => {
   try {
     const response = await fetch(`${API_URL}${API_ENDPOINTS.authLogout}`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -107,16 +113,21 @@ export const getUserCashbacks = async (
     const query = new URLSearchParams();
     if (params?.page) query.set('page', params.page.toString());
     if (params?.pageSize) query.set('pageSize', params.pageSize.toString());
-    if (params?.purchase_time_s) query.set('purchase_time_s', params.purchase_time_s.toString());
-    if (params?.purchase_time_e) query.set('purchase_time_e', params.purchase_time_e.toString());
+    if (params?.purchase_time_s)
+      query.set('purchase_time_s', params.purchase_time_s.toString());
+    if (params?.purchase_time_e)
+      query.set('purchase_time_e', params.purchase_time_e.toString());
 
     const suffix = query.toString() ? `?${query.toString()}` : '';
-    const response = await fetch(`${API_URL}${API_ENDPOINTS.userCashbacks}${suffix}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
+    const response = await fetch(
+      `${API_URL}${API_ENDPOINTS.userCashbacks}${suffix}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       return { ok: false, code: 'fetch_failed' };
@@ -145,12 +156,15 @@ export const getAdminCashbacks = async (
     if (params.userId) query.set('userId', params.userId);
 
     const suffix = query.toString() ? `?${query.toString()}` : '';
-    const response = await fetch(`${API_URL}${API_ENDPOINTS.adminCashbacks}${suffix}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
+    const response = await fetch(
+      `${API_URL}${API_ENDPOINTS.adminCashbacks}${suffix}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       return { ok: false, code: 'fetch_failed' };
@@ -181,12 +195,15 @@ export const getUserShopeeConversions = async (
     query.set('purchase_time_e', params.purchase_time_e.toString());
 
     const suffix = `?${query.toString()}`;
-    const response = await fetch(`${API_URL}${API_ENDPOINTS.userShopeeConversions}${suffix}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
+    const response = await fetch(
+      `${API_URL}${API_ENDPOINTS.userShopeeConversions}${suffix}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       return { ok: false, code: 'fetch_failed' };
@@ -215,16 +232,21 @@ export const getAdminShopeeConversions = async (
     if (params.page_size) query.set('page_size', params.page_size.toString());
     if (params.page_num) query.set('page_num', params.page_num.toString());
     if (params.sub_id) query.set('sub_id', params.sub_id);
-    if (params.purchase_time_s) query.set('purchase_time_s', params.purchase_time_s.toString());
-    if (params.purchase_time_e) query.set('purchase_time_e', params.purchase_time_e.toString());
+    if (params.purchase_time_s)
+      query.set('purchase_time_s', params.purchase_time_s.toString());
+    if (params.purchase_time_e)
+      query.set('purchase_time_e', params.purchase_time_e.toString());
 
     const suffix = query.toString() ? `?${query.toString()}` : '';
-    const response = await fetch(`${API_URL}${API_ENDPOINTS.adminShopeeConversions}${suffix}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
+    const response = await fetch(
+      `${API_URL}${API_ENDPOINTS.adminShopeeConversions}${suffix}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       return { ok: false, code: 'fetch_failed' };
@@ -248,17 +270,22 @@ export const syncShopeeCashbacks = async (
 ): Promise<{ ok: boolean; code: string }> => {
   try {
     const query = new URLSearchParams();
-    if (params.purchase_time_s) query.set('purchase_time_s', params.purchase_time_s.toString());
-    if (params.purchase_time_e) query.set('purchase_time_e', params.purchase_time_e.toString());
+    if (params.purchase_time_s)
+      query.set('purchase_time_s', params.purchase_time_s.toString());
+    if (params.purchase_time_e)
+      query.set('purchase_time_e', params.purchase_time_e.toString());
     if (params.sub_id) query.set('sub_id', params.sub_id);
 
     const suffix = query.toString() ? `?${query.toString()}` : '';
-    const response = await fetch(`${API_URL}${API_ENDPOINTS.shopeeSync}${suffix}`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
+    const response = await fetch(
+      `${API_URL}${API_ENDPOINTS.shopeeSync}${suffix}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       return { ok: false, code: 'sync_failed' };

@@ -32,22 +32,25 @@ export const formatDate = (dateInput?: string | number | null): string => {
   } else {
     date = new Date(dateInput);
   }
-  
+
   if (isNaN(date.getTime())) return '—';
-  
+
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
-  
+
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 };
 
 /**
  * Parses date string to unix timestamp in seconds.
  */
-export const dateToUnixSeconds = (dateStr: string, isEndOfDay = false): number | undefined => {
+export const dateToUnixSeconds = (
+  dateStr: string,
+  isEndOfDay = false,
+): number | undefined => {
   if (!dateStr) return undefined;
   const date = new Date(dateStr);
   if (isNaN(date.getTime())) return undefined;

@@ -144,4 +144,3 @@ export type PanelMode =
   | { type: 'bookmark'; bookmark?: Bookmark }
   | { type: 'category'; category?: Category }
   | null;
-

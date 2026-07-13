@@ -1,7 +1,12 @@
 'use client';
 
 import * as React from 'react';
-import { LogOut, Bookmark as BookmarkIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  LogOut,
+  Bookmark as BookmarkIcon,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/features/i18n/LanguageSwitcher';
 import { ThemeToggle } from '@/features/theme/ThemeToggle';
@@ -24,7 +29,10 @@ import { BookmarkAuthDialog } from '@/features/bookmarks/BookmarkAuthDialog';
 import { BookmarkForms } from '@/features/bookmarks/BookmarkForms';
 import { BookmarkList } from '@/features/bookmarks/BookmarkList';
 import { CategorySidebar } from '@/features/bookmarks/CategorySidebar';
-import type { BookmarkDashboardLabels, PanelMode } from '@/features/bookmarks/types';
+import type {
+  BookmarkDashboardLabels,
+  PanelMode,
+} from '@/features/bookmarks/types';
 
 interface BookmarkDashboardProps {
   labels: BookmarkDashboardLabels;
@@ -51,66 +59,67 @@ const DEFAULT_FILTERS: BookmarkFiltersState = {
   sortOrder: 'desc',
 };
 
-export function BookmarkDashboard({
-  labels,
-}: BookmarkDashboardProps) {
+export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
   const hasHydrated = React.useSyncExternalStore(
     subscribeHydration,
     getClientHydrationSnapshot,
     getServerHydrationSnapshot,
   );
   const [token, setToken] = React.useState('');
-  const [filters, setFilters] = React.useState<BookmarkFiltersState>(DEFAULT_FILTERS);
-  const [selectedSidebarCategoryId, setSelectedSidebarCategoryId] = React.useState<string>('');
+  const [filters, setFilters] =
+    React.useState<BookmarkFiltersState>(DEFAULT_FILTERS);
+  const [selectedSidebarCategoryId, setSelectedSidebarCategoryId] =
+    React.useState<string>('');
   const [data, setData] = React.useState<BookmarkDashboardData | null>(null);
   const [panelMode, setPanelMode] = React.useState<PanelMode>(null);
   const [message, setMessage] = React.useState<string | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isPending, startTransition] = React.useTransition();
 
-  const updateUrl = React.useCallback(
-    (nextFilters: BookmarkFiltersState) => {
-      const params = new URLSearchParams();
+  const updateUrl = React.useCallback((nextFilters: BookmarkFiltersState) => {
+    const params = new URLSearchParams();
 
-      if (nextFilters.query) {
-        params.set('q', nextFilters.query);
-      }
+    if (nextFilters.query) {
+      params.set('q', nextFilters.query);
+    }
 
-      if (nextFilters.categoryId) {
-        params.set('category', nextFilters.categoryId);
-      }
+    if (nextFilters.categoryId) {
+      params.set('category', nextFilters.categoryId);
+    }
 
-      if (nextFilters.page !== 1) {
-        params.set('page', nextFilters.page.toString());
-      }
+    if (nextFilters.page !== 1) {
+      params.set('page', nextFilters.page.toString());
+    }
 
-      if (nextFilters.pageSize !== 20) {
-        params.set('pageSize', nextFilters.pageSize.toString());
-      }
+    if (nextFilters.pageSize !== 20) {
+      params.set('pageSize', nextFilters.pageSize.toString());
+    }
 
-      if (nextFilters.sortBy !== 'createdAt') {
-        params.set('sortBy', nextFilters.sortBy);
-      }
+    if (nextFilters.sortBy !== 'createdAt') {
+      params.set('sortBy', nextFilters.sortBy);
+    }
 
-      if (nextFilters.sortOrder !== 'desc') {
-        params.set('sortOrder', nextFilters.sortOrder);
-      }
+    if (nextFilters.sortOrder !== 'desc') {
+      params.set('sortOrder', nextFilters.sortOrder);
+    }
 
-      const suffix = params.toString() ? `?${params.toString()}` : '';
-      window.history.replaceState(
-        null,
-        '',
-        `${window.location.pathname}${suffix}`,
-      );
-    },
-    [],
-  );
+    const suffix = params.toString() ? `?${params.toString()}` : '';
+    window.history.replaceState(
+      null,
+      '',
+      `${window.location.pathname}${suffix}`,
+    );
+  }, []);
 
   const loadDashboard = React.useCallback(
     async (
       nextToken: string,
       nextFilters: BookmarkFiltersState,
-      options: { persistToken?: boolean; showError?: boolean; skipCategories?: boolean } = {},
+      options: {
+        persistToken?: boolean;
+        showError?: boolean;
+        skipCategories?: boolean;
+      } = {},
     ) => {
       setIsLoading(true);
       const result = await loadBookmarkDashboard({
@@ -142,8 +151,12 @@ export function BookmarkDashboard({
         if (!prevData) return result.data;
         return {
           ...result.data,
-          categories: options.skipCategories ? prevData.categories : result.data.categories,
-          categoryTree: options.skipCategories ? prevData.categoryTree : result.data.categoryTree,
+          categories: options.skipCategories
+            ? prevData.categories
+            : result.data.categories,
+          categoryTree: options.skipCategories
+            ? prevData.categoryTree
+            : result.data.categoryTree,
         };
       });
       setMessage(null);
@@ -184,8 +197,16 @@ export function BookmarkDashboard({
       categoryId: params.get('category') ?? '',
       page: parseInt(params.get('page') ?? '1', 10),
       pageSize: parseInt(params.get('pageSize') ?? '20', 10),
-      sortBy: sortByParam === 'createdAt' || sortByParam === 'title' || sortByParam === 'url' ? sortByParam : 'createdAt',
-      sortOrder: sortOrderParam === 'asc' || sortOrderParam === 'desc' ? sortOrderParam : 'desc',
+      sortBy:
+        sortByParam === 'createdAt' ||
+        sortByParam === 'title' ||
+        sortByParam === 'url'
+          ? sortByParam
+          : 'createdAt',
+      sortOrder:
+        sortOrderParam === 'asc' || sortOrderParam === 'desc'
+          ? sortOrderParam
+          : 'desc',
     };
 
     setFilters(initialFilters);
@@ -210,10 +231,14 @@ export function BookmarkDashboard({
   const updateFilters = (next: Partial<BookmarkFiltersState>) => {
     const nextFilters = {
       query: next.query ?? filters.query,
-      categoryId: next.categoryId !== undefined ? next.categoryId : filters.categoryId,
-      page: (next.query !== undefined && next.query !== filters.query) || (next.categoryId !== undefined && next.categoryId !== filters.categoryId)
-        ? 1
-        : (next.page ?? filters.page),
+      categoryId:
+        next.categoryId !== undefined ? next.categoryId : filters.categoryId,
+      page:
+        (next.query !== undefined && next.query !== filters.query) ||
+        (next.categoryId !== undefined &&
+          next.categoryId !== filters.categoryId)
+          ? 1
+          : (next.page ?? filters.page),
       pageSize: next.pageSize ?? filters.pageSize,
       sortBy: next.sortBy ?? filters.sortBy,
       sortOrder: next.sortOrder ?? filters.sortOrder,
@@ -223,7 +248,10 @@ export function BookmarkDashboard({
     updateUrl(nextFilters);
 
     if (token) {
-      void loadDashboard(token, nextFilters, { showError: true, skipCategories: true });
+      void loadDashboard(token, nextFilters, {
+        showError: true,
+        skipCategories: true,
+      });
     }
   };
 
@@ -308,17 +336,11 @@ export function BookmarkDashboard({
     }
 
     if (panelMode.type === 'bookmark') {
-      runMutation(
-        form,
-        panelMode.bookmark ? updateBookmark : createBookmark,
-      );
+      runMutation(form, panelMode.bookmark ? updateBookmark : createBookmark);
       return;
     }
 
-    runMutation(
-      form,
-      panelMode.category ? updateCategory : createCategory,
-    );
+    runMutation(form, panelMode.category ? updateCategory : createCategory);
   };
 
   const activeFilterCount =
@@ -333,12 +355,20 @@ export function BookmarkDashboard({
       <header className="sticky top-0 z-30 flex h-14 items-center justify-end border-b bg-background/80 px-4 backdrop-blur-md sm:px-6">
         <div className="flex items-center gap-1 sm:gap-2">
           {data && (
-            <Button type="button" variant="ghost" size="sm" onClick={logout} className="text-muted-foreground hover:text-foreground hidden sm:flex">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={logout}
+              className="text-muted-foreground hover:text-foreground hidden sm:flex"
+            >
               <LogOut className="h-4 w-4 mr-2" />
               {labels.logout}
             </Button>
           )}
-          {data && <div className="h-4 w-px bg-border mx-1 hidden sm:block"></div>}
+          {data && (
+            <div className="h-4 w-px bg-border mx-1 hidden sm:block"></div>
+          )}
           <LanguageSwitcher />
           <ThemeToggle />
         </div>
@@ -389,7 +419,9 @@ export function BookmarkDashboard({
                   selectedCategoryId={selectedSidebarCategoryId}
                   filterCategoryId={filters.categoryId}
                   labels={labels}
-                  onSelect={(categoryId) => setSelectedSidebarCategoryId(categoryId)}
+                  onSelect={(categoryId) =>
+                    setSelectedSidebarCategoryId(categoryId)
+                  }
                   onFilter={(categoryId) => updateFilters({ categoryId })}
                   onCreateCategory={() => setPanelMode({ type: 'category' })}
                   onEdit={(category) =>
@@ -440,13 +472,20 @@ export function BookmarkDashboard({
               {/* Stats on Left */}
               <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
                 <span className="font-medium">
-                  {labels.totalBookmarks}: <span className="text-foreground">{data.pagination.total}</span>
+                  {labels.totalBookmarks}:{' '}
+                  <span className="text-foreground">
+                    {data.pagination.total}
+                  </span>
                 </span>
                 <span className="font-medium">
-                  {labels.totalCategories}: <span className="text-foreground">{data.categories.length}</span>
+                  {labels.totalCategories}:{' '}
+                  <span className="text-foreground">
+                    {data.categories.length}
+                  </span>
                 </span>
                 <span className="font-medium">
-                  {labels.activeFilters}: <span className="text-foreground">{activeFilterCount}</span>
+                  {labels.activeFilters}:{' '}
+                  <span className="text-foreground">{activeFilterCount}</span>
                 </span>
               </div>
 
@@ -458,7 +497,10 @@ export function BookmarkDashboard({
                     <select
                       value={filters.pageSize ?? 20}
                       onChange={(e) =>
-                        updateFilters({ pageSize: parseInt(e.target.value, 10), page: 1 })
+                        updateFilters({
+                          pageSize: parseInt(e.target.value, 10),
+                          page: 1,
+                        })
                       }
                       className="h-7 rounded border bg-background px-2 text-xs font-medium text-foreground outline-none focus:ring-1 focus:ring-ring"
                     >

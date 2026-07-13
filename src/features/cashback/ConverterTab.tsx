@@ -14,11 +14,15 @@ import {
   Loader2,
   AlertTriangle,
   Clipboard,
-  X
+  X,
 } from 'lucide-react';
 import type { Product, HistoryItem } from '@/features/cashback/types';
 import { Button } from '@/components/ui/button';
-import { formatShopeeImageUrl, formatPrice, formatDate } from '@/features/cashback/utils';
+import {
+  formatShopeeImageUrl,
+  formatPrice,
+  formatDate,
+} from '@/features/cashback/utils';
 
 interface ConverterTabProps {
   inputUrl: string;
@@ -37,7 +41,6 @@ interface ConverterTabProps {
   handleClearInput: () => void;
   handlePasteInput: () => void;
 }
-
 
 export function ConverterTab({
   inputUrl,
@@ -179,17 +182,17 @@ export function ConverterTab({
               <div className="flex flex-col sm:flex-row gap-5">
                 {/* Image Skeleton */}
                 <div className="w-full sm:w-32 h-32 rounded-xl bg-neutral-200 dark:bg-neutral-800/60 flex-shrink-0" />
-                
+
                 {/* Text Skeleton */}
                 <div className="flex-1 space-y-3 py-1 text-left">
                   <div className="h-4.5 bg-neutral-200 dark:bg-neutral-800/60 rounded-md w-3/4" />
                   <div className="h-3 bg-neutral-200 dark:bg-neutral-800/60 rounded-md w-1/2" />
-                  
+
                   <div className="flex gap-2 pt-2">
                     <div className="h-5 bg-neutral-200 dark:bg-neutral-800/60 rounded-full w-20" />
                     <div className="h-5 bg-neutral-200 dark:bg-neutral-800/60 rounded-full w-16" />
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-4 pt-4 border-t border-[var(--aff-border)]">
                     <div className="space-y-1.5">
                       <div className="h-2.5 bg-neutral-200 dark:bg-neutral-800/60 rounded-md w-10" />
@@ -202,7 +205,7 @@ export function ConverterTab({
                   </div>
                 </div>
               </div>
-              
+
               {/* Button Skeleton */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-[var(--aff-border)]">
                 <div className="h-11 bg-neutral-200 dark:bg-neutral-800/60 rounded-xl w-full" />
@@ -243,12 +246,13 @@ export function ConverterTab({
                           Shop: {productInfo.shop}
                         </span>
                       )}
-                      {productInfo.rating !== undefined && productInfo.rating !== null && (
-                        <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center gap-0.5">
-                          <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" />
-                          {formatRating(productInfo.rating)}
-                        </span>
-                      )}
+                      {productInfo.rating !== undefined &&
+                        productInfo.rating !== null && (
+                          <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center gap-0.5">
+                            <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" />
+                            {formatRating(productInfo.rating)}
+                          </span>
+                        )}
                       {productInfo.sales && (
                         <span className="px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-[var(--aff-muted)]">
                           {t('sales_count', { count: productInfo.sales })}
@@ -278,7 +282,9 @@ export function ConverterTab({
 
                     {productInfo.lastUpdate && (
                       <p className="text-4xs text-[var(--aff-muted)] pt-1 text-right">
-                        {t('updated_at', { date: formatDate(productInfo.lastUpdate) })}
+                        {t('updated_at', {
+                          date: formatDate(productInfo.lastUpdate),
+                        })}
                       </p>
                     )}
                   </div>
@@ -321,7 +327,9 @@ export function ConverterTab({
                     <div className="text-left px-1">
                       <p className="text-[11px] sm:text-xs text-red-500 font-medium italic leading-relaxed">
                         {t('voucher_notice_prefix')}
-                        <span className="font-bold text-[var(--aff-orange)]">{t('voucher_notice_highlight')}</span>
+                        <span className="font-bold text-[var(--aff-orange)]">
+                          {t('voucher_notice_highlight')}
+                        </span>
                         {t('voucher_notice_suffix')}
                       </p>
                     </div>
@@ -339,7 +347,9 @@ export function ConverterTab({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-[var(--aff-heading)]">
               <History className="w-4.5 h-4.5 text-[var(--aff-orange)]" />
-              <h3 className="font-bold text-sm sm:text-base">{t('history_title')}</h3>
+              <h3 className="font-bold text-sm sm:text-base">
+                {t('history_title')}
+              </h3>
             </div>
             {history.length > 0 && (
               <Button
@@ -390,7 +400,9 @@ export function ConverterTab({
                         {item.product ? formatPrice(item.product.price) : '—'}
                       </span>
                       <span className="text-[10px] bg-orange-500/10 text-orange-600 dark:text-orange-400 font-bold px-1.5 py-0.5 rounded-full">
-                        {item.product?.commission ? formatPrice(item.product.commission) : '—'}
+                        {item.product?.commission
+                          ? formatPrice(item.product.commission)
+                          : '—'}
                       </span>
                     </div>
                   </div>

@@ -33,27 +33,30 @@ export function useCashbackAuth(onLoginSuccess?: () => void) {
   const [loading, setLoading] = React.useState(false);
   const [apiError, setApiError] = React.useState<string | null>(null);
 
-  const handleGoogleLogin = React.useCallback(async (idToken: string) => {
-    setLoading(true);
-    setApiError(null);
-    try {
-      const res = await loginWithGoogle(idToken);
-      if (res.ok && res.data) {
-        setToken(res.data.token);
-        setUser(res.data.user);
-        localStorage.setItem('cashback_token', res.data.token);
-        localStorage.setItem('cashback_user', JSON.stringify(res.data.user));
-        onLoginSuccess?.();
-      } else {
+  const handleGoogleLogin = React.useCallback(
+    async (idToken: string) => {
+      setLoading(true);
+      setApiError(null);
+      try {
+        const res = await loginWithGoogle(idToken);
+        if (res.ok && res.data) {
+          setToken(res.data.token);
+          setUser(res.data.user);
+          localStorage.setItem('cashback_token', res.data.token);
+          localStorage.setItem('cashback_user', JSON.stringify(res.data.user));
+          onLoginSuccess?.();
+        } else {
+          setApiError(t('not_found'));
+        }
+      } catch (err) {
+        console.error(err);
         setApiError(t('not_found'));
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error(err);
-      setApiError(t('not_found'));
-    } finally {
-      setLoading(false);
-    }
-  }, [t, onLoginSuccess]);
+    },
+    [t, onLoginSuccess],
+  );
 
   const handleLogout = React.useCallback(async () => {
     if (token) {

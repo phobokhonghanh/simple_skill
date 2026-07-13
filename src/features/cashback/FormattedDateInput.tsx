@@ -26,7 +26,9 @@ export function FormattedDateInput({
   }, [value]);
 
   return (
-    <div className={`relative flex items-center justify-between aff-input cursor-pointer rounded-xl bg-[var(--aff-surface)] border-2 border-[var(--aff-border)] transition-all duration-200 ${className}`}>
+    <div
+      className={`relative flex items-center justify-between aff-input cursor-pointer rounded-xl bg-[var(--aff-surface)] border-2 border-[var(--aff-border)] transition-all duration-200 ${className}`}
+    >
       <span className="select-none text-xs text-[var(--aff-text)] truncate pr-6">
         {displayValue || '--/--/----'}
       </span>

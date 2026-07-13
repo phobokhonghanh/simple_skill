@@ -109,15 +109,16 @@ export const loadBookmarkDashboard = async ({
 
   if (skipCategories) {
     try {
-      const bookmarksRes = await request<{ bookmarks: Bookmark[]; pagination: PaginationMetadata }>(
-        `/api/bookmarks?${bookmarksParams.toString()}`,
-        token,
-      );
+      const bookmarksRes = await request<{
+        bookmarks: Bookmark[];
+        pagination: PaginationMetadata;
+      }>(`/api/bookmarks?${bookmarksParams.toString()}`, token);
 
       if (!bookmarksRes.ok || !bookmarksRes.data) {
         return {
           ok: false,
-          code: bookmarksRes.code === 'ok' ? 'unknown_error' : bookmarksRes.code,
+          code:
+            bookmarksRes.code === 'ok' ? 'unknown_error' : bookmarksRes.code,
         };
       }
 
@@ -158,7 +159,8 @@ export const loadBookmarkDashboard = async ({
     if (!categoriesRes.ok || !categoriesRes.data) {
       return {
         ok: false,
-        code: categoriesRes.code === 'ok' ? 'unknown_error' : categoriesRes.code,
+        code:
+          categoriesRes.code === 'ok' ? 'unknown_error' : categoriesRes.code,
       };
     }
 

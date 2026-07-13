@@ -36,6 +36,9 @@ const sortedBookmarks = [...bookmarks].sort((a, b) => {
   return 0;
 });
 
-console.log("Chiều sắp xếp sau khi click:", localSortOrder);
-console.log("Kết quả mảng ban đầu:", bookmarks.map(b => b.id).join(", "));
-console.log("Kết quả mảng sau khi sort:", sortedBookmarks.map(b => b.id).join(", "));
+console.log('Chiều sắp xếp sau khi click:', localSortOrder);
+console.log('Kết quả mảng ban đầu:', bookmarks.map((b) => b.id).join(', '));
+console.log(
+  'Kết quả mảng sau khi sort:',
+  sortedBookmarks.map((b) => b.id).join(', '),
+);
