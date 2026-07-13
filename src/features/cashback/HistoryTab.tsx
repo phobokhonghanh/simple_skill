@@ -50,7 +50,7 @@ interface HistoryTabProps {
   fetchUserHistory: () => void;
   processedUserHistory: CashbackRecord[];
   uiTotalCashback: number;
-  burstCoins: { id: number; tx: number; ty: number }[];
+  burstCoins: { id: string; tx: number; ty: number }[];
   userSyncLoading: boolean;
   userSyncSuccess: boolean;
   userSyncMessage: string | null;
@@ -79,7 +79,6 @@ export function HistoryTab({
   setFilterStatus,
   sortByTime,
   setSortByTime,
-  fetchUserHistory,
   processedUserHistory,
   uiTotalCashback,
   burstCoins,
@@ -100,6 +99,7 @@ export function HistoryTab({
   const [expandedSyncRecordId, setExpandedSyncRecordId] = React.useState<
     string | null
   >(null);
+  const [isNoteOpen, setIsNoteOpen] = React.useState(false);
 
   if (historyStart !== prevHistoryStart || historyEnd !== prevHistoryEnd) {
     setPrevHistoryStart(historyStart);
@@ -131,13 +131,72 @@ export function HistoryTab({
     return dateStr;
   };
 
+  const sparklinePaths = React.useMemo(() => {
+    // 1. Filter and sort records chronologically
+    const sorted = [...processedUserHistory]
+      .filter((r) => r.createdAt && r.status !== 'rejected')
+      .sort((a, b) => {
+        const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return timeA - timeB;
+      });
+
+    // 2. Build cumulative sums
+    let currentSum = 0;
+    let dataPoints: number[] = [];
+    for (const r of sorted) {
+      currentSum += r.cashback || 0;
+      dataPoints.push(currentSum);
+    }
+
+    // Fallbacks to handle empty state or single items
+    if (dataPoints.length === 0) {
+      dataPoints = [0, 10000, 25000, 60000, 130000, 195000, 280000];
+    } else if (dataPoints.length === 1) {
+      dataPoints = [0, dataPoints[0]];
+    }
+
+    const minVal = Math.min(...dataPoints);
+    const maxVal = Math.max(...dataPoints);
+    const valRange = maxVal - minVal;
+
+    // We want the Y coordinates to be between 18 (highest peak) and 23 (lowest floor)
+    // inside viewBox="0 0 120 24". This keeps the wave strictly in the bottom 25% of the card height.
+    const yMin = 18;
+    const yMax = 23;
+    const yRange = yMax - yMin;
+
+    const points = dataPoints.map((val, i) => {
+      const x = dataPoints.length > 1 ? (i / (dataPoints.length - 1)) * 120 : 0;
+      const y =
+        valRange > 0 ? yMax - ((val - minVal) / valRange) * yRange : yMax;
+      return { x, y };
+    });
+
+    // Generate path with smooth Bezier curves
+    let strokePath = `M ${points[0].x.toFixed(1)},${points[0].y.toFixed(1)}`;
+    for (let i = 1; i < points.length; i++) {
+      const prev = points[i - 1];
+      const curr = points[i];
+      const cpX1 = prev.x + (curr.x - prev.x) / 3;
+      const cpY1 = prev.y;
+      const cpX2 = prev.x + (2 * (curr.x - prev.x)) / 3;
+      const cpY2 = curr.y;
+      strokePath += ` C ${cpX1.toFixed(1)},${cpY1.toFixed(1)} ${cpX2.toFixed(1)},${cpY2.toFixed(1)} ${curr.x.toFixed(1)},${curr.y.toFixed(1)}`;
+    }
+
+    const fillPath = `${strokePath} L 120,24 L 0,24 Z`;
+
+    return { strokePath, fillPath };
+  }, [processedUserHistory]);
+
   return (
     <div className="space-y-6 max-w-full overflow-hidden">
       {/* Overview Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         {/* Card 1: Total Cashback */}
-        <div className="relative aff-card p-6 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center relative shrink-0">
+        <div className="relative aff-card p-6 rounded-2xl flex flex-col items-center justify-center text-center gap-3 overflow-hidden">
+          <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center relative shrink-0">
             <Coin size={28} className="coin-2d" animate={true} />
             {/* Burst coins animation */}
             {burstCoins.map((coin) => (
@@ -155,23 +214,60 @@ export function HistoryTab({
               </div>
             ))}
           </div>
-          <div className="space-y-1">
-            <span className="text-xs uppercase tracking-wider text-[var(--aff-muted)] block font-bold">
+          <div className="space-y-1 z-10">
+            <span className="text-xs tracking-wider text-[var(--aff-muted)] block font-bold">
               {t('total_cashback')}
             </span>
-            <span className="text-xl sm:text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 block">
+            <span className="text-xl sm:text-2xl font-extrabold text-amber-500 dark:text-amber-400 block">
               {formatPrice(uiTotalCashback)}
             </span>
+          </div>
+          {/* Wave/Sparkline SVG */}
+          <div className="absolute bottom-0 left-0 right-0 w-full h-6 pointer-events-none">
+            <svg
+              viewBox="0 0 120 24"
+              className="w-full h-full"
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <linearGradient
+                  id="amber-wave-grad"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop
+                    offset="0%"
+                    stopColor="rgb(245, 158, 11)"
+                    stopOpacity="0.08"
+                  />
+                  <stop
+                    offset="100%"
+                    stopColor="rgb(245, 158, 11)"
+                    stopOpacity="0"
+                  />
+                </linearGradient>
+              </defs>
+              <path
+                d={sparklinePaths.strokePath}
+                fill="none"
+                stroke="rgb(245, 158, 11)"
+                strokeWidth="1.2"
+                className="opacity-30 dark:opacity-20"
+              />
+              <path d={sparklinePaths.fillPath} fill="url(#amber-wave-grad)" />
+            </svg>
           </div>
         </div>
 
         {/* Card 2: Recorded Orders */}
-        <div className="aff-card p-6 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300">
+        <div className="aff-card p-6 rounded-2xl flex flex-col items-center justify-center text-center gap-3">
           <div className="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 flex items-center justify-center shrink-0">
             <ShoppingBag className="w-6 h-6" />
           </div>
           <div className="space-y-1">
-            <span className="text-xs uppercase tracking-wider text-[var(--aff-muted)] block font-bold">
+            <span className="text-xs tracking-wider text-[var(--aff-muted)] block font-bold">
               {t('recorded_orders')}
             </span>
             <span className="text-xl sm:text-2xl font-extrabold text-[var(--aff-text)] block">
@@ -186,20 +282,17 @@ export function HistoryTab({
         <div className="flex items-center justify-between border-b border-[var(--aff-border)] pb-4 mb-4">
           <h3 className="font-extrabold text-base sm:text-lg text-[var(--aff-heading)] flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-[var(--aff-orange)]" />
-            <span>{t('history_tab')}</span>
+            <span>{t('history_details_title')}</span>
           </h3>
           <Button
-            variant="ghost"
-            size="icon"
-            onClick={fetchUserHistory}
-            disabled={loadingHistory}
-            className="p-1.5 hover:bg-orange-500/10 rounded-lg text-[var(--aff-muted)] hover:text-[var(--aff-orange)] transition-colors cursor-pointer"
+            onClick={() => handleUserSync(tempStart, tempEnd)}
+            disabled={userSyncLoading || loadingHistory}
+            className="bg-[var(--aff-orange)] hover:bg-[var(--aff-orange-hover)] text-white font-bold text-xs py-1.5 px-3 rounded-xl flex items-center gap-2 transition-all cursor-pointer h-9 shadow-sm shrink-0"
           >
-            {loadingHistory ? (
-              <Loader2 className="w-4 h-4 animate-spin text-[var(--aff-orange)]" />
-            ) : (
-              <RefreshCw className="w-4 h-4" />
-            )}
+            <RefreshCw
+              className={`w-3.5 h-3.5 ${userSyncLoading ? 'animate-spin' : ''}`}
+            />
+            <span>{t('manual_sync')}</span>
           </Button>
         </div>
 
@@ -207,7 +300,7 @@ export function HistoryTab({
         <div className="grid grid-cols-2 sm:grid-cols-6 gap-3 mb-6 items-end text-left">
           {/* Từ ngày */}
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-[var(--aff-muted)] uppercase tracking-wider block">
+            <label className="text-[10px] font-bold text-[var(--aff-muted)] tracking-wider block">
               {t('start_date')}
             </label>
             <FormattedDateInput
@@ -219,7 +312,7 @@ export function HistoryTab({
 
           {/* Đến ngày */}
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-[var(--aff-muted)] uppercase tracking-wider block">
+            <label className="text-[10px] font-bold text-[var(--aff-muted)] tracking-wider block">
               {t('end_date')}
             </label>
             <FormattedDateInput
@@ -242,7 +335,7 @@ export function HistoryTab({
 
           {/* Platform Filter */}
           <div className="space-y-1 col-span-2 sm:col-span-1">
-            <label className="text-[10px] font-bold text-[var(--aff-muted)] uppercase tracking-wider block">
+            <label className="text-[10px] font-bold text-[var(--aff-muted)] tracking-wider block">
               {t('filter_platform')}
             </label>
             <select
@@ -257,7 +350,7 @@ export function HistoryTab({
 
           {/* Status Filter */}
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-[var(--aff-muted)] uppercase tracking-wider block">
+            <label className="text-[10px] font-bold text-[var(--aff-muted)] tracking-wider block">
               {t('filter_status')}
             </label>
             <select
@@ -274,7 +367,7 @@ export function HistoryTab({
 
           {/* Sort by Time */}
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-[var(--aff-muted)] uppercase tracking-wider block">
+            <label className="text-[10px] font-bold text-[var(--aff-muted)] tracking-wider block">
               {t('sort_by_time')}
             </label>
             <select
@@ -286,28 +379,6 @@ export function HistoryTab({
               <option value="asc">{t('sort_oldest')}</option>
             </select>
           </div>
-        </div>
-
-        {/* Manual Sync Note & Button */}
-        <div className="p-4 bg-orange-500/5 dark:bg-orange-500/10 border border-orange-500/20 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 text-left">
-          <div className="space-y-1 max-w-2xl">
-            <p className="text-xs text-[var(--aff-muted)] leading-relaxed">
-              {t('manual_sync_note')}
-            </p>
-            <p className="text-[11px] text-amber-600 dark:text-amber-400 font-medium">
-              {t('manual_sync_disclaimer')}
-            </p>
-          </div>
-          <Button
-            onClick={() => handleUserSync(tempStart, tempEnd)}
-            disabled={userSyncLoading}
-            className="bg-[var(--aff-orange)] hover:bg-[var(--aff-orange-hover)] text-white font-bold text-xs py-2 px-4 rounded-xl flex items-center gap-2 transition-all self-start md:self-center shrink-0 cursor-pointer h-10 shadow-sm"
-          >
-            <RefreshCw
-              className={`w-4 h-4 ${userSyncLoading ? 'animate-spin' : ''}`}
-            />
-            <span>{t('manual_sync')}</span>
-          </Button>
         </div>
 
         {loadingHistory ? (
@@ -557,6 +628,63 @@ export function HistoryTab({
             )}
           </div>
         )}
+
+        {/* Collapsible Note */}
+        <div className="mt-6 border border-orange-500/20 dark:border-orange-500/10 rounded-2xl overflow-hidden bg-orange-500/5 dark:bg-orange-500/10">
+          <button
+            onClick={() => setIsNoteOpen(!isNoteOpen)}
+            className="w-full flex items-center justify-between p-4 font-bold text-xs text-amber-600 dark:text-amber-400 hover:bg-orange-500/5 dark:hover:bg-orange-500/5 transition-all text-left cursor-pointer select-none"
+          >
+            <span className="flex items-center gap-1.5">
+              <span>{t('manual_sync_title')}</span>
+            </span>
+            {isNoteOpen ? (
+              <ChevronUp className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+            ) : (
+              <ChevronDown className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+            )}
+          </button>
+
+          <div
+            className={`transition-all duration-350 ease-in-out overflow-hidden ${
+              isNoteOpen
+                ? 'max-h-[500px] border-t border-orange-500/10'
+                : 'max-h-0'
+            }`}
+          >
+            <div className="p-4 pt-2 text-xs text-[var(--aff-muted)] leading-relaxed text-left">
+              <ul className="list-disc pl-4 space-y-1.5">
+                <li>
+                  {t.rich('manual_sync_bullet1', {
+                    b: (chunks) => (
+                      <strong className="font-bold text-[var(--aff-text)]">
+                        {chunks}
+                      </strong>
+                    ),
+                  })}
+                </li>
+                <li>
+                  {t.rich('manual_sync_bullet2', {
+                    b: (chunks) => (
+                      <strong className="font-bold text-[var(--aff-text)]">
+                        {chunks}
+                      </strong>
+                    ),
+                  })}
+                </li>
+                <li>
+                  {t.rich('manual_sync_bullet3', {
+                    b: (chunks) => (
+                      <strong className="font-bold text-[var(--aff-text)]">
+                        {chunks}
+                      </strong>
+                    ),
+                  })}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Sync Modal/Popup */}

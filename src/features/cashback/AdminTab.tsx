@@ -110,38 +110,83 @@ export function AdminTab({
 }: AdminTabProps) {
   const t = useTranslations('cashback');
 
+  const [indicatorStyle, setIndicatorStyle] = React.useState({
+    left: 0,
+    width: 0,
+  });
+  const tabsRef = React.useRef<{ [key: string]: HTMLButtonElement | null }>({});
+
+  React.useEffect(() => {
+    const activeEl = tabsRef.current[adminSubTab];
+    if (activeEl) {
+      setIndicatorStyle({
+        left: activeEl.offsetLeft,
+        width: activeEl.offsetWidth,
+      });
+    }
+  }, [adminSubTab]);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      const activeEl = tabsRef.current[adminSubTab];
+      if (activeEl) {
+        setIndicatorStyle({
+          left: activeEl.offsetLeft,
+          width: activeEl.offsetWidth,
+        });
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [adminSubTab]);
+
   return (
     <div className="space-y-6">
       {/* Subtab selection */}
-      <div className="flex border-b border-[var(--aff-border)] pb-0.5 mb-6 overflow-x-auto gap-2 scrollbar-none">
+      <div className="relative inline-flex border-b border-[var(--aff-border)] mb-6 overflow-x-auto gap-2 pb-0 scrollbar-none max-w-full">
         <Button
+          ref={(el) => {
+            tabsRef.current['conversions'] = el;
+          }}
           variant="ghost"
           onClick={() => {
             setAdminSubTab('conversions');
             setAdminPage(1);
           }}
-          className={`h-auto px-4 py-2 font-bold text-xs border-b-2 rounded-none transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer hover:bg-transparent ${
+          className={`h-auto px-4 py-2.5 font-semibold text-sm rounded-none transition-colors duration-200 flex items-center gap-2 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus-visible:ring-0 active:translate-y-0 active:scale-100 ${
             adminSubTab === 'conversions'
-              ? 'border-[var(--aff-orange)] text-[var(--aff-orange)]'
-              : 'border-transparent text-[var(--aff-muted)] hover:text-[var(--aff-text)]'
+              ? 'text-[var(--aff-orange)] font-bold'
+              : 'text-[var(--aff-muted)] hover:text-[var(--aff-text)]'
           }`}
         >
           <span>{t('admin_conversions_subtab')}</span>
         </Button>
         <Button
+          ref={(el) => {
+            tabsRef.current['cashbacks'] = el;
+          }}
           variant="ghost"
           onClick={() => {
             setAdminSubTab('cashbacks');
             setAdminCashbacksPage(1);
           }}
-          className={`h-auto px-4 py-2 font-bold text-xs border-b-2 rounded-none transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer hover:bg-transparent ${
+          className={`h-auto px-4 py-2.5 font-semibold text-sm rounded-none transition-colors duration-200 flex items-center gap-2 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus-visible:ring-0 active:translate-y-0 active:scale-100 ${
             adminSubTab === 'cashbacks'
-              ? 'border-[var(--aff-orange)] text-[var(--aff-orange)]'
-              : 'border-transparent text-[var(--aff-muted)] hover:text-[var(--aff-text)]'
+              ? 'text-[var(--aff-orange)] font-bold'
+              : 'text-[var(--aff-muted)] hover:text-[var(--aff-text)]'
           }`}
         >
           <span>{t('admin_cashbacks_subtab')}</span>
         </Button>
+
+        {/* Smooth sliding bottom indicator */}
+        <div
+          className="absolute bottom-0 h-[3px] bg-[var(--aff-orange)] transition-all duration-300 ease-in-out rounded-full"
+          style={{
+            left: `${indicatorStyle.left}px`,
+            width: `${indicatorStyle.width}px`,
+          }}
+        />
       </div>
 
       {adminSubTab === 'conversions' && (
@@ -155,7 +200,7 @@ export function AdminTab({
 
             <form
               onSubmit={handleAdminSync}
-              className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end"
             >
               <div className="space-y-1.5 text-left">
                 <label className="text-xs font-bold text-[var(--aff-muted)] flex items-center gap-1">
@@ -196,11 +241,11 @@ export function AdminTab({
                 />
               </div>
 
-              <div className="md:col-span-3 pt-2">
+              <div className="sm:col-span-2 lg:col-span-1">
                 <Button
                   type="submit"
                   disabled={syncLoading}
-                  className="aff-btn-primary w-full py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="aff-btn-primary w-full h-[38px] rounded-xl font-bold flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {syncLoading ? (
                     <>

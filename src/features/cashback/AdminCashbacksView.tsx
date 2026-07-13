@@ -52,9 +52,6 @@ export function AdminCashbacksView({
       {/* Search filters */}
       <div className="flex flex-col sm:flex-row gap-3 items-end mb-6 text-left">
         <div className="space-y-1.5 flex-1 w-full">
-          <label className="text-2xs font-bold text-[var(--aff-muted)] block">
-            {t('search_user_id')}
-          </label>
           <input
             type="text"
             placeholder={t('search_user_id')}
@@ -63,29 +60,16 @@ export function AdminCashbacksView({
             className="aff-input w-full px-3 py-1.5 rounded-xl text-xs"
           />
         </div>
-        <div className="flex gap-2 w-full sm:w-auto font-bold">
+        <div className="w-full sm:w-auto font-bold">
           <Button
             onClick={() => {
               setAdminCashbacksPage(1);
               void fetchAdminCashbacks();
             }}
-            className="flex-1 sm:flex-initial aff-btn-primary py-1.5 px-4 rounded-xl text-xs cursor-pointer flex items-center justify-center gap-1 font-bold"
+            className="w-full sm:w-auto aff-btn-primary py-1.5 px-4 rounded-xl text-xs cursor-pointer flex items-center justify-center gap-1 font-bold"
           >
             <Search className="w-3.5 h-3.5" />
             <span>{t('search')}</span>
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setSearchUserId('');
-              setAdminCashbacksPage(1);
-              setTimeout(() => {
-                void fetchAdminCashbacks();
-              }, 0);
-            }}
-            className="flex-1 sm:flex-initial bg-neutral-200 dark:bg-neutral-800 text-[var(--aff-text)] hover:bg-neutral-300 dark:hover:bg-neutral-700 py-1.5 px-4 rounded-xl text-xs cursor-pointer font-bold hover:bg-transparent"
-          >
-            {t('clear')}
           </Button>
         </div>
       </div>

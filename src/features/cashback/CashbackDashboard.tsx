@@ -15,41 +15,12 @@ import { PaymentTab } from '@/features/cashback/PaymentTab';
 import { AdminTab } from '@/features/cashback/AdminTab';
 import { NavBar } from '@/features/cashback/NavBar';
 
-import Coin from '@/features/cashback/Coin';
 import '@/features/cashback/cashback.css';
-
-interface CustomWindow extends Window {
-  google?: {
-    accounts?: {
-      id?: {
-        initialize: (config: {
-          client_id: string;
-          callback: (response: { credential?: string }) => void;
-          auto_select?: boolean;
-        }) => void;
-        renderButton: (
-          parent: HTMLElement,
-          options: {
-            type?: string;
-            theme?: string;
-            size?: string;
-            text?: string;
-            shape?: string;
-            logo_alignment?: string;
-            width?: string;
-          },
-        ) => void;
-      };
-    };
-  };
-  __gsiInitialized?: boolean;
-}
 
 export function CashbackDashboard() {
   const [activeTab, setActiveTab] = React.useState<
     'converter' | 'history' | 'payment' | 'admin'
   >('converter');
-  const gsiIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
 
   // Business logic hooks
   const auth = useCashbackAuth(
@@ -77,99 +48,14 @@ export function CashbackDashboard() {
     history.setUserHistoryPage(1);
   }, [history]);
 
-  // Google Identity Services (GSI) Initialization Callback Ref
-  const gsiBtnRef = React.useCallback(
-    (node: HTMLDivElement | null) => {
-      if (gsiIntervalRef.current) {
-        clearInterval(gsiIntervalRef.current);
-        gsiIntervalRef.current = null;
-      }
-
-      if (!node || auth.user) return;
-
-      const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
-      if (!googleClientId) {
-        console.warn('Google Client ID is not configured.');
-      }
-
-      const renderButton = (container: HTMLDivElement) => {
-        const w = window as unknown as CustomWindow;
-        if (w.google?.accounts?.id) {
-          if (!w.__gsiInitialized) {
-            w.google.accounts.id.initialize({
-              client_id: googleClientId,
-              callback: async (response) => {
-                if (response.credential) {
-                  await auth.handleGoogleLogin(response.credential);
-                }
-              },
-              auto_select: false,
-            });
-            w.__gsiInitialized = true;
-          }
-
-          try {
-            w.google.accounts.id.renderButton(container, {
-              type: 'standard',
-              theme: 'outline',
-              size: 'medium',
-              text: 'signin',
-              shape: 'pill',
-            });
-          } catch (e) {
-            console.error('GSI rendering failed:', e);
-          }
-        }
-      };
-
-      const w = window as unknown as CustomWindow;
-      if (w.google?.accounts?.id) {
-        renderButton(node);
-      } else {
-        gsiIntervalRef.current = setInterval(() => {
-          const w = window as unknown as CustomWindow;
-          if (w.google?.accounts?.id) {
-            if (gsiIntervalRef.current) {
-              clearInterval(gsiIntervalRef.current);
-              gsiIntervalRef.current = null;
-            }
-            renderButton(node);
-          }
-        }, 300);
-      }
-    },
-    [auth],
-  );
-
-  // Cleanup interval on unmount
-  React.useEffect(() => {
-    return () => {
-      if (gsiIntervalRef.current) {
-        clearInterval(gsiIntervalRef.current);
-      }
-    };
-  }, []);
-
   return (
     <div className="affiliate-page-container relative overflow-x-hidden transition-colors duration-300 min-h-screen">
       {/* Sticky NavBar specific to cashback layout */}
       <NavBar
         user={auth.user}
         handleLogout={handleLogout}
-        gsiBtnRef={gsiBtnRef}
+        onLoginClick={auth.initiateGoogleLogin}
       />
-
-      {/* Background falling coins */}
-      {anim.fallingCoins.map((coin) => (
-        <div
-          key={coin.id}
-          className="falling-coin"
-          style={{ left: `${coin.left}%` }}
-        >
-          <Coin size={coin.size} animate={true} />
-        </div>
-      ))}
-
       <div className="max-w-6xl mx-auto py-6 px-4 sm:px-6 lg:px-8 space-y-6">
         {/* Header Block & Profile & Tab Select */}
         <DashboardHeader

@@ -2,39 +2,14 @@
 
 import * as React from 'react';
 
-interface FallingCoin {
-  id: number;
-  left: number;
-  size: number;
-}
-
 interface BurstCoin {
-  id: number;
+  id: string;
   tx: number;
   ty: number;
 }
 
 export function useCoinAnimation(uiTotalCashback: number) {
-  const [fallingCoins, setFallingCoins] = React.useState<FallingCoin[]>([]);
   const [burstCoins, setBurstCoins] = React.useState<BurstCoin[]>([]);
-
-  // Background falling coins effect
-  React.useEffect(() => {
-    const spawnCoin = () => {
-      if (typeof document !== 'undefined' && document.hidden) return;
-      const id = Date.now();
-      const left = Math.random() * 90 + 5;
-      const size = Math.random() * 12 + 14;
-      setFallingCoins((prev) => [...prev, { id, left, size }]);
-      setTimeout(() => {
-        setFallingCoins((prev) => prev.filter((c) => c.id !== id));
-      }, 6000);
-    };
-
-    spawnCoin();
-    const interval = setInterval(spawnCoin, 12000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Spawn coin burst when total cashback increases
   const prevTotalRef = React.useRef(uiTotalCashback);
@@ -47,7 +22,7 @@ export function useCoinAnimation(uiTotalCashback: number) {
         const tx = Math.cos(rad) * speed;
         const ty = Math.sin(rad) * -speed - 20;
         return {
-          id: Date.now() + i,
+          id: `${Date.now()}-${i}-${Math.random()}`,
           tx,
           ty,
         };
@@ -62,7 +37,7 @@ export function useCoinAnimation(uiTotalCashback: number) {
   }, [uiTotalCashback]);
 
   return {
-    fallingCoins,
+    fallingCoins: [],
     burstCoins,
   };
 }

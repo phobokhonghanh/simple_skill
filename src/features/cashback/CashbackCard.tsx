@@ -42,7 +42,7 @@ export function CashbackCard({
 
   return (
     <div
-      className={`aff-card p-4 rounded-xl border border-[var(--aff-border)] bg-neutral-50/50 dark:bg-neutral-900/30 space-y-3 text-left max-w-full overflow-hidden hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 ${className}`}
+      className={`aff-card p-4 rounded-xl border border-[var(--aff-border)] bg-neutral-50/50 dark:bg-neutral-900/30 space-y-3 text-left max-w-full overflow-hidden ${className}`}
     >
       <div className="flex justify-between items-start gap-2 max-w-full overflow-hidden">
         <div className="min-w-0 flex-1">

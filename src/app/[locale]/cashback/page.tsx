@@ -1,5 +1,4 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import Script from 'next/script';
 import { routing } from '@/i18n/routing';
 import CashbackDashboardWrapper from '@/features/cashback/CashbackDashboardWrapper';
 
@@ -31,12 +30,6 @@ export default async function CashbackPage({
 
   return (
     <main className="min-h-screen bg-background transition-colors duration-300">
-      {/* Load Google Identity Services client script statically in English to prevent script re-evaluation on locale changes */}
-      <Script
-        src="https://accounts.google.com/gsi/client?hl=en"
-        strategy="afterInteractive"
-      />
-
       {/* Main Cashback Portal Content */}
       <CashbackDashboardWrapper />
     </main>

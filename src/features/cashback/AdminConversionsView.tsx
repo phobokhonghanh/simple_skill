@@ -73,18 +73,6 @@ export function AdminConversionsView({
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end mb-6 text-left">
         <div className="space-y-1.5">
           <label className="text-2xs font-bold text-[var(--aff-muted)]">
-            {t('filter_sub_id')}
-          </label>
-          <input
-            type="text"
-            placeholder={t('filter_sub_id')}
-            value={filterSubId}
-            onChange={(e) => setFilterSubId(e.target.value)}
-            className="aff-input w-full px-3 py-1.5 rounded-xl text-xs"
-          />
-        </div>
-        <div className="space-y-1.5">
-          <label className="text-2xs font-bold text-[var(--aff-muted)]">
             {t('start_date')}
           </label>
           <FormattedDateInput
@@ -103,31 +91,28 @@ export function AdminConversionsView({
             className="w-full px-3 py-1.5 text-xs"
           />
         </div>
-        <div className="flex gap-2">
+        <div className="space-y-1.5">
+          <label className="text-2xs font-bold text-[var(--aff-muted)]">
+            {t('filter_sub_id')}
+          </label>
+          <input
+            type="text"
+            placeholder={t('filter_sub_id')}
+            value={filterSubId}
+            onChange={(e) => setFilterSubId(e.target.value)}
+            className="aff-input w-full px-3 py-1.5 rounded-xl text-xs"
+          />
+        </div>
+        <div>
           <Button
             onClick={() => {
               setAdminPage(1);
               void fetchAdminConversions();
             }}
-            className="aff-btn-primary py-1.5 px-4 rounded-xl text-xs cursor-pointer flex items-center justify-center gap-1 font-bold flex-1 sm:flex-initial"
+            className="aff-btn-primary py-1.5 px-4 rounded-xl text-xs cursor-pointer flex items-center justify-center gap-1 font-bold w-full"
           >
             <Search className="w-3.5 h-3.5" />
             <span>{t('search')}</span>
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setFilterSubId('');
-              setFilterStart('');
-              setFilterEnd('');
-              setAdminPage(1);
-              setTimeout(() => {
-                void fetchAdminConversions();
-              }, 0);
-            }}
-            className="bg-neutral-200 dark:bg-neutral-800 text-[var(--aff-text)] hover:bg-neutral-300 dark:hover:bg-neutral-700 py-1.5 px-4 rounded-xl text-xs cursor-pointer font-bold flex-1 sm:flex-initial hover:bg-transparent"
-          >
-            {t('clear')}
           </Button>
         </div>
       </div>
@@ -234,9 +219,6 @@ export function AdminConversionsView({
                             className="bg-neutral-50/50 dark:bg-neutral-900/30 p-4 border-b border-[var(--aff-border)]"
                           >
                             <div className="space-y-4 pl-2 text-left">
-                              <h4 className="font-bold text-xs uppercase tracking-wider text-[var(--aff-muted)]">
-                                {t('shopee_order_list')}
-                              </h4>
                               <div className="divide-y divide-[var(--aff-border)]">
                                 {rec.orders?.map((ord, oIdx) => {
                                   const orderIdVal =

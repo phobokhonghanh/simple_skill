@@ -30,6 +30,36 @@ export function DashboardHeader({
   const firstWord = titleWords[0] || '';
   const restWords = titleWords.slice(1).join(' ') || '';
 
+  const [indicatorStyle, setIndicatorStyle] = React.useState({
+    left: 0,
+    width: 0,
+  });
+  const tabsRef = React.useRef<{ [key: string]: HTMLButtonElement | null }>({});
+
+  React.useEffect(() => {
+    const activeEl = tabsRef.current[activeTab];
+    if (activeEl) {
+      setIndicatorStyle({
+        left: activeEl.offsetLeft,
+        width: activeEl.offsetWidth,
+      });
+    }
+  }, [activeTab, user]);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      const activeEl = tabsRef.current[activeTab];
+      if (activeEl) {
+        setIndicatorStyle({
+          left: activeEl.offsetLeft,
+          width: activeEl.offsetWidth,
+        });
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [activeTab]);
+
   return (
     <div className="w-full text-center">
       {/* Header Hero Section */}
@@ -51,41 +81,50 @@ export function DashboardHeader({
 
       {/* Tab Switcher if logged in */}
       {user && (
-        <div className="flex border-b border-[var(--aff-border)] mb-6 overflow-x-auto gap-2 scrollbar-none">
+        <div className="relative inline-flex border-b border-[var(--aff-border)] mb-6 overflow-x-auto gap-2 pb-0 scrollbar-none max-w-full">
           <Button
+            ref={(el) => {
+              tabsRef.current['converter'] = el;
+            }}
             variant="ghost"
             onClick={() => setActiveTab('converter')}
-            className={`h-auto px-4 py-2.5 font-semibold text-sm border-b-2 rounded-none transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer hover:bg-transparent ${
+            className={`h-auto px-4 py-2.5 font-semibold text-sm rounded-none transition-colors duration-200 flex items-center gap-2 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus-visible:ring-0 active:translate-y-0 active:scale-100 ${
               activeTab === 'converter'
-                ? 'border-[var(--aff-orange)] text-[var(--aff-orange)] font-bold'
-                : 'border-transparent text-[var(--aff-muted)] hover:text-[var(--aff-text)]'
+                ? 'text-[var(--aff-orange)] font-bold'
+                : 'text-[var(--aff-muted)] hover:text-[var(--aff-text)]'
             }`}
           >
             <Sparkles className="w-4 h-4" />
             <span>{t('converter_tab')}</span>
           </Button>
           <Button
+            ref={(el) => {
+              tabsRef.current['history'] = el;
+            }}
             variant="ghost"
             onClick={() => {
               setActiveTab('history');
               resetUserHistoryPage();
             }}
-            className={`h-auto px-4 py-2.5 font-semibold text-sm border-b-2 rounded-none transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer hover:bg-transparent ${
+            className={`h-auto px-4 py-2.5 font-semibold text-sm rounded-none transition-colors duration-200 flex items-center gap-2 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus-visible:ring-0 active:translate-y-0 active:scale-100 ${
               activeTab === 'history'
-                ? 'border-[var(--aff-orange)] text-[var(--aff-orange)] font-bold'
-                : 'border-transparent text-[var(--aff-muted)] hover:text-[var(--aff-text)]'
+                ? 'text-[var(--aff-orange)] font-bold'
+                : 'text-[var(--aff-muted)] hover:text-[var(--aff-text)]'
             }`}
           >
             <TrendingUp className="w-4 h-4" />
             <span>{t('history_tab')}</span>
           </Button>
           <Button
+            ref={(el) => {
+              tabsRef.current['payment'] = el;
+            }}
             variant="ghost"
             onClick={() => setActiveTab('payment')}
-            className={`h-auto px-4 py-2.5 font-semibold text-sm border-b-2 rounded-none transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer hover:bg-transparent ${
+            className={`h-auto px-4 py-2.5 font-semibold text-sm rounded-none transition-colors duration-200 flex items-center gap-2 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus-visible:ring-0 active:translate-y-0 active:scale-100 ${
               activeTab === 'payment'
-                ? 'border-[var(--aff-orange)] text-[var(--aff-orange)] font-bold'
-                : 'border-transparent text-[var(--aff-muted)] hover:text-[var(--aff-text)]'
+                ? 'text-[var(--aff-orange)] font-bold'
+                : 'text-[var(--aff-muted)] hover:text-[var(--aff-text)]'
             }`}
           >
             <CircleDollarSign className="w-4 h-4" />
@@ -93,18 +132,30 @@ export function DashboardHeader({
           </Button>
           {user.role === 'admin' && (
             <Button
+              ref={(el) => {
+                tabsRef.current['admin'] = el;
+              }}
               variant="ghost"
               onClick={() => setActiveTab('admin')}
-              className={`h-auto px-4 py-2.5 font-semibold text-sm border-b-2 rounded-none transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer hover:bg-transparent ${
+              className={`h-auto px-4 py-2.5 font-semibold text-sm rounded-none transition-colors duration-200 flex items-center gap-2 whitespace-nowrap cursor-pointer bg-transparent hover:bg-transparent focus-visible:ring-0 active:translate-y-0 active:scale-100 ${
                 activeTab === 'admin'
-                  ? 'border-[var(--aff-orange)] text-[var(--aff-orange)] font-bold'
-                  : 'border-transparent text-[var(--aff-muted)] hover:text-[var(--aff-text)]'
+                  ? 'text-[var(--aff-orange)] font-bold'
+                  : 'text-[var(--aff-muted)] hover:text-[var(--aff-text)]'
               }`}
             >
               <ShieldCheck className="w-4 h-4" />
               <span>{t('admin_tab')}</span>
             </Button>
           )}
+
+          {/* Smooth sliding bottom indicator */}
+          <div
+            className="absolute bottom-0 h-[3px] bg-[var(--aff-orange)] transition-all duration-300 ease-in-out rounded-full"
+            style={{
+              left: `${indicatorStyle.left}px`,
+              width: `${indicatorStyle.width}px`,
+            }}
+          />
         </div>
       )}
     </div>

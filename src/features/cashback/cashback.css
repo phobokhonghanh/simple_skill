@@ -16,7 +16,7 @@
 
   background-color: var(--aff-bg);
   color: var(--aff-text);
-  min-h: 100vh;
+  min-height: 100vh;
 }
 
 .dark .affiliate-page-container {
@@ -35,6 +35,7 @@
 .aff-gradient-text {
   background: linear-gradient(135deg, var(--aff-orange), #ff8a50);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -42,15 +43,11 @@
   background-color: var(--aff-surface);
   border: 1px solid var(--aff-border);
   box-shadow: var(--aff-card-shadow);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color 0.2s ease;
 }
 
 .aff-card:hover {
   border-color: var(--aff-orange-border);
-  box-shadow:
-    0 10px 30px -5px rgba(255, 87, 34, 0.08),
-    0 4px 12px -2px rgba(0, 0, 0, 0.04);
-  transform: translateY(-2px);
 }
 
 .aff-input {

@@ -39,15 +39,15 @@ This is a modern, sustainable, and highly optimized personal portfolio and web t
 
 ## Routes Matrix
 
-| Route                   | Type                     | Description                                                                                  |
-| ----------------------- | ------------------------ | -------------------------------------------------------------------------------------------- |
-| `/`                     | Redirect                 | Redirects to `/en/` via `public/_redirects` (or client fallback in `src/app/page.tsx`).       |
-| `/bookmarks/`           | Client redirect          | Legacy entry point forwarding visitors to `/en/bookmarks`.                                   |
-| `/experience/`          | Client redirect          | Legacy entry point forwarding visitors to `/en/experience`.                                   |
-| `/[locale]/`            | Static page              | Landing page with localized greetings, language selection, and theme options.                |
-| `/[locale]/bookmarks/`  | Static page + client API | Bookmarks manager interface loading data from the FastAPI backend.                           |
-| `/[locale]/cashback/`   | Static page + client API | Shopee affiliate cashback portal with login, order list, and sync tools.                    |
-| `/[locale]/experience/` | Static page              | Interactive resume showing professional timeline, education, and credentials.                |
+| Route                   | Type                     | Description                                                                             |
+| ----------------------- | ------------------------ | --------------------------------------------------------------------------------------- |
+| `/`                     | Redirect                 | Redirects to `/en/` via `public/_redirects` (or client fallback in `src/app/page.tsx`). |
+| `/bookmarks/`           | Client redirect          | Legacy entry point forwarding visitors to `/en/bookmarks`.                              |
+| `/experience/`          | Client redirect          | Legacy entry point forwarding visitors to `/en/experience`.                             |
+| `/[locale]/`            | Static page              | Landing page with localized greetings, language selection, and theme options.           |
+| `/[locale]/bookmarks/`  | Static page + client API | Bookmarks manager interface loading data from the FastAPI backend.                      |
+| `/[locale]/cashback/`   | Static page + client API | Shopee affiliate cashback portal with login, order list, and sync tools.                |
+| `/[locale]/experience/` | Static page              | Interactive resume showing professional timeline, education, and credentials.           |
 
 ---
 
@@ -114,6 +114,7 @@ This repository enforces high-quality standards using pre-commit hooks (Husky, l
 ```
 
 Common types:
+
 - `feat`: A new feature
 - `fix`: A bug fix
 - `docs`: Documentation changes
@@ -127,9 +128,10 @@ Common types:
 
 ## Deployment & Verification
 
-Deployments are set up as a **static export** compiled into the `out` directory and hosted on **Cloudflare Pages**. 
+Deployments are set up as a **static export** compiled into the `out` directory and hosted on **Cloudflare Pages**.
 
 Verification check status of standard output:
+
 - `GET /[locale]/` -> `200 OK`, Title: `Nguyen Dinh Nguyen`
 - `GET /[locale]/bookmarks/` -> `200 OK`, Title: `Bookmarks — Nguyen Dinh Nguyen`
 - `GET /[locale]/experience/` -> `200 OK`, Title: `Experience — Nguyen Dinh Nguyen`

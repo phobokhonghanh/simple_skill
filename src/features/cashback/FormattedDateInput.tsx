@@ -40,7 +40,16 @@ export function FormattedDateInput({
         required={required}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer [color-scheme:dark]"
+        onClick={(e) => {
+          try {
+            if ('showPicker' in e.currentTarget) {
+              e.currentTarget.showPicker();
+            }
+          } catch {
+            // Fallback for older browsers
+          }
+        }}
+        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer [color-scheme:dark] z-10"
       />
     </div>
   );
