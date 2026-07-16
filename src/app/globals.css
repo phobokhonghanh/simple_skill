@@ -45,6 +45,77 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  --animate-toast-in-right: toast-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-toast-in-left: toast-in-left 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-toast-in-top: toast-in-top 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-toast-in-bottom: toast-in-bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-toast-out: toast-out 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-toast-shrink: toast-shrink linear forwards;
+
+  @keyframes toast-in-right {
+    from {
+      transform: translateX(100%) scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes toast-in-left {
+    from {
+      transform: translateX(-100%) scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes toast-in-top {
+    from {
+      transform: translateY(-100%) scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes toast-in-bottom {
+    from {
+      transform: translateY(100%) scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes toast-out {
+    from {
+      transform: scale(1);
+      opacity: 1;
+    }
+    to {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+  }
+
+  @keyframes toast-shrink {
+    from {
+      width: 100%;
+    }
+    to {
+      width: 0%;
+    }
+  }
 }
 
 :root {
@@ -174,91 +245,3 @@
   --experience-button-text: rgb(0 0 0);
 }
 
-/* === Toast Notification Animations === */
-@keyframes toast-in-right {
-  from {
-    transform: translateX(100%) scale(0.9);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes toast-in-left {
-  from {
-    transform: translateX(-100%) scale(0.9);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes toast-in-top {
-  from {
-    transform: translateY(-100%) scale(0.9);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes toast-in-bottom {
-  from {
-    transform: translateY(100%) scale(0.9);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes toast-out {
-  from {
-    transform: scale(1);
-    opacity: 1;
-  }
-  to {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-}
-
-@keyframes toast-shrink {
-  from {
-    width: 100%;
-  }
-  to {
-    width: 0%;
-  }
-}
-
-.animate-toast-in-right {
-  animation: toast-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-toast-in-left {
-  animation: toast-in-left 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-toast-in-top {
-  animation: toast-in-top 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-toast-in-bottom {
-  animation: toast-in-bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-toast-out {
-  animation: toast-out 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-toast-shrink {
-  animation: toast-shrink linear forwards;
-}

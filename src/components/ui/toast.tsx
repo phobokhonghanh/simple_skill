@@ -209,12 +209,12 @@ export function ToastItem({ toast, position, onDismiss }: ToastItemProps) {
       {duration > 0 && duration !== Infinity && !isExiting && (
         <div
           className={cn(
-            'absolute bottom-0 left-0 h-[3px] animate-toast-shrink',
+            'absolute bottom-0 left-0 h-[3px] w-full animate-toast-shrink',
+            typeClasses.progress,
           )}
           style={{
             animationDuration: `${duration}ms`,
-            backgroundColor: 'currentColor',
-            opacity: 0.35,
+            opacity: 0.45,
           }}
         />
       )}
