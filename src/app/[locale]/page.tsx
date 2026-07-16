@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { ThemeToggle } from '@/features/theme/ThemeToggle';
 import { LanguageSwitcher } from '@/features/i18n/LanguageSwitcher';
+// import { ToastDemo } from '@/components/features/ToastDemo';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -30,7 +31,7 @@ export default async function IndexPage({
   const t = await getTranslations({ locale, namespace: 'common' });
 
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center p-4 sm:p-6 md:p-24 bg-background transition-colors duration-300">
+    <main className="relative flex min-h-screen flex-col items-center justify-center p-4 sm:p-6 md:p-24 bg-background transition-colors duration-300 gap-6">
       {/* Quick Settings - Fixed position */}
       <div className="absolute top-4 right-4 sm:top-8 sm:right-8 flex items-center gap-4">
         <LanguageSwitcher />
@@ -72,6 +73,11 @@ export default async function IndexPage({
           </div>
         </CardContent>
       </Card>
+
+      {/* Toast Demo Card */}
+      {/* <div className="w-full max-w-[600px] animate-in fade-in slide-in-from-bottom duration-1000">
+        <ToastDemo />
+      </div> */}
     </main>
   );
 }

@@ -2,6 +2,7 @@
 
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { NextIntlClientProvider, AbstractIntlMessages } from 'next-intl';
+import { ToastProvider } from '@/components/providers/ToastProvider';
 
 // Silence the false-positive React 19 warning in development for next-themes inline script
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
@@ -42,7 +43,7 @@ export function Providers({
         messages={messages}
         timeZone={timeZone}
       >
-        {children}
+        <ToastProvider>{children}</ToastProvider>
       </NextIntlClientProvider>
     </NextThemesProvider>
   );

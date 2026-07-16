@@ -20,7 +20,19 @@
     "hero_tagline": "Developer - Data Engineer",
     "hero_description": "I build scalable backend systems and high-performance data pipelines — from architecture design to production deployment.",
     "skills_title": "Skills & Technologies",
-    "cashback": "Cashback"
+    "cashback": "Cashback",
+    "toast_demo_title": "Toast Notification Demo",
+    "toast_demo_desc": "Click the buttons below to trigger different toast notifications with various colors and behaviors.",
+    "toast_success_btn": "Success Toast",
+    "toast_error_btn": "Error Toast",
+    "toast_warning_btn": "Warning Toast",
+    "toast_info_btn": "Info Toast",
+    "toast_custom_btn": "Custom Orange",
+    "toast_success_msg": "Successfully updated your settings!",
+    "toast_error_msg": "An error occurred while saving.",
+    "toast_warning_msg": "Please check your network connection.",
+    "toast_info_msg": "A new update is available.",
+    "toast_custom_msg": "Shopee Cashback Conversion Sync completed!"
   },
   "locales": {
     "en": "English",

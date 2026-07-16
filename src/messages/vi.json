@@ -12,7 +12,19 @@
     "bookmarks": "Bookmark",
     "homelab": "Homelab",
     "homelab_desc": "Ở đây có vài thứ linh tinh về các dự án & hạ tầng self-host...",
-    "cashback": "Cashback"
+    "cashback": "Cashback",
+    "toast_demo_title": "Thử nghiệm Toast thông báo",
+    "toast_demo_desc": "Nhấn vào các nút dưới đây để thử kích hoạt các loại thông báo khác nhau.",
+    "toast_success_btn": "Toast Thành công",
+    "toast_error_btn": "Toast Lỗi",
+    "toast_warning_btn": "Toast Cảnh báo",
+    "toast_info_btn": "Toast Thông tin",
+    "toast_custom_btn": "Toast Cam Tùy biến",
+    "toast_success_msg": "Cập nhật cài đặt thành công!",
+    "toast_error_msg": "Đã xảy ra lỗi khi lưu dữ liệu.",
+    "toast_warning_msg": "Vui lòng kiểm tra lại kết nối mạng.",
+    "toast_info_msg": "Đã có bản cập nhật mới.",
+    "toast_custom_msg": "Đồng bộ Cashback Shopee hoàn tất!"
   },
   "locales": {
     "en": "English",
