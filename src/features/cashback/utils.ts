@@ -4,7 +4,10 @@ import type {
   CashbackRecord,
 } from './types';
 import { formatDate } from '@/lib/date';
-import { SHOPEE_CDN_PREFIX } from '@/features/cashback/config';
+import {
+  SHOPEE_CDN_PREFIX,
+  CASHBACK_STATUSES,
+} from '@/features/cashback/config';
 
 export { formatCurrency, formatNumber } from '@/lib/format';
 export {
@@ -153,6 +156,21 @@ export const calculateOrderTotalAmount = (
 };
 
 /**
+ * Chuẩn hóa trạng thái đơn hàng (chuyển "waiting for payment" từ Shopee API thành "approved").
+ *
+ * @param rawStatus - Trạng thái thô ban đầu từ API.
+ * @returns Trạng thái đã qua chuẩn hóa.
+ */
+export const normalizeStatus = (rawStatus?: string | null): string => {
+  if (!rawStatus) return CASHBACK_STATUSES.PENDING;
+  const s = rawStatus.toLowerCase().trim();
+  if (s === CASHBACK_STATUSES.WAITING_FOR_PAYMENT) {
+    return CASHBACK_STATUSES.APPROVED;
+  }
+  return s;
+};
+
+/**
  * Tính toán các chỉ số thống kê đơn hàng bao gồm xử lý cờ gian lận (Fraud detection logic).
  *
  * @param orders - Mảng đơn hàng chuyển đổi.
@@ -163,14 +181,15 @@ export const calculateOrderTotalAmount = (
 export const calculateConversionStats = (
   orders?: ConversionOrder[],
   rawCashback = 0,
-  rawStatus = 'pending',
+  rawStatus: string = CASHBACK_STATUSES.PENDING,
 ): ConversionStats => {
   const totalItems =
     orders?.reduce((acc, o) => acc + (o.items?.length || 0), 0) || 0;
   const totalAmount = calculateOrderTotalAmount(orders);
   const hasFraud =
     orders?.some((o) => o.items?.some((it) => it.is_fraud === 1)) ?? false;
-  const displayStatus = hasFraud ? 'rejected' : rawStatus;
+  const normalized = normalizeStatus(rawStatus);
+  const displayStatus = hasFraud ? CASHBACK_STATUSES.REJECTED : normalized;
   const displayCashback = hasFraud ? 0 : rawCashback;
 
   return {
@@ -194,6 +213,7 @@ export const mapConversionToCashbackRecord = (
   platform = 'shopee',
 ): CashbackRecord => {
   const checkoutId = rec.checkout_id || '';
+  const rawStatus = rec.checkout_status || CASHBACK_STATUSES.PENDING;
   return {
     id: checkoutId,
     userId: rec.utm_content || '',
@@ -201,7 +221,7 @@ export const mapConversionToCashbackRecord = (
     cashback: rec.affiliate_net_commission
       ? parseFloat(rec.affiliate_net_commission)
       : 0,
-    status: rec.checkout_status || 'pending',
+    status: normalizeStatus(rawStatus),
     checkoutId,
     conversion: rec,
     createdAt: '',

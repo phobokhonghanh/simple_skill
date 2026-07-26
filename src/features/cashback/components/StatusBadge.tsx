@@ -7,13 +7,15 @@ import {
   KNOWN_STATUS_VALUES,
 } from '@/features/cashback/config';
 
+import { normalizeStatus } from '@/features/cashback/utils';
+
 export interface StatusBadgeProps {
   status?: string | null;
 }
 
 export const getStatusDetails = (status?: string | null) => {
   if (!status) return null;
-  const lower = status.toLowerCase();
+  const lower = normalizeStatus(status).toLowerCase();
 
   // Completed & Approved (Xanh lá tích cực - Emerald)
   if (
@@ -53,7 +55,8 @@ export function StatusBadge({ status }: StatusBadgeProps) {
   const t = useTranslations('cashback');
 
   if (!status) return null;
-  const lowerStatus = status.toLowerCase();
+  const normalizedStatus = normalizeStatus(status);
+  const lowerStatus = normalizedStatus.toLowerCase();
   const details = getStatusDetails(lowerStatus);
   const className =
     details?.className ??
@@ -64,7 +67,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
     displayLabel = t(`status.${lowerStatus}`);
   } else {
     displayLabel =
-      status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+      normalizedStatus.charAt(0).toUpperCase() + normalizedStatus.slice(1).toLowerCase();
   }
 
   return (

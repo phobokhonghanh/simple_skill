@@ -45,6 +45,7 @@ export const CASHBACK_STATUSES = {
   COMPLETED: 'completed',
   REJECTED: 'rejected',
   CANCELLED: 'cancelled',
+  WAITING_FOR_PAYMENT: 'waiting for payment',
 } as const;
 
 /** Type mô tả trạng thái đơn hoàn tiền */
