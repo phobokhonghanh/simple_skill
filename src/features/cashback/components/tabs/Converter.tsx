@@ -3,43 +3,33 @@
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
 import { History, Trash2 } from 'lucide-react';
-import type { Product, HistoryItem } from '@/features/cashback/types';
+import type { HistoryItem } from '@/features/cashback/types';
 import { Button } from '@/components/ui/button';
 import { ClientWrapper } from '@/components/ui/ClientWrapper';
 import { scrollToElement } from '@/features/cashback/utils';
 import { SearchBar } from '@/features/cashback/components/input/SearchBar';
 import { ProductCard } from '@/features/cashback/components/ProductCard';
-
-interface ConverterTabProps {
-  inputUrl: string;
-  loading: boolean;
-  product: Product | null;
-  affiliateLink: string | null;
-  copied: boolean;
-  history: HistoryItem[];
-  handleSubmit: (targetUrlOrEvent?: string | React.FormEvent) => void;
-  handleCopy: () => void;
-  handleClearHistory: () => void;
-  handleSelectHistory: (item: HistoryItem) => void;
-}
+import { useLinkConverter } from '@/features/cashback/hooks';
 
 /**
  * Component hiển thị giao diện chuyển đổi link sản phẩm Shopee sang link tiếp thị liên kết (affiliate).
+ * Tự đóng gói logic nghiệp vụ với `useLinkConverter()` (0 Props).
  * Bao gồm thanh nhập link, hiển thị thông tin sản phẩm và lịch sử chuyển đổi cá nhân.
  */
-export function ConverterTab({
-  inputUrl,
-  loading,
-  product,
-  affiliateLink,
-  copied,
-  history,
-  handleSubmit,
-  handleCopy,
-  handleClearHistory,
-  handleSelectHistory,
-}: ConverterTabProps) {
+export function ConverterTab() {
   const t = useTranslations('cashback');
+  const {
+    inputUrl,
+    loading,
+    product,
+    affiliateLink,
+    copied,
+    history,
+    handleSubmit,
+    handleCopy,
+    handleClearHistory,
+    handleSelectHistory,
+  } = useLinkConverter();
 
   const onSelectHistoryItem = (item: HistoryItem) => {
     handleSelectHistory(item);
@@ -53,7 +43,7 @@ export function ConverterTab({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-      {/* Left Column: Form & Main Area */}
+      {/* Cột trái: Thanh tìm kiếm & Thông tin sản phẩm sau khi chuyển đổi */}
       <div className="lg:col-span-2 space-y-6">
         <ClientWrapper>
           <SearchBar
@@ -76,7 +66,7 @@ export function ConverterTab({
         </section>
       </div>
 
-      {/* Right Column: Search History */}
+      {/* Cột phải: Lịch sử các đường link đã chuyển đổi gần đây */}
       <div className="lg:col-span-1">
         <ClientWrapper>
           <div className="aff-card p-5 sm:p-6 rounded-2xl space-y-4">

@@ -8,18 +8,20 @@ import {
   getFormattedSubId,
 } from '@/features/cashback/config';
 import { generateCashbackLink } from '@/features/cashback/api';
-import type { Product, HistoryItem, User } from '@/features/cashback/types';
+import type { Product, HistoryItem } from '@/features/cashback/types';
 import { formatImageUrl, safeLocalStorage } from '@/features/cashback/utils';
 import { useToast } from '@/components/providers/ToastProvider';
+import { useAuth } from '@/components/providers/AuthProvider';
 
 /**
  * Custom hook quản lý logic Chuyển đổi Link sản phẩm (Shopee, Lazada...) thành Link Hoàn tiền (Affiliate Link).
+ * Tự động lấy thông tin người dùng từ AuthContext.
  * Quản lý validate URL, lưu lịch sử tìm kiếm vào localStorage, copy link và thông báo kết quả.
  *
- * @param user - Thông tin người dùng hiện tại (null nếu chưa đăng nhập).
  * @returns Đối tượng chứa các state link, product, history và các handler thao tác.
  */
-export function useLinkConverter(user: User | null) {
+export function useLinkConverter() {
+  const { user, loading: authLoading } = useAuth();
   const t = useTranslations('cashback');
   const tCommon = useTranslations('common');
   const { warning: showWarningToast, custom: showCustomToast } = useToast();
@@ -217,7 +219,7 @@ export function useLinkConverter(user: User | null) {
 
   return {
     inputUrl,
-    loading,
+    loading: loading || authLoading,
     validationError,
     apiError,
     product,
