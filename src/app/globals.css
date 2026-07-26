@@ -46,10 +46,14 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 
-  --animate-toast-in-right: toast-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-toast-in-left: toast-in-left 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-toast-in-top: toast-in-top 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-toast-in-bottom: toast-in-bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-toast-in-right: toast-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1)
+    forwards;
+  --animate-toast-in-left: toast-in-left 0.3s cubic-bezier(0.16, 1, 0.3, 1)
+    forwards;
+  --animate-toast-in-top: toast-in-top 0.3s cubic-bezier(0.16, 1, 0.3, 1)
+    forwards;
+  --animate-toast-in-bottom: toast-in-bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1)
+    forwards;
   --animate-toast-out: toast-out 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-toast-shrink: toast-shrink linear forwards;
 
@@ -244,4 +248,3 @@
   --experience-accent-glow: rgb(59 130 246 / 50%);
   --experience-button-text: rgb(0 0 0);
 }
-

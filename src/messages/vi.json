@@ -1,282 +1,438 @@
 {
   "common": {
-    "title": "Nguyễn Đình Nguyên",
-    "rule": "Developer - Data Engineer",
-    "description": "Góc nhỏ này sẽ là nơi bắt đầu của những điều nhỏ nhặt, nhưng đủ để giúp mình không bị FOMO trước những thứ to lớn ngoài kia khi AI đang phát triển quá nhanh. \n Đây cũng là nơi mình có thể giới thiệu về bản thân, chia sẻ góc nhìn và hiểu biết của mình - vừa để sau này dễ dàng nhìn lại, vừa để bạn nào tình cờ ghé qua có thể tham khảo, biết đâu cũng hữu ích.",
-    "welcome": "Ở đây có gì ?",
     "theme": "Chủ đề",
     "language": "Ngôn ngữ",
-    "footer_resources": "Resources",
-    "experience": "Kinh nghiệm",
-    "experience_desc": "Ở đây có một vài thông tin về kinh nghiệm của mình với số năm ít ỏi khi đi làm \"culi\".",
-    "bookmarks": "Bookmark",
-    "homelab": "Homelab",
-    "homelab_desc": "Ở đây có vài thứ linh tinh về các dự án & hạ tầng self-host...",
-    "cashback": "Cashback",
-    "toast_demo_title": "Thử nghiệm Toast thông báo",
-    "toast_demo_desc": "Nhấn vào các nút dưới đây để thử kích hoạt các loại thông báo khác nhau.",
-    "toast_success_btn": "Toast Thành công",
-    "toast_error_btn": "Toast Lỗi",
-    "toast_warning_btn": "Toast Cảnh báo",
-    "toast_info_btn": "Toast Thông tin",
-    "toast_custom_btn": "Toast Cam Tùy biến",
-    "toast_success_msg": "Cập nhật cài đặt thành công!",
-    "toast_error_msg": "Đã xảy ra lỗi khi lưu dữ liệu.",
-    "toast_warning_msg": "Vui lòng kiểm tra lại kết nối mạng.",
-    "toast_info_msg": "Đã có bản cập nhật mới.",
-    "toast_custom_msg": "Đồng bộ Cashback Shopee hoàn tất!"
+    "roles": {
+      "admin": "Quản trị viên",
+      "user": "Người dùng"
+    },
+    "buttons": {
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "edit": "Sửa",
+      "delete": "Xóa",
+      "close": "Đóng",
+      "search": "Tìm kiếm",
+      "clear": "Xóa",
+      "next": "Trang sau",
+      "previous": "Trang trước",
+      "open": "Mở",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép!"
+    },
+    "labels": {
+      "loading": "Đang tải...",
+      "status": "Trạng thái",
+      "page": "Trang",
+      "pageSize": "Số mục mỗi trang",
+      "all": "Tất cả"
+    },
+    "pagination": {
+      "total_records": "Tổng cộng: {total} bản ghi",
+      "page_indicator": "Trang {page} / {totalPages}"
+    },
+    "sort": {
+      "by": "Sắp xếp theo",
+      "order": "Thứ tự",
+      "fields": {
+        "created_at": "Ngày tạo",
+        "title": "Tiêu đề",
+        "url": "URL"
+      },
+      "directions": {
+        "asc": "Tăng dần",
+        "desc": "Giảm dần"
+      },
+      "types": {
+        "advanced": "Nâng cao",
+        "api": "Sắp xếp qua API",
+        "local": "Sắp xếp cục bộ"
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "Đăng nhập",
+        "subtitle": "Vui lòng đăng nhập để tiếp tục."
+      },
+      "token": {
+        "title": "Yêu cầu xác thực",
+        "subtitle": "Vui lòng cung cấp mã xác thực.",
+        "label": "Mã xác thực",
+        "placeholder": "Nhập mã xác thực...",
+        "saved": "Đã lưu mã xác thực.",
+        "required": "Vui lòng nhập mã xác thực.",
+        "invalid": "Sai mã xác thực.",
+        "missing_config": "Hệ thống chưa cấu hình mã xác thực."
+      }
+    },
+    "errors": {
+      "db_unavailable": "Chưa kết nối được máy chủ. Vui lòng thử lại sau.",
+      "unknown": "Đã xảy ra lỗi ngoài ý muốn. Vui lòng thử lại sau.",
+      "invalid_url": "Đường dẫn không hợp lệ.",
+      "invalid_date": "Ngày tháng không hợp lệ.",
+      "required": "Trường này là bắt buộc.",
+      "not_found": "Không tìm thấy dữ liệu."
+    },
+    "messages": {
+      "save_success": "Đã lưu thành công.",
+      "delete_confirm": "Bạn có chắc chắn muốn xóa mục này?",
+      "copied_success": "Đã sao chép vào bộ nhớ tạm."
+    },
+    "footer": {
+      "resources": "Tài nguyên"
+    },
+    "colors": {
+      "blue": "Xanh dương",
+      "emerald": "Xanh lá",
+      "amber": "Vàng",
+      "rose": "Hồng",
+      "violet": "Tím",
+      "cyan": "Xanh cyan"
+    }
   },
   "locales": {
     "en": "English",
     "vi": "Tiếng Việt"
   },
+  "home": {
+    "title": "Nguyễn Đình Nguyên",
+    "rule": "Developer - Data Engineer",
+    "description": "Góc nhỏ này sẽ là nơi bắt đầu của những điều nhỏ nhặt, nhưng đủ để giúp mình không bị FOMO trước những thứ to lớn ngoài kia khi AI đang phát triển quá nhanh. \n Đây cũng là nơi mình có thể giới thiệu về bản thân, chia sẻ góc nhìn và hiểu biết của mình - vừa để sau này dễ dàng nhìn lại, vừa để bạn nào tình cờ ghé qua có thể tham khảo, biết đâu cũng hữu ích.",
+    "welcome": "Ở đây có gì ?",
+    "experience": {
+      "title": "Kinh nghiệm",
+      "desc": "Ở đây có một vài thông tin về kinh nghiệm của mình với số năm ít ỏi khi đi làm \"culi\"."
+    },
+    "homelab": {
+      "title": "Homelab",
+      "desc": "Ở đây có vài thứ linh tinh về các dự án & hạ tầng self-host..."
+    }
+  },
   "experience": {
-    "meta_title": "Kinh nghiệm — Nguyễn Đình Nguyên",
-    "meta_description": "Portfolio và kinh nghiệm làm việc của Nguyễn Đình Nguyên — Developer & Data Engineer chuyên xây dựng hệ thống backend mở rộng và pipeline dữ liệu hiệu suất cao.",
-    "hero_tagline": "Developer - Data Engineer",
-    "hero_description": "Tôi xây dựng các hệ thống backend có khả năng mở rộng và các pipeline dữ liệu hiệu suất cao — từ thiết kế kiến trúc đến triển khai production. Có kinh nghiệm về hệ thống phân tán, Data Lakehouse và tự động hóa CI/CD.",
-    "hero_bio": "Xây dựng các dịch vụ backend có khả năng mở rộng và pipeline dữ liệu, tối ưu hiệu suất & đảm bảo độ tin cậy của hệ thống.",
-    "hero_view_cv": "Xem CV",
-    "hero_featured_projects": "Dự án nổi bật",
-    "hero_location": "Thủ Đức, Hồ Chí Minh",
-    "hero_education": "Đại học Nông Lâm",
-    "skills_title": "Kỹ năng & Công nghệ",
-    "certifications_title": "Certifications",
-    "certification_view_details": "Xem chi tiết",
-    "skills_scrum": "Chứng chỉ Scrum",
-    "nav_home": "Trang chủ",
-    "nav_experience": "Kinh nghiệm",
-    "nav_homelab": "Homelab",
-    "nav_projects": "Dự án",
-    "nav_certificates": "Chứng chỉ",
-    "nav_contact": "Liên hệ",
-    "section_tech": "Tech Stack",
-    "section_tech_subtitle": "Các công nghệ tôi sử dụng",
-    "category_data": "Dữ liệu / Streaming",
-    "category_database": "Cơ sở dữ liệu / Lưu trữ",
-    "category_software": "Phần mềm / Frontend",
-    "category_devops": "DevOps",
-    "section_experience": "Kinh nghiệm làm việc",
-    "section_experience_subtitle": "Vài năm ít ỏi đi làm \"culi\"",
-    "exp1_company": "International Centre for Trade Transparency (ICTTM)",
-    "exp1_product": "Sản phẩm: ADAMftd.com",
-    "exp1_role": "Junior Data Engineer",
-    "exp1_period": "Tháng 8/2024 – Hiện tại",
-    "exp1_desc": "Xây dựng framework thu thập dữ liệu cốt lõi tổng hợp dữ liệu thương mại quốc tế & công ty từ nhiều nguồn toàn cầu. Thiết kế mô hình Data Vault cho lĩnh vực logistics và pipeline tự động với Apache Airflow & Spark xử lý ~100M records/batch, chuyển đến PostgreSQL và Elasticsearch.",
-    "exp1_tag1": "~100M records/batch",
-    "exp1_tag2": "Airflow + Spark",
-    "exp1_tag3": "Data Vault",
-    "exp2_company": "STATLAB Outlier Software Dev",
-    "exp2_role": "Intern & Fresher Data Engineer",
-    "exp2_period": "Tháng 12/2023 – Tháng 7/2024",
-    "exp2_desc": "Xây dựng hệ thống thu thập dữ liệu quy mô lớn tự động, xử lý từ 500K–2M records mỗi khu vực. Thiết kế workflow Airflow với Python parsing, tích hợp AWS S3 và xây dựng crawler hiệu suất cao với khả năng chịu lỗi, xoay proxy.",
-    "exp2_tag1": "500K – 2M records/vùng",
-    "exp2_tag2": "Airflow Orchestration",
-    "exp2_tag3": "Multi-threading / Async IO",
-    "section_contact": "Liên hệ",
-    "contact_subtitle": "Sẵn sàng cho cơ hội & hợp tác mới",
-    "contact_email_label": "Email"
+    "meta": {
+      "title": "Kinh nghiệm — Nguyễn Đình Nguyên",
+      "description": "Portfolio và kinh nghiệm làm việc của Nguyễn Đình Nguyên — Developer & Data Engineer chuyên xây dựng hệ thống backend mở rộng và pipeline dữ liệu hiệu suất cao."
+    },
+    "hero": {
+      "tagline": "Developer - Data Engineer",
+      "description": "Tôi xây dựng các hệ thống backend có khả năng mở rộng và các pipeline dữ liệu hiệu suất cao — từ thiết kế kiến trúc đến triển khai production. Có kinh nghiệm về hệ thống phân tán, Data Lakehouse và tự động hóa CI/CD.",
+      "bio": "Xây dựng các dịch vụ backend có khả năng mở rộng và pipeline dữ liệu, tối ưu hiệu suất & đảm bảo độ tin cậy của hệ thống.",
+      "view_cv": "Xem CV",
+      "featured_projects": "Dự án nổi bật",
+      "location": "Thủ Đức, Hồ Chí Minh",
+      "education": "Đại học Nông Lâm"
+    },
+    "skills": {
+      "title": "Kỹ năng & Công nghệ",
+      "scrum": "Chứng chỉ Scrum"
+    },
+    "certifications": {
+      "title": "Certifications",
+      "view_details": "Xem chi tiết"
+    },
+    "nav": {
+      "home": "Trang chủ",
+      "experience": "Kinh nghiệm",
+      "homelab": "Homelab",
+      "projects": "Dự án",
+      "certificates": "Chứng chỉ",
+      "contact": "Liên hệ"
+    },
+    "sections": {
+      "tech": {
+        "title": "Tech Stack",
+        "subtitle": "Các công nghệ tôi sử dụng"
+      },
+      "experience": {
+        "title": "Kinh nghiệm làm việc",
+        "subtitle": "Vài năm ít ỏi đi làm \"culi\""
+      },
+      "contact": {
+        "title": "Liên hệ",
+        "subtitle": "Sẵn sàng cho cơ hội & hợp tác mới",
+        "email_label": "Email"
+      }
+    },
+    "categories": {
+      "data": "Dữ liệu / Streaming",
+      "database": "Cơ sở dữ liệu / Lưu trữ",
+      "software": "Phần mềm / Frontend",
+      "devops": "DevOps"
+    },
+    "jobs": {
+      "exp1": {
+        "company": "International Centre for Trade Transparency (ICTTM)",
+        "product": "Sản phẩm: ADAMftd.com",
+        "role": "Junior Data Engineer",
+        "period": "Tháng 8/2024 – Hiện tại",
+        "desc": "Xây dựng framework thu thập dữ liệu cốt lõi tổng hợp dữ liệu thương mại quốc tế & công ty từ nhiều nguồn toàn cầu. Thiết kế mô hình Data Vault cho lĩnh vực logistics và pipeline tự động với Apache Airflow & Spark xử lý ~100M records/batch, chuyển đến PostgreSQL và Elasticsearch.",
+        "tag1": "~100M records/batch",
+        "tag2": "Airflow + Spark",
+        "tag3": "Data Vault"
+      },
+      "exp2": {
+        "company": "STATLAB Outlier Software Dev",
+        "role": "Intern & Fresher Data Engineer",
+        "period": "Tháng 12/2023 – Tháng 7/2024",
+        "desc": "Xây dựng hệ thống thu thập dữ liệu quy mô lớn tự động, xử lý từ 500K–2M records mỗi khu vực. Thiết kế workflow Airflow với Python parsing, tích hợp AWS S3 và xây dựng crawler hiệu suất cao với khả năng chịu lỗi, xoay proxy.",
+        "tag1": "500K – 2M records/vùng",
+        "tag2": "Airflow Orchestration",
+        "tag3": "Multi-threading / Async IO"
+      }
+    }
   },
   "bookmarks": {
-    "meta_title": "Bookmarks — Nguyen Dinh Nguyen",
-    "meta_description": "Dashboard lưu, tìm kiếm, lọc và quản lý bookmark theo danh mục nhiều cấp.",
-    "subtitle": "Lưu các liên kết hữu ích với tiêu đề, mô tả và danh mục nhiều cấp. Tìm kiếm nhanh, lọc theo chủ đề và quản lý trong một dashboard gọn gàng.",
-    "login_title": "Đăng nhập bookmarks",
-    "login_subtitle": "Nhập token quản trị trước khi tải dữ liệu bookmark.",
-    "login_button": "Mở dashboard",
-    "logout": "Đăng xuất",
-    "search_placeholder": "Tìm theo tiêu đề, URL hoặc mô tả...",
-    "all_categories": "Tất cả danh mục",
-    "categories": "Danh mục",
-    "bookmarks": "Bookmark",
-    "total_bookmarks": "Tổng bookmark",
-    "total_categories": "Danh mục",
-    "active_filters": "Bộ lọc đang dùng",
-    "editing_bookmark": "Chi tiết bookmark",
-    "editing_category": "Chi tiết danh mục",
-    "add_category": "Thêm danh mục",
-    "add_bookmark": "Thêm bookmark",
-    "edit": "Sửa",
-    "delete": "Xóa",
-    "cancel": "Hủy",
-    "save": "Lưu",
-    "open": "Mở",
-    "token": "Token quản trị",
-    "token_placeholder": "Nhập token quản trị",
-    "token_saved": "Đã lưu token quản trị trên trình duyệt này.",
-    "token_required": "Hãy nhập token quản trị trước khi thay đổi dữ liệu.",
-    "db_unavailable": "Chưa kết nối được API bookmark. Hãy kiểm tra cấu hình API.",
-    "empty_bookmarks": "Không có bookmark phù hợp với bộ lọc hiện tại.",
-    "empty_categories": "Chưa có danh mục.",
-    "category_name": "Tên danh mục",
-    "parent_category": "Danh mục cha",
-    "no_parent": "Không có danh mục cha",
-    "category_color": "Màu danh mục",
-    "color_blue": "Xanh dương",
-    "color_emerald": "Xanh lá",
-    "color_amber": "Vàng",
-    "color_rose": "Hồng",
-    "color_violet": "Tím",
-    "color_cyan": "Xanh cyan",
-    "bookmark_title": "Tiêu đề",
-    "bookmark_url": "URL",
-    "bookmark_description": "Mô tả",
-    "bookmark_category": "Danh mục",
-    "description_optional": "Ghi chú tùy chọn về lý do liên kết này hữu ích...",
-    "confirm_delete": "Xóa mục này?",
-    "action_ok": "Đã lưu thành công.",
-    "action_auth_invalid": "Token quản trị không đúng.",
-    "action_auth_missing_config": "Server chưa cấu hình ADMIN_TOKEN.",
-    "action_category_required": "Hãy chọn danh mục hợp lệ.",
-    "action_category_in_use": "Danh mục này vẫn còn bookmark.",
-    "action_category_has_children": "Hãy xóa danh mục con trước khi xóa danh mục này.",
-    "action_category_not_found": "Không tìm thấy danh mục.",
-    "action_bookmark_not_found": "Không tìm thấy bookmark.",
-    "action_title_required": "Tiêu đề là bắt buộc.",
-    "action_url_invalid": "Hãy nhập URL http hoặc https hợp lệ.",
-    "action_db_unavailable": "Chưa kết nối được API bookmark.",
-    "action_unknown_error": "Có lỗi xảy ra khi lưu dữ liệu.",
-    "sortBy": "Sắp xếp theo",
-    "sortOrder": "Thứ tự",
-    "sort_createdAt": "Ngày tạo",
-    "sort_title": "Tiêu đề",
-    "sort_url": "URL",
-    "sort_asc": "Tăng dần",
-    "sort_desc": "Giảm dần",
-    "advancedSort": "Nâng cao",
-    "advancedSortLabel": "Sắp xếp API",
-    "localSort": "Sắp xếp trang:",
-    "hide": "Ẩn",
-    "page": "Trang",
-    "pageSize": "Số mục mỗi trang",
-    "next": "Trang sau",
-    "previous": "Trang trước",
-    "viewBookmarks": "Xem danh sách bookmark thuộc danh mục này"
+    "meta": {
+      "title": "Bookmarks — Nguyen Dinh Nguyen",
+      "description": "Dashboard lưu, tìm kiếm, lọc và quản lý bookmark theo danh mục nhiều cấp."
+    },
+    "dashboard": {
+      "subtitle": "Lưu các liên kết hữu ích với tiêu đề, mô tả và danh mục nhiều cấp. Tìm kiếm nhanh, lọc theo chủ đề và quản lý trong một dashboard gọn gàng.",
+      "search_placeholder": "Tìm theo tiêu đề, URL hoặc mô tả...",
+      "total_bookmarks": "Tổng bookmark",
+      "total_categories": "Danh mục",
+      "active_filters": "Bộ lọc đang dùng",
+      "editing_bookmark": "Chi tiết bookmark",
+      "editing_category": "Chi tiết danh mục",
+      "add_category": "Thêm danh mục",
+      "add_bookmark": "Thêm bookmark",
+      "empty_bookmarks": "Không có bookmark phù hợp với bộ lọc hiện tại.",
+      "empty_categories": "Chưa có danh mục.",
+      "category_name": "Tên danh mục",
+      "parent_category": "Danh mục cha",
+      "no_parent": "Không có danh mục cha",
+      "category_color": "Màu danh mục",
+      "bookmark_title": "Tiêu đề",
+      "bookmark_url": "URL",
+      "bookmark_description": "Mô tả",
+      "bookmark_category": "Danh mục",
+      "description_optional": "Ghi chú tùy chọn về lý do liên kết này hữu ích...",
+      "advancedSort": "Nâng cao",
+      "advancedSortLabel": "Sắp xếp API",
+      "localSort": "Sắp xếp trang:",
+      "viewBookmarks": "Xem danh sách bookmark thuộc danh mục này"
+    },
+    "categories": {
+      "all": "Tất cả danh mục",
+      "title": "Danh mục"
+    },
+    "bookmarks_title": "Bookmark",
+    "actions": {
+      "category_required": "Hãy chọn danh mục hợp lệ.",
+      "category_in_use": "Danh mục này vẫn còn bookmark.",
+      "category_has_children": "Hãy xóa danh mục con trước khi xóa danh mục này.",
+      "category_not_found": "Không tìm thấy danh mục.",
+      "bookmark_not_found": "Không tìm thấy bookmark."
+    }
   },
   "cashback": {
-    "meta_title": "Hoàn tiền — Nguyễn Đình Nguyên",
-    "meta_description": "Hoàn tiền không giới hạn khi mua hàng",
-    "title": "Hoàn Tiền",
-    "subtitle": "Hoàn tiền không giới hạn khi mua hàng trên Shopee",
-    "input_placeholder": "Nhập URL sản phẩm (Shopee...)",
-    "invalid_link": "URL không hợp lệ. Vui lòng nhập url từ trang Shopee.",
-    "btn_search": "Tìm sản phẩm",
-    "btn_searching": "Đang tìm...",
-    "btn_copy": "Sao chép link",
-    "btn_copied": "Đã sao chép!",
-    "btn_paste": "Dán",
-    "btn_buy": "Áp Voucher",
-    "voucher_notice_prefix": "Giá chưa áp dụng voucher. Nhấn ",
-    "voucher_notice_highlight": "Áp Voucher",
-    "voucher_notice_suffix": " để nhận voucher độc quyền!",
-    "product_name": "Tên sản phẩm",
-    "shop_name": "Cửa hàng",
-    "price": "Giá",
-    "product_price": "Giá sản phẩm",
-    "commission_rate": "Hoa hồng tích lũy",
-    "sales": "Đã bán",
-    "sales_count": "Đã bán: {count}",
-    "rating": "Đánh giá",
-    "commission": "Hoa hồng",
-    "last_update": "Cập nhật lần cuối",
-    "updated_at": "Cập nhật: {date}",
-    "not_found": "Không tìm thấy sản phẩm",
-    "history_title": "Lịch sử tìm kiếm",
-    "history_empty": "Chưa có sản phẩm nào.",
-    "history_clear": "Xoá lịch sử",
-    "login_btn": "Đăng nhập",
-    "login_title_gsi": "Đăng nhập cổng hoàn tiền",
-    "login_subtitle_gsi": "Đăng nhập với Google để bắt đầu tích lũy hoàn tiền và quản lý đơn hàng của bạn",
-    "logout_btn": "Đăng xuất",
-    "user_profile": "Thông tin cá nhân",
-    "admin_role": "Quản trị viên",
-    "user_role": "Người dùng",
-    "converter_tab": "Chuyển đổi link",
-    "history_tab": "Cashback",
-    "history_details_title": "Chi tiết cashback",
-    "admin_tab": "Đồng bộ đơn hàng",
-    "no_cashback": "Bạn chưa có đơn hàng hoàn tiền nào. Hãy thử chuyển đổi link sản phẩm Shopee và mua hàng nhé!",
-    "sync_shopee_conversions": "Đồng bộ đơn hàng Shopee",
-    "sync_sub_id": "Sub ID",
-    "sync_start_time": "Ngày bắt đầu",
-    "sync_end_time": "Ngày kết thúc",
-    "sync_now": "Đồng bộ ngay",
-    "sync_success": "Đồng bộ đơn hàng thành công!",
-    "sync_error": "Đồng bộ đơn hàng thất bại.",
-    "syncing": "Đang đồng bộ...",
-    "all_conversions": "Báo cáo tất cả đơn hàng",
-    "no_conversions": "Không tìm thấy đơn hàng nào.",
-    "order_id": "Mã đơn hàng",
-    "user_id": "Mã người dùng",
-    "status": "Trạng thái",
-    "amount": "Giá trị đơn",
-    "purchase_time": "Ngày mua",
-    "checkout_id": "Mã thanh toán",
-    "checkout_status": "Trạng thái thanh toán",
-    "loading_history": "Đang tải lịch sử...",
-    "guest_mode_warning": "Bạn đang tìm kiếm với tư cách khách. Đăng nhập để tự động tích lũy hoàn tiền.",
-    "payment_tab": "Thanh toán",
-    "payment_coming_soon": "Tính năng thanh toán đang được phát triển. Vui lòng quay lại sau!",
-    "total_cashback": "Tổng tiền hoàn",
-    "recorded_orders": "Đơn hàng ghi nhận",
-    "order_unit": "đơn",
-    "hide_details": "Ẩn chi tiết",
-    "show_details": "Xem chi tiết ({count} sản phẩm)",
-    "qty": "SL",
-    "filter_platform": "Nền tảng",
-    "filter_status": "Trạng thái",
-    "sort_by_time": "Sắp xếp thời gian",
-    "sort_newest": "Mới nhất",
-    "sort_oldest": "Cũ nhất",
-    "all_platforms": "Tất cả các sàn",
-    "all_statuses": "Tất cả trạng thái",
-    "admin_cashbacks_subtab": "Quản lý hoàn tiền",
-    "admin_conversions_subtab": "Báo cáo đơn hàng",
-    "role_admin": "Quản trị viên",
-    "role_user": "Người dùng",
-    "start_date": "Từ ngày",
-    "end_date": "Đến ngày",
-    "search_user_id": "Tìm User ID",
-    "page_indicator": "Trang {page} / {totalPages}",
-    "total_records": "Tổng cộng: {total} đơn",
-    "search": "Tìm kiếm",
-    "clear": "Xóa",
-    "filter_sub_id": "Sub ID",
-    "manual_sync": "Đồng bộ thủ công",
-    "manual_sync_title": "Lưu ý:",
-    "manual_sync_bullet1": "Sau khi bạn chốt đơn mua sắm, Shopee có thể mất <b>24h</b> để cập nhật đơn hàng của bạn",
-    "manual_sync_bullet2": "Hệ thống tự động đồng bộ đơn hàng của bạn từ Shopee vào <b>00:00 hằng ngày</b>.",
-    "manual_sync_bullet3": "Bạn có thể <b>đồng bộ thủ công</b> để lấy dữ liệu mới nhất từ Shopee.",
-    "sync_modal_title": "Đồng bộ đơn hàng Shopee",
-    "sync_modal_range": "Khoảng thời gian: {range}",
-    "sync_modal_loading": "Hệ thống đang đồng bộ dữ liệu từ Shopee, vui lòng chờ giây lát...",
-    "sync_modal_success_prefix": "Đồng bộ hoàn tất! Tìm thấy {count} lượt chuyển đổi.",
-    "sync_modal_empty": "Không tìm thấy đơn hàng mới nào trong khoảng thời gian này.",
-    "sync_modal_close": "Đóng và cập nhật",
-    "sync_modal_failed": "Không thể đồng bộ. Vui lòng thử lại sau.",
-    "order_id_prefix": "Mã đơn: {id}",
-    "purchase_date_prefix": "Ngày: {date}",
-    "sub_id_user": "Sub ID (User)",
-    "total_order": "Tổng Đơn",
-    "shopee_commission": "Hoa Hồng",
-    "products_count": "{count} sản phẩm",
-    "shopee_order_list": "Danh sách đơn hàng Shopee",
-    "order_code_prefix": "Mã Đơn: {id}",
-    "qty_shop_prefix": "SL: {qty} • Shop: {shop}",
-    "commission_suffix": "+{amount}",
-    "total_records_prefix": "Tổng cộng: {total} bản ghi",
-    "page_indicator_prefix": "Trang {page} / {totalPages}",
-    "qty_prefix": "SL: {qty}",
-    "table_date": "Ngày Tạo",
-    "table_user_id": "User ID",
-    "table_checkout_id": "Checkout ID",
-    "table_platform": "Nền tảng",
-    "table_cashback": "Hoàn Tiền",
-    "table_status": "Trạng Thái",
-    "empty_cashbacks": "Không tìm thấy bản ghi cashback nào",
-    "loading": "Đang tải...",
-    "platform_prefix": "Sàn: {platform}",
-    "user_prefix": "User: {id}",
-    "checkout_prefix": "Checkout: {id}"
+    "common": {
+      "from_date": "Từ ngày",
+      "to_date": "Đến ngày",
+      "sub_id": "Sub ID",
+      "checkout_id": "Mã thanh toán",
+      "platform": "Nền tảng",
+      "status": "Trạng thái",
+      "cashback": "Hoàn tiền",
+      "amount": "Giá trị đơn",
+      "platform_shopee": "Shopee",
+      "system": "Hệ thống",
+      "anonymous_user": "Người dùng"
+    },
+    "platforms": {
+      "shopee": "Shopee",
+      "lazada": "Lazada",
+      "tiktok": "TikTok"
+    },
+    "navbar": {
+      "portal": "Portal",
+      "cashback": "Cashback"
+    },
+    "status": {
+      "pending": "Chờ xử lý",
+      "approved": "Đã duyệt",
+      "completed": "Hoàn thành",
+      "rejected": "Từ chối",
+      "cancelled": "Đã hủy"
+    },
+    "meta": {
+      "title": "Hoàn tiền — Nguyễn Đình Nguyên",
+      "description": "Hoàn tiền không giới hạn khi mua hàng"
+    },
+    "header": {
+      "title": "Hoàn Tiền",
+      "subtitle": "Hoàn tiền không giới hạn khi mua hàng trên Shopee"
+    },
+    "input": {
+      "placeholder": "Nhập URL sản phẩm",
+      "invalid_link": "URL không hợp lệ. Vui lòng nhập url từ trang Shopee."
+    },
+    "buttons": {
+      "paste": "Dán",
+      "buy": "Áp Voucher",
+      "hide_details": "Ẩn chi tiết",
+      "show_details": "Xem chi tiết ({count} sản phẩm)",
+      "manual_sync": "Đồng bộ thủ công"
+    },
+    "labels": {
+      "product_name": "Tên sản phẩm",
+      "shop_name": "Cửa hàng",
+      "price": "Giá",
+      "product_price": "Giá sản phẩm",
+      "commission_rate": "Ước tính hoàn tiền",
+      "sales": "Đã bán",
+      "sales_count": "Đã bán: {count}",
+      "rating": "Đánh giá",
+      "commission": "Hoàn tiền",
+      "last_update": "Cập nhật lần cuối",
+      "updated_at": "Cập nhật: {date}",
+      "qty": "SL",
+      "order_id": "Mã đơn hàng",
+      "user_id": "Mã người dùng",
+      "amount": "Giá trị đơn",
+      "purchase_time": "Thời gian",
+      "checkout_id": "Mã thanh toán",
+      "checkout_status": "Trạng thái thanh toán",
+      "loading_history": "Đang tải lịch sử...",
+      "user_profile": "Thông tin cá nhân",
+      "total_cashback": "Tổng tiền hoàn",
+      "recorded_orders": "Đơn hàng ghi nhận",
+      "order_unit": "đơn",
+      "order_id_prefix": "Mã đơn: {id}",
+      "purchase_date_prefix": "Ngày: {date}",
+      "sub_id_user": "Sub ID (User)",
+      "total_order": "Tổng Đơn",
+      "shopee_commission": "Hoàn tiền",
+      "products_count": "{count} sản phẩm",
+      "shopee_order_list": "Danh sách đơn hàng Shopee",
+      "order_code_prefix": "Mã Đơn: {id}",
+      "qty_shop_prefix": "SL: {qty} • Shop: {shop}",
+      "commission_suffix": "+{amount}",
+      "qty_prefix": "SL: {qty}",
+      "table_date": "Ngày Tạo",
+      "table_user_id": "User ID",
+      "table_checkout_id": "Checkout ID",
+      "table_platform": "Nền tảng",
+      "table_cashback": "Hoàn tiền",
+      "table_status": "Trạng Thái",
+      "empty_cashbacks": "Không tìm thấy bản ghi cashback nào",
+      "platform_prefix": "Sàn: {platform}",
+      "user_prefix": "User: {id}",
+      "checkout_prefix": "Checkout: {id}",
+      "table_products": "Sản phẩm",
+      "products_unit": "SP",
+      "item_qty_price": "Số lượng: {qty} • Đơn giá: {price}",
+      "platform_rejected": "Quyết định bởi <platform>{platformName}</platform>"
+    },
+    "voucher": {
+      "notice_prefix": "Giá chưa áp dụng voucher. Nhấn ",
+      "notice_highlight": "Áp Voucher",
+      "notice_suffix": " để nhận voucher độc quyền!"
+    },
+    "history": {
+      "title": "Lịch sử tìm kiếm",
+      "empty": "Chưa có sản phẩm nào.",
+      "clear": "Xoá lịch sử"
+    },
+    "orders": {
+      "empty_order": "Chưa có đơn hàng hoàn tiền. Hãy thử chuyển đổi link sản phẩm và mua hàng nhé!"
+    },
+    "toasts": {
+      "sync_success": "Đồng bộ hoàn tất! Tìm thấy {count} đơn hàng.",
+      "sync_failed": "Đồng bộ thất bại. Vui lòng thử lại.",
+      "admin_sync_success": "Đồng bộ đơn hàng Shopee hoàn tất!"
+    },
+    "tabs": {
+      "converter": "Chuyển đổi link",
+      "orders": "Đơn hàng",
+      "orders_details": "Chi tiết đơn hàng",
+      "admin": "Đồng bộ đơn hàng",
+      "payment": "Thanh toán",
+      "admin_cashbacks": "Quản lý hoàn tiền",
+      "admin_conversions": "Báo cáo đơn hàng"
+    },
+    "sync": {
+      "shopee_conversions": "Đồng bộ đơn hàng Shopee",
+      "sub_id": "Sub ID",
+      "start_time": "Ngày bắt đầu",
+      "end_time": "Ngày kết thúc",
+      "now": "Đồng bộ ngay",
+      "success": "Đồng bộ đơn hàng thành công!",
+      "error": "Đồng bộ đơn hàng thất bại.",
+      "syncing": "Đang đồng bộ..."
+    },
+    "report": {
+      "all_conversions": "Báo cáo tất cả đơn hàng"
+    },
+    "warnings": {
+      "guest_mode": "Bạn đang tìm kiếm với tư cách khách. Đăng nhập để tự động tích lũy hoàn tiền."
+    },
+    "payment": {
+      "coming_soon": "Tính năng thanh toán đang được phát triển. Vui lòng quay lại sau!",
+      "badge": "Sắp ra mắt"
+    },
+    "filters": {
+      "platform": "Nền tảng",
+      "status": "Trạng thái",
+      "sub_id": "Sub ID",
+      "sub_id_placeholder": "Ví dụ: user_1234",
+      "start_date": "Từ ngày",
+      "end_date": "Đến ngày",
+      "search_user_id": "Tìm User ID",
+      "all_platforms": "Tất cả các sàn",
+      "all_statuses": "Tất cả trạng thái"
+    },
+    "sort": {
+      "by_time": "Sắp xếp thời gian",
+      "newest": "Mới nhất",
+      "oldest": "Cũ nhất"
+    },
+    "manual_sync": {
+      "title": "Lưu ý:",
+      "bullet1": "Sau khi bạn chốt đơn mua sắm, Shopee có thể mất <b>24h</b> để cập nhật đơn hàng của bạn",
+      "bullet2": "Hệ thống tự động đồng bộ đơn hàng của bạn từ Shopee vào <b>00:00 hằng ngày</b>.",
+      "bullet3": "Bạn có thể <b>đồng bộ thủ công</b> để lấy dữ liệu mới nhất từ Shopee."
+    },
+    "sync_modal": {
+      "title": "Đồng bộ đơn hàng Shopee",
+      "range": "Khoảng thời gian: {range}",
+      "loading": "Hệ thống đang đồng bộ dữ liệu từ Shopee, vui lòng chờ giây lát...",
+      "success_prefix": "Đồng bộ hoàn tất! Tìm thấy {count} lượt chuyển đổi.",
+      "empty": "Không tìm thấy đơn hàng mới nào trong khoảng thời gian này.",
+      "close": "Đóng và cập nhật",
+      "failed": "Không thể đồng bộ. Vui lòng thử lại sau."
+    }
+  },
+  "auth": {
+    "buttons": {
+      "login": "Đăng nhập",
+      "logout": "Đăng xuất",
+      "login_google": "Đăng nhập Google"
+    },
+    "protected": {
+      "require_login": "Vui lòng đăng nhập để truy cập trang này.",
+      "unauthorized_admin": "Bạn không có quyền quản trị để truy cập nội dung này."
+    },
+    "roles": {
+      "admin": "Quản trị viên",
+      "user": "Người dùng"
+    },
+    "prompts": {
+      "login_title": "Đăng nhập cổng hoàn tiền",
+      "login_subtitle": "Đăng nhập với Google để bắt đầu tích lũy hoàn tiền và quản lý đơn hàng của bạn"
+    },
+    "toasts": {
+      "welcome": {
+        "0": "Chào mừng {name} quay trở lại!",
+        "1": "Rất vui được gặp lại {name}!",
+        "2": "Chào {name}, chúc bạn một ngày tốt lành!"
+      },
+      "goodbye": {
+        "0": "Tạm biệt, hẹn gặp lại bạn sớm!",
+        "1": "Đăng xuất thành công. Hẹn gặp lại nhé!",
+        "2": "Chúc bạn một ngày vui vẻ! Tạm biệt!"
+      },
+      "login_failed": "Đăng nhập thất bại. Vui lòng thử lại!"
+    }
   }
 }

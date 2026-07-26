@@ -1,51 +1,7 @@
-export interface Product {
-  itemId?: string | number | null;
-  name: string;
-  shop?: string | null;
-  price: number;
-  sales?: number | null;
-  image?: string | null;
-  rating?: number | Record<string, unknown> | null;
-  commission?: number | null;
-  lastUpdate?: string | null;
-}
+'use client';
 
-export interface HistoryItem {
-  url: string;
-  product: Product;
-  affiliateLink: string;
-  timestamp: number;
-}
-
-export interface CashbackResponse {
-  ok: boolean;
-  code: string;
-  data?: {
-    affiliate_link: string;
-    product: Product | null;
-  } | null;
-}
-
-export interface User {
-  id: string;
-  email: string;
-  name?: string | null;
-  picture?: string | null;
-  role: string;
-  createdAt?: string | null;
-  updatedAt?: string | null;
-}
-
-export interface LoginResponseData {
-  token: string;
-  user: User;
-}
-
-export interface LoginResponse {
-  ok: boolean;
-  code: string;
-  data?: LoginResponseData | null;
-}
+import { Pagination } from './common';
+import type { Product } from './product';
 
 export interface ConversionItem {
   product?: Product | null;
@@ -104,31 +60,5 @@ export interface ConversionReportEnvelope {
   ok: boolean;
   code: string;
   data?: ConversionRecord[] | null;
-  pagination?: Pagination | null;
-}
-
-export interface Pagination {
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
-}
-
-export interface CashbackRecord {
-  id?: string;
-  userId: string;
-  platform: string;
-  cashback: number;
-  status: string;
-  checkoutId: string;
-  conversion?: ConversionRecord | null;
-  createdAt?: string | null;
-  updatedAt?: string | null;
-}
-
-export interface CashbackListResponse {
-  ok: boolean;
-  code: string;
-  data?: CashbackRecord[] | null;
   pagination?: Pagination | null;
 }

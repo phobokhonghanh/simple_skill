@@ -5,12 +5,19 @@ import { Link, usePathname } from '@/i18n/routing';
 import { LanguageSwitcher } from '@/features/i18n/LanguageSwitcher';
 import { ThemeToggle } from '@/features/theme/ThemeToggle';
 
+/** Danh sách các liên kết điều hướng trên thanh Navbar của trang Experience */
 const NAV_LINK_KEYS = [
-  { key: 'nav_home', href: '/' as const },
-  { key: 'nav_experience', href: '/experience' as const },
-  { key: 'nav_homelab', href: '#' },
+  { key: 'nav.home', href: '/' as const },
+  { key: 'nav.experience', href: '/experience' as const },
+  { key: 'nav.homelab', href: '#' },
 ] as const;
 
+/**
+ * Component NavBar hiển thị thanh điều hướng đầu trang cho phân hệ Experience.
+ * Bao gồm các liên kết trang chính, bộ chuyển đổi ngôn ngữ (LanguageSwitcher) và bộ chuyển chủ đề giao diện (ThemeToggle).
+ *
+ * @returns JSX Element thanh điều hướng đầu trang.
+ */
 export function NavBar() {
   const t = useTranslations('experience');
   const pathname = usePathname();
@@ -18,7 +25,7 @@ export function NavBar() {
   return (
     <header className="sticky top-0 z-50 bg-[var(--experience-nav-bg)] backdrop-blur-md border-b border-[var(--experience-nav-border)] shadow-sm">
       <nav className="container mx-auto max-w-6xl px-6 py-3 flex items-center justify-between gap-6">
-        {/* Left: Nav links */}
+        {/* Danh sách liên kết trang chính ở bên trái */}
         <ul className="hidden sm:flex items-center gap-6">
           {NAV_LINK_KEYS.map(({ key, href }) => {
             const isDisabled = href === '#';
@@ -68,13 +75,13 @@ export function NavBar() {
           })}
         </ul>
 
-        {/* Right: Lang + Theme toggles */}
+        {/* Nút chuyển ngôn ngữ và giao diện theme ở bên phải */}
         <div className="flex items-center gap-3 flex-shrink-0 ml-auto sm:ml-0">
           <LanguageSwitcher />
           <ThemeToggle />
         </div>
 
-        {/* Mobile: hamburger placeholder (nav links hidden on mobile) */}
+        {/* Nhãn hiển thị menu trên thiết bị di động */}
         <div className="sm:hidden">
           <span className="text-xs text-[var(--experience-subtle)]">Menu</span>
         </div>

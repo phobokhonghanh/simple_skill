@@ -4,16 +4,20 @@ import Image from 'next/image';
 import { MapPin, GraduationCap } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+/**
+ * Component HeroSection hiển thị phần giới thiệu cá nhân ở trang Experience.
+ * Bao gồm ảnh đại diện Avatar, Họ tên, Chức danh, Mô tả bản thân, Nút tải/xem CV và các thông tin địa điểm, học vấn.
+ *
+ * @returns JSX Element khối giới thiệu Hero.
+ */
 export function HeroSection() {
   const t = useTranslations('experience');
 
   return (
     <div className="flex flex-col items-center lg:items-start gap-7 text-center lg:text-left">
-      {/* Avatar */}
+      {/* Khối hiển thị ảnh đại diện Avatar với khung viền trang trí */}
       <div className="relative">
-        {/* Decorative dashed ring */}
         <div className="absolute -inset-3 rounded-full border-2 border-[var(--experience-accent-border)] border-dashed" />
-        {/* Soft glow */}
         <div className="absolute inset-0 rounded-full bg-[var(--experience-accent-muted)] blur-xl scale-110" />
 
         <div
@@ -34,7 +38,7 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Name & Title */}
+      {/* Tên và Chức danh chuyên môn */}
       <div>
         <h1 className="text-3xl md:text-4xl font-black tracking-tight text-[var(--experience-heading)] leading-tight">
           NGUYỄN ĐÌNH NGUYÊN
@@ -44,12 +48,12 @@ export function HeroSection() {
         </p>
       </div>
 
-      {/* Bio */}
+      {/* Dòng Bio giới thiệu bản thân */}
       <p className="text-xs md:text-sm font-semibold uppercase tracking-wide text-[var(--experience-muted)] leading-relaxed max-w-xs">
-        {t('hero_bio')}
+        {t('hero.bio')}
       </p>
 
-      {/* CTA Buttons */}
+      {/* Nút hành động kêu gọi (CTA): Xem / Tải CV */}
       <div className="flex flex-wrap justify-center lg:justify-start gap-3 w-full">
         <a
           href="/CV_Developer_Nguyen_Dinh_Nguyen_EN.pdf"
@@ -58,23 +62,23 @@ export function HeroSection() {
           className="px-6 py-2.5 bg-[var(--experience-accent)] text-[var(--experience-button-text)] text-sm font-bold rounded-lg
                      hover:bg-[var(--experience-accent-hover)] active:scale-95 transition-all duration-200 shadow-md"
         >
-          {t('hero_view_cv')}
+          {t('hero.view_cv')}
         </a>
       </div>
 
-      {/* Info */}
+      {/* Thông tin phụ: Địa điểm và Học vấn */}
       <div className="flex flex-col gap-2.5 w-full">
         <span className="flex items-center justify-center lg:justify-start gap-2.5 text-sm text-[var(--experience-muted)]">
           <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[var(--experience-icon-bg)] flex-shrink-0">
             <MapPin className="h-4 w-4 text-[var(--experience-accent)]" />
           </span>
-          {t('hero_location')}
+          {t('hero.location')}
         </span>
         <span className="flex items-center justify-center lg:justify-start gap-2.5 text-sm text-[var(--experience-muted)]">
           <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[var(--experience-icon-bg)] flex-shrink-0">
             <GraduationCap className="h-4 w-4 text-[var(--experience-accent)]" />
           </span>
-          {t('hero_education')}
+          {t('hero.education')}
         </span>
       </div>
     </div>

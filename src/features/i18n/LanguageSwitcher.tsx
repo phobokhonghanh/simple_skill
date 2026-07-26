@@ -12,9 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-/**
- * Flag configurations for supported locales.
- */
+/** Cấu hình quốc kỳ và tên hiển thị cho từng ngôn ngữ hỗ trợ */
 const FLAGS = {
   en: {
     emoji: '🇬🇧',
@@ -27,11 +25,10 @@ const FLAGS = {
 } as const;
 
 /**
- * LanguageSwitcher molecule component.
- * Displays the current country flag and allows switching between locales.
+ * Component LanguageSwitcher cho phép người dùng chuyển đổi ngôn ngữ ứng dụng ('en' <-> 'vi').
+ * Tự động chuyển hướng URL theo locale được chọn thông qua router của next-intl.
  *
- * @example
- * <LanguageSwitcher />
+ * @returns JSX Element Menu chuyển đổi ngôn ngữ.
  */
 export function LanguageSwitcher() {
   const locale = useLocale() as keyof typeof FLAGS;
@@ -45,6 +42,7 @@ export function LanguageSwitcher() {
 
   return (
     <DropdownMenu>
+      {/* Nút hiển thị quốc kỳ hiện tại */}
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
@@ -61,6 +59,8 @@ export function LanguageSwitcher() {
           <span className="sr-only">Switch language</span>
         </Button>
       </DropdownMenuTrigger>
+
+      {/* Danh sách các ngôn ngữ có thể lựa chọn */}
       <DropdownMenuContent
         align="end"
         className="w-40 p-1 animate-in slide-in-from-top-2 duration-200"

@@ -17,18 +17,29 @@ import {
 import type { CategoryTreeNode } from '@/features/bookmarks/types';
 import type { BookmarkDashboardLabels } from '@/features/bookmarks/types';
 
+/** Props cho Component CategorySidebar */
 interface CategorySidebarProps {
+  /** Cây danh mục */
   nodes: CategoryTreeNode[];
+  /** ID danh mục đang chọn */
   selectedCategoryId: string;
+  /** ID danh mục đang lọc */
   filterCategoryId: string;
+  /** Các nhãn ngôn ngữ i18n */
   labels: BookmarkDashboardLabels;
+  /** Callback chọn danh mục */
   onSelect: (categoryId: string) => void;
+  /** Callback lọc theo danh mục */
   onFilter: (categoryId: string) => void;
+  /** Callback mở modal tạo danh mục */
   onCreateCategory: () => void;
+  /** Callback sửa danh mục */
   onEdit: (category: CategoryTreeNode) => void;
+  /** Callback xóa danh mục */
   onDelete: (categoryId: string) => void;
 }
 
+/** Sub-component hiển thị chấm màu đại diện cho danh mục */
 function CategoryDot({ color }: { color: CategoryColorId }) {
   const preset = getCategoryColorPreset(color);
 
@@ -40,6 +51,13 @@ function CategoryDot({ color }: { color: CategoryColorId }) {
   );
 }
 
+/**
+ * Component CategorySidebar hiển thị cây danh mục dạng Sidebar bên trái cho tính năng Bookmark.
+ * Hỗ trợ các hành động: lọc theo danh mục, thêm mới, chỉnh sửa và xóa danh mục.
+ *
+ * @param props - CategorySidebarProps.
+ * @returns JSX Element Sidebar cây danh mục.
+ */
 export function CategorySidebar({
   nodes,
   selectedCategoryId,

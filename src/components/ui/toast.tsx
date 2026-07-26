@@ -10,7 +10,10 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+/** Phân loại loại thông báo Toast */
 export type ToastType = 'success' | 'error' | 'warning' | 'info' | 'custom';
+
+/** Vị trí hiển thị danh sách Toast trên màn hình */
 export type ToastPosition =
   | 'top-left'
   | 'top-right'
@@ -19,32 +22,58 @@ export type ToastPosition =
   | 'bottom-right'
   | 'bottom-center';
 
+/** Tùy chọn nâng cao cấu hình Toast */
 export interface ToastOptions {
+  /** Thời gian hiển thị (milisec, mặc định 4000ms) */
   duration?: number;
+  /** Dòng mô tả chi tiết phụ */
   description?: string;
+  /** Class CSS tùy chỉnh cho background */
   bgClass?: string;
+  /** Class CSS tùy chỉnh cho văn bản */
   textClass?: string;
+  /** Class CSS tùy chỉnh cho viền */
   borderClass?: string;
+  /** Class CSS màu sắc biểu tượng */
   iconColorClass?: string;
+  /** Class CSS cho thanh đếm ngược tiến độ */
   progressClass?: string;
+  /** Class CSS bổ sung */
   className?: string;
+  /** CSS inline tùy chỉnh */
   style?: React.CSSProperties;
+  /** Icon tùy chỉnh thay thế icon mặc định */
   icon?: React.ReactNode;
 }
 
+/** Đơn vị thông báo Toast */
 export interface Toast {
+  /** Định danh duy nhất của Toast */
   id: string;
+  /** Thông điệp chính */
   message: string;
+  /** Phân loại thông báo */
   type: ToastType;
+  /** Các tùy chọn cấu hình bổ sung */
   options?: ToastOptions;
 }
 
+/** Props cho ToastItem */
 interface ToastItemProps {
+  /** Thông tin thẻ Toast */
   toast: Toast;
+  /** Vị trí hiển thị trên màn hình */
   position: ToastPosition;
+  /** Hàm hủy/ẩn Toast */
   onDismiss: (id: string) => void;
 }
 
+/**
+ * Component hiển thị một thẻ Toast thông báo đơn lẻ với hiệu ứng chuyển cảnh và thanh đếm ngược tự động tắt.
+ *
+ * @param props - ToastItemProps gồm thông tin toast, vị trí và hàm đóng onDismiss.
+ * @returns JSX Element thẻ ToastItem.
+ */
 export function ToastItem({ toast, position, onDismiss }: ToastItemProps) {
   const [isExiting, setIsExiting] = React.useState(false);
   const { type, message, options = {} } = toast;
@@ -63,23 +92,20 @@ export function ToastItem({ toast, position, onDismiss }: ToastItemProps) {
 
   const handleDismiss = React.useCallback(() => {
     setIsExiting(true);
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       onDismiss(toast.id);
-    }, 150); // Matches the duration of animate-toast-out (150ms)
-    return () => clearTimeout(timer);
+    }, 150);
   }, [toast.id, onDismiss]);
 
-  // Set up timer for auto-dismiss
   React.useEffect(() => {
     if (duration > 0 && duration !== Infinity) {
       const timer = setTimeout(() => {
-        void handleDismiss();
+        handleDismiss();
       }, duration);
       return () => clearTimeout(timer);
     }
   }, [duration, handleDismiss]);
 
-  // Map icons based on type
   const defaultIcon = React.useMemo(() => {
     const iconSizeClass = 'h-5 w-5 shrink-0';
     switch (type) {
@@ -111,7 +137,6 @@ export function ToastItem({ toast, position, onDismiss }: ToastItemProps) {
     }
   }, [type, iconColorClass]);
 
-  // Set up colors depending on the type
   const typeClasses = React.useMemo(() => {
     if (type === 'custom') {
       return {
@@ -158,7 +183,6 @@ export function ToastItem({ toast, position, onDismiss }: ToastItemProps) {
     }
   }, [type, bgClass, textClass, borderClass, progressClass]);
 
-  // Determine animations based on position
   const animationClass = React.useMemo(() => {
     if (isExiting) return 'animate-toast-out';
     if (position.includes('right')) return 'animate-toast-in-right';
@@ -181,12 +205,10 @@ export function ToastItem({ toast, position, onDismiss }: ToastItemProps) {
         className,
       )}
     >
-      {/* Icon Area */}
       <div className="flex items-start justify-center">
         {icon || defaultIcon}
       </div>
 
-      {/* Message Area */}
       <div className="flex flex-1 flex-col gap-1 pr-4">
         <span className="text-sm font-semibold leading-tight">{message}</span>
         {description && (
@@ -196,16 +218,14 @@ export function ToastItem({ toast, position, onDismiss }: ToastItemProps) {
         )}
       </div>
 
-      {/* Dismiss Button */}
       <button
         onClick={handleDismiss}
         className="absolute top-3 right-3 rounded-md p-1 opacity-60 hover:opacity-100 transition-opacity hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
-        aria-label="Dismiss notification"
+        aria-label="Đóng thông báo"
       >
         <X className="h-4 w-4" />
       </button>
 
-      {/* Animated Progress Bar */}
       {duration > 0 && duration !== Infinity && !isExiting && (
         <div
           className={cn(
@@ -222,12 +242,22 @@ export function ToastItem({ toast, position, onDismiss }: ToastItemProps) {
   );
 }
 
+/** Props cho ToastContainer */
 interface ToastContainerProps {
+  /** Danh sách các Toast hiện có */
   toasts: Toast[];
+  /** Vị trí định vị trên màn hình */
   position: ToastPosition;
+  /** Hàm hủy ẩn Toast */
   onDismiss: (id: string) => void;
 }
 
+/**
+ * Component chứa (Container) cố định danh sách các thẻ Toast ở góc màn hình.
+ *
+ * @param props - ToastContainerProps gồm toasts, position và onDismiss.
+ * @returns JSX Element container chứa danh sách ToastItem.
+ */
 export function ToastContainer({
   toasts,
   position,

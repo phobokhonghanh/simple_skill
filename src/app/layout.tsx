@@ -10,6 +10,13 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+/**
+ * Root Layout gốc của ứng dụng Next.js.
+ * Cấu hình thẻ <html>, <body>, nạp font Google Fonts và CSS toàn cục `globals.css`.
+ *
+ * @param props - Props nhận vào children node đại diện cho trang web.
+ * @returns JSX Element thẻ <html> và <body> bọc toàn hệ thống.
+ */
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>

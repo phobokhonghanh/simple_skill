@@ -11,7 +11,19 @@ import {
   type TechSkill,
 } from '@/features/experience/data/techSkills';
 
-function TechSkillCard({ skill }: { skill: TechSkill }) {
+/** Props cho Component TechSkillCard */
+interface TechSkillCardProps {
+  /** Thông tin kỹ năng công nghệ bao gồm tên, icon và link tham chiếu */
+  skill: TechSkill;
+}
+
+/**
+ * Sub-component hiển thị một thẻ Kỹ năng công nghệ (Tech Skill) đơn lẻ với biểu tượng icon và tên kỹ năng.
+ *
+ * @param props - TechSkillCardProps chứa đối tượng skill.
+ * @returns JSX Element thẻ kỹ năng.
+ */
+function TechSkillCard({ skill }: TechSkillCardProps) {
   return (
     <li className="inline-flex m-1.5 align-top w-[calc(33.333%-12px)] sm:w-[100px] lg:w-[110px]">
       <a
@@ -42,13 +54,24 @@ function TechSkillCard({ skill }: { skill: TechSkill }) {
   );
 }
 
+/** Props cho Component CertificationBadge */
+interface CertificationBadgeProps {
+  /** Thông tin chứng chỉ */
+  certification: Certification;
+  /** Nhãn nút bấm xem chi tiết */
+  detailsLabel: string;
+}
+
+/**
+ * Sub-component hiển thị một chứng chỉ chuyên môn (Certification) kèm hình ảnh minh họa và liên kết xác thực.
+ *
+ * @param props - CertificationBadgeProps chứa thông tin chứng chỉ và nhãn xem chi tiết.
+ * @returns JSX Element thẻ chứng chỉ.
+ */
 function CertificationBadge({
   certification,
   detailsLabel,
-}: {
-  certification: Certification;
-  detailsLabel: string;
-}) {
+}: CertificationBadgeProps) {
   return (
     <li className="min-w-0">
       <article
@@ -88,36 +111,43 @@ function CertificationBadge({
   );
 }
 
+/**
+ * Component TechStackSection hiển thị toàn bộ kỹ năng công nghệ (Tech Stack) và các chứng chỉ đạt được.
+ *
+ * @returns JSX Element phần thông tin Kỹ năng & Chứng chỉ.
+ */
 export function TechStackSection() {
   const t = useTranslations('experience');
 
   return (
     <div className="block">
-      {/* Title */}
+      {/* Tiêu đề danh sách Kỹ năng công nghệ */}
       <h2 className="text-xl font-black text-[var(--experience-heading)] tracking-wide uppercase mb-6 block">
-        {t('skills_title')}
+        {t('skills.title')}
       </h2>
 
-      <ul className="block" aria-label={t('skills_title')}>
+      {/* Grid danh sách các TechSkillCard */}
+      <ul className="block" aria-label={t('skills.title')}>
         {TECH_SKILLS.map((skill) => (
           <TechSkillCard key={skill.name} skill={skill} />
         ))}
       </ul>
 
+      {/* Danh sách Chứng chỉ chuyên môn */}
       <div className="clear-both pt-8">
         <h3 className="mb-3 block text-sm font-black uppercase tracking-wide text-[var(--experience-heading)]">
-          {t('certifications_title')}
+          {t('certifications.title')}
         </h3>
 
         <ul
           className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,420px),520px))] gap-3"
-          aria-label={t('certifications_title')}
+          aria-label={t('certifications.title')}
         >
           {CERTIFICATIONS.map((certification) => (
             <CertificationBadge
               key={certification.name}
               certification={certification}
-              detailsLabel={t('certification_view_details')}
+              detailsLabel={t('certifications.view_details')}
             />
           ))}
         </ul>

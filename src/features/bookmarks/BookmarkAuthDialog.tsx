@@ -5,13 +5,25 @@ import { KeyRound, LockKeyhole } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { BookmarkDashboardLabels } from '@/features/bookmarks/types';
 
+/** Props cho Component Modal Nhập Token Xác thực Bookmark */
 interface BookmarkAuthDialogProps {
+  /** Bản dịch nhãn giao diện i18n */
   labels: BookmarkDashboardLabels;
+  /** Thông báo lỗi hoặc thông tin trạng thái */
   message: string | null;
+  /** Trạng thái đang tải xác thực */
   isLoading: boolean;
+  /** Callback gửi token đã nhập */
   onSubmit: (token: string) => void;
 }
 
+/**
+ * Component Modal hộp thoại nhập Token quản trị Bookmark (Admin Password/Token).
+ * Hiển thị dạng Dialog phủ lên màn hình khi chưa có Token hợp lệ.
+ *
+ * @param props - BookmarkAuthDialogProps.
+ * @returns JSX Element Modal nhập Token.
+ */
 export function BookmarkAuthDialog({
   labels,
   message,

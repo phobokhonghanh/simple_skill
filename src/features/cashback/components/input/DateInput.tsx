@@ -3,19 +3,25 @@
 import * as React from 'react';
 import { Calendar } from 'lucide-react';
 
-interface FormattedDateInputProps {
+interface DateInputProps {
   value: string; // YYYY-MM-DD
   onChange: (val: string) => void;
   className?: string;
   required?: boolean;
+  label?: string; // Nhãn hiển thị phía trên input
+  labelClassName?: string; // Class tùy chỉnh cho label
+  showLabelIcon?: boolean; // Hiển thị icon Calendar bên cạnh nhãn
 }
 
-export function FormattedDateInput({
+export function DateInput({
   value,
   onChange,
   className = '',
   required = false,
-}: FormattedDateInputProps) {
+  label,
+  labelClassName = '',
+  showLabelIcon = false,
+}: DateInputProps) {
   const displayValue = React.useMemo(() => {
     if (!value) return '';
     const parts = value.split('-');
@@ -25,7 +31,7 @@ export function FormattedDateInput({
     return value;
   }, [value]);
 
-  return (
+  const inputEl = (
     <div
       className={`relative flex items-center justify-between aff-input cursor-pointer rounded-xl bg-[var(--aff-surface)] border-2 border-[var(--aff-border)] transition-all duration-200 ${className}`}
     >
@@ -53,4 +59,22 @@ export function FormattedDateInput({
       />
     </div>
   );
+
+  if (label) {
+    return (
+      <div className="space-y-1.5 text-left">
+        <label
+          className={`text-2xs font-bold text-[var(--aff-muted)] tracking-wider flex items-center gap-1 ${labelClassName}`}
+        >
+          {showLabelIcon && (
+            <Calendar className="w-3.5 h-3.5 text-[var(--aff-muted)]" />
+          )}
+          <span>{label}</span>
+        </label>
+        {inputEl}
+      </div>
+    );
+  }
+
+  return inputEl;
 }

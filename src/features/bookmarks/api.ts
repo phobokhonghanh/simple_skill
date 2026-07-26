@@ -8,14 +8,24 @@ import type {
   PaginationMetadata,
 } from '@/features/bookmarks/types';
 
+/** Base API URL từ biến môi trường public */
 const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') ?? '';
 
+/** Generic ApiResponse wrapper */
 interface ApiResponse<T = never> {
   ok: boolean;
   code: BookmarkActionCode;
   data?: T;
 }
 
+/**
+ * Hàm gọi API chung tự động thêm Authorization Bearer token và JSON header.
+ *
+ * @param path - Đường dẫn API endpoint.
+ * @param token - Bearer Token xác thực.
+ * @param init - Tùy chọn fetch RequestInit.
+ * @returns ApiResponse chứa kết quả dữ liệu hoặc mã lỗi.
+ */
 const request = async <T>(
   path: string,
   token: string,
@@ -42,11 +52,13 @@ const request = async <T>(
   }
 };
 
+/** Lấy chuỗi từ FormData có trim khoảng trắng */
 const formValue = (formData: FormData, key: string): string => {
   const value = formData.get(key);
   return typeof value === 'string' ? value.trim() : '';
 };
 
+/** Lấy payload Bookmark từ FormData */
 const bookmarkPayload = (formData: FormData) => ({
   title: formValue(formData, 'title'),
   url: formValue(formData, 'url'),
@@ -54,12 +66,19 @@ const bookmarkPayload = (formData: FormData) => ({
   categoryId: formValue(formData, 'categoryId'),
 });
 
+/** Lấy payload Category từ FormData */
 const categoryPayload = (formData: FormData) => ({
   name: formValue(formData, 'name'),
   color: formValue(formData, 'color'),
   parentId: formValue(formData, 'parentId') || null,
 });
 
+/**
+ * Chuyển đổi cây danh mục (CategoryTreeNode[]) thành mảng phẳng các Danh mục (Category[]).
+ *
+ * @param nodes - Cây danh mục đầu vào.
+ * @returns Mảng danh mục phẳng.
+ */
 function flattenCategoryTree(nodes: CategoryTreeNode[]): Category[] {
   const result: Category[] = [];
   const traverse = (node: CategoryTreeNode) => {
@@ -80,6 +99,12 @@ function flattenCategoryTree(nodes: CategoryTreeNode[]): Category[] {
   return result;
 }
 
+/**
+ * Nạp danh sách Bookmarks, Cây Danh mục và Metadata phân trang cho trang BookmarkDashboard.
+ *
+ * @param options - Đối tượng tham số gồm token, query, categoryId, page, pageSize, sortBy, sortOrder và skipCategories.
+ * @returns BookmarkDashboardLoadResult chứa dữ liệu BookmarkDashboardData hoặc báo lỗi.
+ */
 export const loadBookmarkDashboard = async ({
   token,
   query,
@@ -142,7 +167,7 @@ export const loadBookmarkDashboard = async ({
   }
 
   const categoriesParams = new URLSearchParams();
-  categoriesParams.set('pageSize', '100'); // Fetch all categories to build sidebar/dropdown tree
+  categoriesParams.set('pageSize', '100');
 
   try {
     const [categoriesRes, bookmarksRes] = await Promise.all([
@@ -192,6 +217,7 @@ export const loadBookmarkDashboard = async ({
   }
 };
 
+/** Thực hiện request biến đổi dữ liệu (POST, PUT, DELETE) */
 const mutate = async (
   path: string,
   token: string,
@@ -205,9 +231,23 @@ const mutate = async (
   return { ok: result.ok, code: result.code };
 };
 
+/**
+ * Tạo một Bookmark mới.
+ *
+ * @param token - Admin Token xác thực.
+ * @param formData - Dữ liệu Form chứa title, url, description, categoryId.
+ * @returns BookmarkActionResult.
+ */
 export const createBookmark = (token: string, formData: FormData) =>
   mutate('/api/bookmarks', token, 'POST', bookmarkPayload(formData));
 
+/**
+ * Cập nhật thông tin Bookmark hiện có.
+ *
+ * @param token - Admin Token xác thực.
+ * @param formData - Dữ liệu Form chứa id, title, url, description, categoryId.
+ * @returns BookmarkActionResult.
+ */
 export const updateBookmark = (token: string, formData: FormData) =>
   mutate(
     `/api/bookmarks/${encodeURIComponent(formValue(formData, 'id'))}`,
@@ -216,12 +256,33 @@ export const updateBookmark = (token: string, formData: FormData) =>
     bookmarkPayload(formData),
   );
 
+/**
+ * Xóa một Bookmark theo ID.
+ *
+ * @param token - Admin Token xác thực.
+ * @param id - ID của Bookmark cần xóa.
+ * @returns BookmarkActionResult.
+ */
 export const deleteBookmark = (token: string, id: string) =>
   mutate(`/api/bookmarks/${encodeURIComponent(id)}`, token, 'DELETE');
 
+/**
+ * Tạo một Danh mục (Category) mới.
+ *
+ * @param token - Admin Token xác thực.
+ * @param formData - Dữ liệu Form chứa name, color, parentId.
+ * @returns BookmarkActionResult.
+ */
 export const createCategory = (token: string, formData: FormData) =>
   mutate('/api/categories', token, 'POST', categoryPayload(formData));
 
+/**
+ * Cập nhật một Danh mục (Category) hiện có.
+ *
+ * @param token - Admin Token xác thực.
+ * @param formData - Dữ liệu Form chứa id, name, color, parentId.
+ * @returns BookmarkActionResult.
+ */
 export const updateCategory = (token: string, formData: FormData) =>
   mutate(
     `/api/categories/${encodeURIComponent(formValue(formData, 'id'))}`,
@@ -230,5 +291,12 @@ export const updateCategory = (token: string, formData: FormData) =>
     categoryPayload(formData),
   );
 
+/**
+ * Xóa một Danh mục (Category) theo ID.
+ *
+ * @param token - Admin Token xác thực.
+ * @param id - ID của danh mục cần xóa.
+ * @returns BookmarkActionResult.
+ */
 export const deleteCategory = (token: string, id: string) =>
   mutate(`/api/categories/${encodeURIComponent(id)}`, token, 'DELETE');

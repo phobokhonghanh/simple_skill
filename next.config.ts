@@ -15,6 +15,14 @@ const nextConfig: NextConfig = {
         hostname: 'storage.googleapis.com',
         pathname: '/verified-storage/cert/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cf.shopee.vn',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+      },
     ],
   },
 };

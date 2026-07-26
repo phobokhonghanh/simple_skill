@@ -1,9 +1,18 @@
+/**
+ * Interface định nghĩa dữ liệu cho một Kỹ năng công nghệ.
+ */
 export interface TechSkill {
+  /** Tên kỹ năng/công nghệ */
   name: string;
+  /** Đường dẫn icon minh họa SVG/PNG */
   iconSrc: string;
+  /** Trang chủ hoặc tài liệu tham khảo chính thức */
   url: string;
 }
 
+/**
+ * Danh sách tĩnh chứa tất cả các Kỹ năng công nghệ (Tech Skills) của bản thân.
+ */
 export const TECH_SKILLS: TechSkill[] = [
   {
     name: 'Python',

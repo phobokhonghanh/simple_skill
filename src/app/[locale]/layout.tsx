@@ -7,6 +7,7 @@ import { Providers } from '@/components/providers/Providers';
 import { Footer } from '@/components/layout/Footer';
 import { APP_TIME_ZONE } from '@/lib/runtime-config';
 
+/** Metadata cơ bản mặc định của ứng dụng */
 export const metadata = {
   title: 'Nguyen Dinh Nguyen',
   description: 'Personal profile, experience, and bookmark dashboard',
@@ -14,10 +15,22 @@ export const metadata = {
 
 export const dynamicParams = false;
 
+/**
+ * Sinh tham số tĩnh cho các locale được hỗ trợ ('en', 'vi').
+ *
+ * @returns Mảng đối tượng chứa tham số locale.
+ */
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
+/**
+ * Layout bọc ngoài theo từng ngôn ngữ (LocaleLayout).
+ * Tải file bản dịch i18n, bọc ứng dụng trong `Providers` và `Footer`, đồng thời nhúng các mã Analytics (Google Analytics, GTM, Microsoft Clarity) ở môi trường Production.
+ *
+ * @param props - Object chứa children node và params Promise<{ locale: string }>.
+ * @returns JSX Element Layout chính cho từng locale.
+ */
 export default async function LocaleLayout({
   children,
   params,

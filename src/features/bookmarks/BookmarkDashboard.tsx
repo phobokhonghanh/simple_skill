@@ -33,11 +33,15 @@ import type {
   BookmarkDashboardLabels,
   PanelMode,
 } from '@/features/bookmarks/types';
+import { useToast } from '@/components/providers/ToastProvider';
 
+/** Props cho Component BookmarkDashboard */
 interface BookmarkDashboardProps {
+  /** Bản dịch ngôn ngữ i18n cho BookmarkDashboard */
   labels: BookmarkDashboardLabels;
 }
 
+/** State quản lý các tham số lọc Bookmark */
 interface BookmarkFiltersState {
   query: string;
   categoryId: string;
@@ -50,6 +54,7 @@ interface BookmarkFiltersState {
 const subscribeHydration = () => () => {};
 const getClientHydrationSnapshot = () => true;
 const getServerHydrationSnapshot = () => false;
+
 const DEFAULT_FILTERS: BookmarkFiltersState = {
   query: '',
   categoryId: '',
@@ -59,7 +64,16 @@ const DEFAULT_FILTERS: BookmarkFiltersState = {
   sortOrder: 'desc',
 };
 
+/**
+ * Component BookmarkDashboard quản lý toàn bộ giao diện bảng điều khiển Bookmark cá nhân.
+ * Điều phối các sub-components: Header Navbar, Sidebar cây danh mục (`CategorySidebar`), Form Thêm/Sửa (`BookmarkForms`),
+ * Danh sách Bookmark (`BookmarkList`), Modal xác thực Token (`BookmarkAuthDialog`) và thanh phân trang Footer.
+ *
+ * @param props - BookmarkDashboardProps chứa các nhãn ngôn ngữ labels.
+ * @returns JSX Element Bảng điều khiển BookmarkDashboard.
+ */
 export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
+  const { error: showErrorToast } = useToast();
   const hasHydrated = React.useSyncExternalStore(
     subscribeHydration,
     getClientHydrationSnapshot,
@@ -140,7 +154,13 @@ export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
         localStorage.removeItem(BOOKMARK_TOKEN_STORAGE_KEY);
 
         if (options.showError ?? true) {
-          setMessage(labels.actionMessages[result.code]);
+          const errMsg = labels.actionMessages[result.code];
+          if (result.code === 'auth_invalid') {
+            showErrorToast(errMsg);
+            setMessage(null);
+          } else {
+            setMessage(errMsg);
+          }
         }
 
         return false;
@@ -161,7 +181,6 @@ export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
       });
       setMessage(null);
 
-      // Keep sidebar selection synced if category is filtered, otherwise don't override
       if (nextFilters.categoryId) {
         setSelectedSidebarCategoryId(nextFilters.categoryId);
       }
@@ -172,7 +191,7 @@ export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
 
       return true;
     },
-    [labels.actionMessages],
+    [labels.actionMessages, showErrorToast],
   );
 
   const isInitialMount = React.useRef(true);
@@ -187,7 +206,6 @@ export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
     }
     isInitialMount.current = false;
 
-    // Parse URL on the client strictly after hydration to avoid mismatch
     const params = new URLSearchParams(window.location.search);
     const sortByParam = params.get('sortBy');
     const sortOrderParam = params.get('sortOrder');
@@ -269,7 +287,13 @@ export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
 
     startTransition(async () => {
       const result = await action(token, new FormData(form));
-      setMessage(labels.actionMessages[result.code]);
+      const msg = labels.actionMessages[result.code];
+      if (result.code === 'auth_invalid') {
+        showErrorToast(msg);
+        setMessage(null);
+      } else {
+        setMessage(msg);
+      }
 
       if (result.ok) {
         form.reset();
@@ -298,7 +322,13 @@ export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
 
     startTransition(async () => {
       const result = await action(token, id);
-      setMessage(labels.actionMessages[result.code]);
+      const msg = labels.actionMessages[result.code];
+      if (result.code === 'auth_invalid') {
+        showErrorToast(msg);
+        setMessage(null);
+      } else {
+        setMessage(msg);
+      }
 
       if (result.ok) {
         await loadDashboard(token, filters, {
@@ -351,7 +381,7 @@ export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
 
   return (
     <main className="min-h-screen bg-background text-foreground flex flex-col">
-      {/* 6. Header Navbar */}
+      {/* Header Bar trên cùng chứa nút Đăng xuất, Đổi ngôn ngữ & Theme */}
       <header className="sticky top-0 z-30 flex h-14 items-center justify-end border-b bg-background/80 px-4 backdrop-blur-md sm:px-6">
         <div className="flex items-center gap-1 sm:gap-2">
           {data && (
@@ -374,6 +404,7 @@ export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
         </div>
       </header>
 
+      {/* Modal Dialog Yêu cầu Nhập Token khi chưa đăng nhập */}
       {hasHydrated && !data && (
         <BookmarkAuthDialog
           labels={labels}
@@ -383,6 +414,7 @@ export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
         />
       )}
 
+      {/* Phần giao diện chính chứa Sidebar và Danh sách Bookmark */}
       <section
         className={`mx-auto flex w-full flex-1 max-w-7xl flex-col gap-6 p-4 sm:p-6 lg:p-8 ${
           !data ? 'pointer-events-none opacity-40 blur-[1px]' : ''
@@ -403,7 +435,6 @@ export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
 
         {data && (
           <div className="flex flex-1 flex-col overflow-hidden rounded-xl border bg-card shadow-sm">
-            {/* Main Bookmark Container Header */}
             <div className="border-b bg-muted/20 px-4 py-3 sm:px-5">
               <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
                 <BookmarkIcon className="h-4 w-4 text-primary" />
@@ -411,8 +442,8 @@ export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
               </h2>
             </div>
 
-            {/* Sidebar & List Layout */}
             <div className="flex min-h-0 flex-1 flex-col divide-y lg:flex-row lg:divide-x lg:divide-y-0">
+              {/* Sidebar Danh mục */}
               <div className="flex w-full shrink-0 flex-col bg-muted/5 lg:w-[280px] xl:w-[320px]">
                 <CategorySidebar
                   nodes={data.categoryTree}
@@ -433,6 +464,7 @@ export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
                 />
               </div>
 
+              {/* Khối chính: Form Thêm/Sửa & Danh sách Bookmark */}
               <div className="flex min-w-0 flex-1 flex-col bg-card">
                 {panelMode && (
                   <div className="border-b p-4 sm:p-5">
@@ -467,9 +499,8 @@ export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
               </div>
             </div>
 
-            {/* Main Bookmark Container Footer (Stats + Pagination) */}
+            {/* Chân trang: Thống kê & Phân trang */}
             <div className="flex flex-col gap-4 border-t bg-muted/20 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5">
-              {/* Stats on Left */}
               <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
                 <span className="font-medium">
                   {labels.totalBookmarks}:{' '}
@@ -489,7 +520,6 @@ export function BookmarkDashboard({ labels }: BookmarkDashboardProps) {
                 </span>
               </div>
 
-              {/* Pagination on Right */}
               {data.bookmarks.length > 0 && (
                 <div className="flex flex-wrap items-center gap-4">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">

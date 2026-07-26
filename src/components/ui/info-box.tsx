@@ -2,21 +2,23 @@ import * as React from 'react';
 import { Link } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 
-interface InfoBoxProps extends React.HTMLAttributes<HTMLDivElement> {
+/** Props của Component InfoBox */
+export interface InfoBoxProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Tiêu đề chính của hộp thông tin */
   title?: string;
+  /** Nội dung mô tả chi tiết (hỗ trợ ngắt dòng \n) */
   description?: string;
+  /** Đường dẫn liên kết khi nhấn vào hộp thông tin */
   href?: string;
+  /** Mở liên kết ở thẻ mới (target="_blank") nếu là true */
   external?: boolean;
 }
 
 /**
- * InfoBox component - A flexible container for displaying information with optional linking.
- * Atomic Design: Molecule/Atom.
+ * Component InfoBox hiển thị khối thông tin nổi bật hỗ trợ gắn liên kết tùy chọn.
  *
- * @param title - The main heading in the box.
- * @param description - The supporting text (supports \n).
- * @param href - Optional link destination.
- * @param external - If true, opens link in a new tab.
+ * @param props - InfoBoxProps bao gồm title, description, href, external và className.
+ * @returns JSX Element khối nội dung InfoBox hoặc thẻ liên kết bọc ngoài.
  */
 export function InfoBox({
   title,

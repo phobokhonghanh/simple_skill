@@ -17,8 +17,10 @@ const getClientSnapshot = () => true;
 const getServerSnapshot = () => false;
 
 /**
- * ThemeToggle molecule component.
- * Allows users to switch between light, dark, and system themes.
+ * Component ThemeToggle cho phép người dùng chuyển đổi giữa giao diện Sáng (Light), Tối (Dark) hoặc Theo hệ thống (System).
+ * Sử dụng next-themes để lưu vết chế độ theme đã chọn.
+ *
+ * @returns JSX Element Nút bật/tắt giao diện Theme.
  */
 export function ThemeToggle() {
   const { setTheme } = useTheme();
@@ -35,7 +37,7 @@ export function ThemeToggle() {
         size="icon"
         className="cursor-pointer"
         disabled
-        aria-label="Toggle theme"
+        aria-label="Chuyển đổi giao diện"
       >
         <Sun className="h-[1.2rem] w-[1.2rem] opacity-0" />
       </Button>
@@ -44,13 +46,16 @@ export function ThemeToggle() {
 
   return (
     <DropdownMenu>
+      {/* Nút kích hoạt mở danh sách theme */}
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon" className="cursor-pointer">
           <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
+          <span className="sr-only">Chuyển đổi giao diện</span>
         </Button>
       </DropdownMenuTrigger>
+
+      {/* Menu lựa chọn theme */}
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           onClick={() => setTheme('light')}

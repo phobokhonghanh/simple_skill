@@ -2,6 +2,14 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
+/**
+ * Component Card hiển thị khung chứa nội dung dạng thẻ.
+ *
+ * @param props - Props nguyên bản của thẻ div kết hợp với thuộc tính size.
+ * @param props.className - Các class CSS bổ sung.
+ * @param props.size - Kích thước lề của thẻ ('default' | 'sm').
+ * @returns JSX Element thẻ Card.
+ */
 function Card({
   className,
   size = 'default',
@@ -20,6 +28,12 @@ function Card({
   );
 }
 
+/**
+ * Component con CardHeader chứa tiêu đề và mô tả ở đầu thẻ Card.
+ *
+ * @param props - Props nguyên bản của thẻ div.
+ * @returns JSX Element phần đầu thẻ CardHeader.
+ */
 function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -33,6 +47,12 @@ function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+/**
+ * Component con CardTitle hiển thị tiêu đề chính bên trong CardHeader.
+ *
+ * @param props - Props nguyên bản của thẻ div.
+ * @returns JSX Element tiêu đề CardTitle.
+ */
 function CardTitle({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -46,6 +66,12 @@ function CardTitle({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+/**
+ * Component con CardDescription hiển thị dòng mô tả phụ bên dưới CardTitle.
+ *
+ * @param props - Props nguyên bản của thẻ div.
+ * @returns JSX Element dòng mô tả CardDescription.
+ */
 function CardDescription({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -56,6 +82,12 @@ function CardDescription({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+/**
+ * Component con CardAction chứa các nút thao tác nhanh ở góc trên bên phải của CardHeader.
+ *
+ * @param props - Props nguyên bản của thẻ div.
+ * @returns JSX Element khu vực nút thao tác CardAction.
+ */
 function CardAction({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -69,6 +101,12 @@ function CardAction({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+/**
+ * Component con CardContent chứa nội dung chính ở giữa thẻ Card.
+ *
+ * @param props - Props nguyên bản của thẻ div.
+ * @returns JSX Element khối nội dung CardContent.
+ */
 function CardContent({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -79,6 +117,12 @@ function CardContent({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+/**
+ * Component con CardFooter chứa các hành động hoặc nút bấm ở chân thẻ Card.
+ *
+ * @param props - Props nguyên bản của thẻ div.
+ * @returns JSX Element chân thẻ CardFooter.
+ */
 function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div

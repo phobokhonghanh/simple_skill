@@ -19,16 +19,25 @@ import type {
   PanelMode,
 } from '@/features/bookmarks/types';
 
+/** Props cho Component BookmarkForms */
 interface BookmarkFormsProps {
+  /** Chế độ Form hiện tại ('bookmark' hoặc 'category') */
   panelMode: Exclude<PanelMode, null>;
+  /** ID danh mục đang chọn */
   selectedCategoryId: string;
+  /** Cây danh mục dùng cho select dropdown */
   categoryTree: CategoryTreeNode[];
+  /** Nhãn ngôn ngữ i18n */
   labels: BookmarkDashboardLabels;
+  /** Trạng thái đang lưu/gửi dữ liệu */
   isPending: boolean;
+  /** Callback hủy/đóng Form */
   onCancel: () => void;
+  /** Callback gửi Form */
   onSubmit: (form: HTMLFormElement) => void;
 }
 
+/** Sub-component render tùy chọn Danh mục cây phân cấp trong thẻ <select> */
 function CategoryOption({
   category,
   depth = 0,
@@ -49,6 +58,7 @@ function CategoryOption({
   );
 }
 
+/** Sub-component bộ chọn Màu đại diện cho Danh mục */
 function CategoryColorPicker({
   defaultColor,
   labels,
@@ -87,6 +97,13 @@ function CategoryColorPicker({
   );
 }
 
+/**
+ * Component Form tổng hợp cho phép tạo/chỉnh sửa Bookmark hoặc Danh mục (Category).
+ * Tự động chuyển đổi giao diện dựa trên `panelMode.type`.
+ *
+ * @param props - BookmarkFormsProps.
+ * @returns JSX Element Form Thêm/Sửa Bookmark hoặc Category.
+ */
 export function BookmarkForms({
   panelMode,
   selectedCategoryId,

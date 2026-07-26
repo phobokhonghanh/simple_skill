@@ -1,290 +1,438 @@
 {
   "common": {
-    "title": "Nguyen Dinh Nguyen",
-    "rule": "Developer - Data Engineer",
-    "description": "This little corner is where small things begin—just enough to keep me from feeling FOMO in the face of all the big things happening out there as AI evolves so quickly. \n It’s also a place where I can introduce myself, share my perspectives and what I’ve learned—so I can easily look back on it later, and maybe it’ll be useful for anyone who happens to stop by and take a look.",
-    "welcome": "What's here?",
     "theme": "Theme",
     "language": "Language",
-    "footer_resources": "Resources",
-    "nav_home": "Home",
-    "nav_experience": "Experience",
-    "nav_projects": "Projects",
-    "nav_certificates": "Certificates",
-    "nav_contact": "Contact",
-    "experience": "Experience",
-    "experience_desc": "Here’s a bit about my experience—with just a few humble years working as a \"culi\".",
-    "bookmarks": "Bookmarks",
-    "homelab": "Home Lab",
-    "homelab_desc": "Here are a few random things about prod & infra self-host...",
-    "hero_tagline": "Developer - Data Engineer",
-    "hero_description": "I build scalable backend systems and high-performance data pipelines — from architecture design to production deployment.",
-    "skills_title": "Skills & Technologies",
-    "cashback": "Cashback",
-    "toast_demo_title": "Toast Notification Demo",
-    "toast_demo_desc": "Click the buttons below to trigger different toast notifications with various colors and behaviors.",
-    "toast_success_btn": "Success Toast",
-    "toast_error_btn": "Error Toast",
-    "toast_warning_btn": "Warning Toast",
-    "toast_info_btn": "Info Toast",
-    "toast_custom_btn": "Custom Orange",
-    "toast_success_msg": "Successfully updated your settings!",
-    "toast_error_msg": "An error occurred while saving.",
-    "toast_warning_msg": "Please check your network connection.",
-    "toast_info_msg": "A new update is available.",
-    "toast_custom_msg": "Shopee Cashback Conversion Sync completed!"
+    "roles": {
+      "admin": "Admin",
+      "user": "User"
+    },
+    "buttons": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "close": "Close",
+      "search": "Search",
+      "clear": "Clear",
+      "next": "Next",
+      "previous": "Previous",
+      "open": "Open",
+      "copy": "Copy",
+      "copied": "Copied!"
+    },
+    "labels": {
+      "loading": "Loading...",
+      "status": "Status",
+      "page": "Page",
+      "pageSize": "Page size",
+      "all": "All"
+    },
+    "pagination": {
+      "total_records": "Total: {total} records",
+      "page_indicator": "Page {page} of {totalPages}"
+    },
+    "sort": {
+      "by": "Sort by",
+      "order": "Order",
+      "fields": {
+        "created_at": "Date Created",
+        "title": "Title",
+        "url": "URL"
+      },
+      "directions": {
+        "asc": "Ascending",
+        "desc": "Descending"
+      },
+      "types": {
+        "advanced": "Advanced",
+        "api": "API Sort",
+        "local": "Local Sort"
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "Log In",
+        "subtitle": "Please log in to continue."
+      },
+      "token": {
+        "title": "Authentication Required",
+        "subtitle": "Please provide the authentication token to manage data.",
+        "label": "Admin Token",
+        "placeholder": "Enter admin token...",
+        "saved": "Admin token saved on this browser.",
+        "required": "Please enter the admin token before making changes.",
+        "invalid": "Admin token is incorrect.",
+        "missing_config": "ADMIN_TOKEN is not configured on the server."
+      }
+    },
+    "errors": {
+      "db_unavailable": "The server is unavailable. Please try again later.",
+      "unknown": "An unexpected error occurred. Please try again later.",
+      "invalid_url": "Invalid URL.",
+      "invalid_date": "Invalid date.",
+      "required": "This field is required.",
+      "not_found": "No data found."
+    },
+    "messages": {
+      "save_success": "Saved successfully.",
+      "delete_confirm": "Are you sure you want to delete this item?",
+      "copied_success": "Copied to clipboard."
+    },
+    "footer": {
+      "resources": "Resources"
+    },
+    "colors": {
+      "blue": "Blue",
+      "emerald": "Emerald",
+      "amber": "Amber",
+      "rose": "Rose",
+      "violet": "Violet",
+      "cyan": "Cyan"
+    }
   },
   "locales": {
     "en": "English",
     "vi": "Tiếng Việt"
   },
+  "home": {
+    "title": "Nguyen Dinh Nguyen",
+    "rule": "Developer - Data Engineer",
+    "description": "This little corner is where small things begin—just enough to keep me from feeling FOMO in the face of all the big things happening out there as AI evolves so quickly. \n It’s also a place where I can introduce myself, share my perspectives and what I’ve learned—so I can easily look back on it later, and maybe it’ll be useful for anyone who happens to stop by and take a look.",
+    "welcome": "What's here?",
+    "experience": {
+      "title": "Experience",
+      "desc": "Here’s a bit about my experience—with just a few humble years working as a \"culi\"."
+    },
+    "homelab": {
+      "title": "Home Lab",
+      "desc": "Here are a few random things about prod & infra self-host..."
+    }
+  },
   "experience": {
-    "meta_title": "Experience — Nguyen Dinh Nguyen",
-    "meta_description": "Portfolio and work experience of Nguyen Dinh Nguyen — Developer & Data Engineer specializing in scalable backend systems and high-performance data pipelines.",
-    "hero_tagline": "Developer - Data Engineer",
-    "hero_description": "I build scalable backend systems and high-performance data pipelines — from architecture design to production deployment. Experienced in distributed systems, Data Lakehouse, and CI/CD automation.",
-    "hero_bio": "Building scalable backend services and data pipelines, optimizing performance & ensuring system reliability.",
-    "hero_view_cv": "View CV",
-    "hero_featured_projects": "Featured Projects",
-    "hero_location": "Thu Duc, Ho Chi Minh",
-    "hero_education": "Nong Lam University",
-    "skills_title": "Skills & Technologies",
-    "certifications_title": "Certifications",
-    "certification_view_details": "View details",
-    "skills_scrum": "Scrum Certified",
-    "nav_home": "Home",
-    "nav_experience": "Experience",
-    "nav_homelab": "Homelab",
-    "nav_projects": "Projects",
-    "nav_certificates": "Certificates",
-    "nav_contact": "Contact",
-    "section_tech": "Tech Stack",
-    "section_tech_subtitle": "Technologies I work with",
-    "category_data": "Data / Streaming",
-    "category_database": "Database / Storage",
-    "category_software": "Software / Frontend",
-    "category_devops": "DevOps",
-    "section_experience": "Work Experience",
-    "section_experience_subtitle": "A few humble years grinding as a \"culi\"",
-    "exp1_company": "International Centre for Trade Transparency (ICTTM)",
-    "exp1_product": "Product: ADAMftd.com",
-    "exp1_role": "Junior Data Engineer",
-    "exp1_period": "Aug 2024 – Present",
-    "exp1_desc": "Built the core data collection framework aggregating international trade & company data from multiple global sources. Designed Data Vault models for the logistics domain and automated pipelines with Apache Airflow & Spark processing ~100M records/batch, delivering to PostgreSQL and Elasticsearch.",
-    "exp1_tag1": "~100M records/batch",
-    "exp1_tag2": "Airflow + Spark",
-    "exp1_tag3": "Data Vault",
-    "exp2_company": "STATLAB Outlier Software Dev",
-    "exp2_role": "Intern & Fresher Data Engineer",
-    "exp2_period": "Dec 2023 – Jul 2024",
-    "exp2_desc": "Implemented an automated large-scale data collection system handling 500K–2M records per region. Designed Airflow orchestration workflows with Python parsing, integrated AWS S3 storage, and engineered high-performance crawlers with fault tolerance and proxy rotation.",
-    "exp2_tag1": "500K – 2M records/region",
-    "exp2_tag2": "Airflow Orchestration",
-    "exp2_tag3": "Multi-threading / Async IO",
-    "section_contact": "Get in Touch",
-    "contact_subtitle": "Open to opportunities & collaborations",
-    "contact_email_label": "Email"
+    "meta": {
+      "title": "Experience — Nguyen Dinh Nguyen",
+      "description": "Portfolio and work experience of Nguyen Dinh Nguyen — Developer & Data Engineer specializing in scalable backend systems and high-performance data pipelines."
+    },
+    "hero": {
+      "tagline": "Developer - Data Engineer",
+      "description": "I build scalable backend systems and high-performance data pipelines — from architecture design to production deployment. Experienced in distributed systems, Data Lakehouse, and CI/CD automation.",
+      "bio": "Building scalable backend services and data pipelines, optimizing performance & ensuring system reliability.",
+      "view_cv": "View CV",
+      "featured_projects": "Featured Projects",
+      "location": "Thu Duc, Ho Chi Minh",
+      "education": "Nong Lam University"
+    },
+    "skills": {
+      "title": "Skills & Technologies",
+      "scrum": "Scrum Certified"
+    },
+    "certifications": {
+      "title": "Certifications",
+      "view_details": "View details"
+    },
+    "nav": {
+      "home": "Home",
+      "experience": "Experience",
+      "homelab": "Homelab",
+      "projects": "Projects",
+      "certificates": "Certificates",
+      "contact": "Contact"
+    },
+    "sections": {
+      "tech": {
+        "title": "Tech Stack",
+        "subtitle": "Technologies I work with"
+      },
+      "experience": {
+        "title": "Work Experience",
+        "subtitle": "A few humble years grinding as a \"culi\""
+      },
+      "contact": {
+        "title": "Get in Touch",
+        "subtitle": "Open to opportunities & collaborations",
+        "email_label": "Email"
+      }
+    },
+    "categories": {
+      "data": "Data / Streaming",
+      "database": "Database / Storage",
+      "software": "Software / Frontend",
+      "devops": "DevOps"
+    },
+    "jobs": {
+      "exp1": {
+        "company": "International Centre for Trade Transparency (ICTTM)",
+        "product": "Product: ADAMftd.com",
+        "role": "Junior Data Engineer",
+        "period": "Aug 2024 – Present",
+        "desc": "Built the core data collection framework aggregating international trade & company data from multiple global sources. Designed Data Vault models for the logistics domain and automated pipelines with Apache Airflow & Spark processing ~100M records/batch, delivering to PostgreSQL and Elasticsearch.",
+        "tag1": "~100M records/batch",
+        "tag2": "Airflow + Spark",
+        "tag3": "Data Vault"
+      },
+      "exp2": {
+        "company": "STATLAB Outlier Software Dev",
+        "role": "Intern & Fresher Data Engineer",
+        "period": "Dec 2023 – Jul 2024",
+        "desc": "Implemented an automated large-scale data collection system handling 500K–2M records per region. Designed Airflow orchestration workflows with Python parsing, integrated AWS S3 storage, and engineered high-performance crawlers with fault tolerance and proxy rotation.",
+        "tag1": "500K – 2M records/region",
+        "tag2": "Airflow Orchestration",
+        "tag3": "Multi-threading / Async IO"
+      }
+    }
   },
   "bookmarks": {
-    "meta_title": "Bookmarks — Nguyen Dinh Nguyen",
-    "meta_description": "A dashboard for saving, searching, filtering, and managing bookmarks by nested categories.",
-    "subtitle": "Save useful links with titles, descriptions, and nested categories. Search fast, filter by topic, and manage everything from one focused workspace.",
-    "login_title": "Sign in to bookmarks",
-    "login_subtitle": "Enter the admin token before loading bookmark data.",
-    "login_button": "Unlock dashboard",
-    "logout": "Log out",
-    "search_placeholder": "Search title, URL, or description...",
-    "all_categories": "All categories",
-    "categories": "Categories",
-    "bookmarks": "Bookmarks",
-    "total_bookmarks": "Total bookmarks",
-    "total_categories": "Categories",
-    "active_filters": "Active filters",
-    "editing_bookmark": "Bookmark details",
-    "editing_category": "Category details",
-    "add_category": "Add category",
-    "add_bookmark": "Add bookmark",
-    "edit": "Edit",
-    "delete": "Delete",
-    "cancel": "Cancel",
-    "save": "Save",
-    "open": "Open",
-    "token": "Admin token",
-    "token_placeholder": "Enter admin token",
-    "token_saved": "Admin token saved on this browser.",
-    "token_required": "Enter the admin token before making changes.",
-    "db_unavailable": "The bookmark API is not available. Check the API configuration.",
-    "empty_bookmarks": "No bookmarks match the current filters.",
-    "empty_categories": "No categories yet.",
-    "category_name": "Category name",
-    "parent_category": "Parent category",
-    "no_parent": "No parent",
-    "category_color": "Category color",
-    "color_blue": "Blue",
-    "color_emerald": "Emerald",
-    "color_amber": "Amber",
-    "color_rose": "Rose",
-    "color_violet": "Violet",
-    "color_cyan": "Cyan",
-    "bookmark_title": "Title",
-    "bookmark_url": "URL",
-    "bookmark_description": "Description",
-    "bookmark_category": "Category",
-    "description_optional": "Optional notes for why this link matters...",
-    "confirm_delete": "Delete this item?",
-    "action_ok": "Saved successfully.",
-    "action_auth_invalid": "Admin token is incorrect.",
-    "action_auth_missing_config": "ADMIN_TOKEN is not configured on the server.",
-    "action_category_required": "Choose a valid category.",
-    "action_category_in_use": "This category still has bookmarks.",
-    "action_category_has_children": "Delete child categories before deleting this category.",
-    "action_category_not_found": "Category was not found.",
-    "action_bookmark_not_found": "Bookmark was not found.",
-    "action_title_required": "Title is required.",
-    "action_url_invalid": "Enter a valid http or https URL.",
-    "action_db_unavailable": "The bookmark API is not available.",
-    "action_unknown_error": "Something went wrong while saving.",
-    "sortBy": "Sort by",
-    "sortOrder": "Order",
-    "sort_createdAt": "Date Created",
-    "sort_title": "Title",
-    "sort_url": "URL",
-    "sort_asc": "Ascending",
-    "sort_desc": "Descending",
-    "advancedSort": "Advanced",
-    "advancedSortLabel": "Advanced Sort",
-    "localSort": "Local Sort:",
-    "hide": "Hide",
-    "page": "Page",
-    "pageSize": "Items per page",
-    "next": "Next",
-    "previous": "Previous",
-    "viewBookmarks": "View bookmarks of this category"
+    "meta": {
+      "title": "Bookmarks — Nguyen Dinh Nguyen",
+      "description": "A dashboard for saving, searching, filtering, and managing bookmarks by nested categories."
+    },
+    "dashboard": {
+      "subtitle": "Save useful links with titles, descriptions, and nested categories. Search fast, filter by topic, and manage everything from one focused workspace.",
+      "search_placeholder": "Search title, URL, or description...",
+      "total_bookmarks": "Total bookmarks",
+      "total_categories": "Categories",
+      "active_filters": "Active filters",
+      "editing_bookmark": "Bookmark details",
+      "editing_category": "Category details",
+      "add_category": "Add category",
+      "add_bookmark": "Add bookmark",
+      "empty_bookmarks": "No bookmarks match the current filters.",
+      "empty_categories": "No categories yet.",
+      "category_name": "Category name",
+      "parent_category": "Parent category",
+      "no_parent": "No parent",
+      "category_color": "Category color",
+      "bookmark_title": "Title",
+      "bookmark_url": "URL",
+      "bookmark_description": "Description",
+      "bookmark_category": "Category",
+      "description_optional": "Optional notes for why this link matters...",
+      "advancedSort": "Advanced",
+      "advancedSortLabel": "Advanced Sort",
+      "localSort": "Local Sort:",
+      "viewBookmarks": "View bookmarks of this category"
+    },
+    "categories": {
+      "all": "All categories",
+      "title": "Categories"
+    },
+    "bookmarks_title": "Bookmarks",
+    "actions": {
+      "category_required": "Choose a valid category.",
+      "category_in_use": "This category still has bookmarks.",
+      "category_has_children": "Delete child categories before deleting this category.",
+      "category_not_found": "Category was not found.",
+      "bookmark_not_found": "Bookmark was not found."
+    }
   },
   "cashback": {
-    "meta_title": "Cashback — Nguyen Dinh Nguyen",
-    "meta_description": "Unlimited cashback on shopping",
-    "title": "Cashback",
-    "subtitle": "Unlimited cashback when shopping on Shopee",
-    "input_placeholder": "Enter product URL (Shopee...)",
-    "invalid_link": "Invalid URL. Please enter a URL from Shopee.",
-    "btn_search": "Search product",
-    "btn_searching": "Searching...",
-    "btn_copy": "Copy link",
-    "btn_copied": "Copied!",
-    "btn_paste": "Paste",
-    "btn_buy": "Apply Voucher",
-    "voucher_notice_prefix": "Price does not include voucher. Click ",
-    "voucher_notice_highlight": "Apply Voucher",
-    "voucher_notice_suffix": " to get exclusive voucher!",
-    "product_name": "Product Name",
-    "shop_name": "Shop",
-    "price": "Price",
-    "product_price": "Product Price",
-    "commission_rate": "Estimated Cashback",
-    "sales": "Sales",
-    "sales_count": "Sales: {count}",
-    "rating": "Rating",
-    "commission": "Commission",
-    "last_update": "Last updated",
-    "updated_at": "Updated: {date}",
-    "not_found": "Product not found",
-    "history_title": "Search History",
-    "history_empty": "No items yet.",
-    "history_clear": "Clear History",
-    "login_btn": "Log In",
-    "login_title_gsi": "Login to Cashback Portal",
-    "login_subtitle_gsi": "Sign in with Google to start earning cashback and tracking your orders",
-    "logout_btn": "Log Out",
-    "user_profile": "User Profile",
-    "admin_role": "Admin",
-    "user_role": "User",
-    "converter_tab": "Converter",
-    "history_tab": "Cashback",
-    "history_details_title": "Cashback Details",
-    "admin_tab": "Admin Sync",
-    "no_cashback": "You have no cashback history yet. Try converting a link and making a purchase!",
-    "sync_shopee_conversions": "Sync Shopee Conversions",
-    "sync_sub_id": "Sub ID (optional)",
-    "sync_start_time": "Start Date",
-    "sync_end_time": "End Date",
-    "sync_now": "Sync Now",
-    "sync_success": "Conversions sync completed successfully!",
-    "sync_error": "Failed to sync conversions.",
-    "syncing": "Syncing...",
-    "all_conversions": "All Conversions Report",
-    "no_conversions": "No conversions found.",
-    "order_id": "Order ID",
-    "user_id": "User ID",
-    "status": "Status",
-    "amount": "Amount",
-    "purchase_time": "Purchase Time",
-    "checkout_id": "Checkout ID",
-    "checkout_status": "Checkout Status",
-    "loading_history": "Loading history...",
-    "guest_mode_warning": "You are currently searching as guest. Log in to earn cashback automatically.",
-    "payment_tab": "Payment",
-    "payment_coming_soon": "Payment feature is under development. Please check back later!",
-    "total_cashback": "Total Cashback",
-    "recorded_orders": "Recorded Orders",
-    "order_unit": "orders",
-    "hide_details": "Hide details",
-    "show_details": "Show details ({count} products)",
-    "qty": "QTY",
-    "filter_platform": "Platform",
-    "filter_status": "Status",
-    "sort_by_time": "Sort by Time",
-    "sort_newest": "Newest First",
-    "sort_oldest": "Oldest First",
-    "all_platforms": "All Platforms",
-    "all_statuses": "All Statuses",
-    "admin_cashbacks_subtab": "Cashback Management (Cashbacks)",
-    "admin_conversions_subtab": "Order Reports (Conversions)",
-    "role_admin": "Admin",
-    "role_user": "User",
-    "start_date": "From Date",
-    "end_date": "To Date",
-    "search_user_id": "Search by User ID",
-    "page_indicator": "Page {page} of {totalPages}",
-    "total_records": "Total: {total} records",
-    "search": "Search",
-    "clear": "Clear",
-    "filter_sub_id": "Sub ID",
-    "manual_sync": "Manual Sync",
-    "manual_sync_title": "Note:",
-    "manual_sync_bullet1": "After you complete a purchase, Shopee may take <b>24h</b> to update your order.",
-    "manual_sync_bullet2": "The system automatically syncs your orders from Shopee at <b>00:00 daily</b>.",
-    "manual_sync_bullet3": "You can <b>manually sync</b> to fetch the latest data from Shopee.",
-    "sync_modal_title": "Sync Shopee Orders",
-    "sync_modal_range": "Date range: {range}",
-    "sync_modal_loading": "Synchronizing data from Shopee, please wait a moment...",
-    "sync_modal_success_prefix": "Sync completed! Found {count} conversions.",
-    "sync_modal_empty": "No new orders found in this date range.",
-    "sync_modal_close": "Close and Update",
-    "sync_modal_failed": "Failed to sync. Please try again later.",
-    "order_id_prefix": "Order ID: {id}",
-    "purchase_date_prefix": "Date: {date}",
-    "sub_id_user": "Sub ID (User)",
-    "total_order": "Total Amount",
-    "shopee_commission": "Commission",
-    "products_count": "{count} products",
-    "shopee_order_list": "Shopee Order List",
-    "order_code_prefix": "Order ID: {id}",
-    "qty_shop_prefix": "QTY: {qty} • Shop: {shop}",
-    "commission_suffix": "+{amount}",
-    "total_records_prefix": "Total: {total} records",
-    "page_indicator_prefix": "Page {page} / {totalPages}",
-    "qty_prefix": "QTY: {qty}",
-    "table_date": "Date Created",
-    "table_user_id": "User ID",
-    "table_checkout_id": "Checkout ID",
-    "table_platform": "Platform",
-    "table_cashback": "Cashback",
-    "table_status": "Status",
-    "empty_cashbacks": "No cashback records found",
-    "loading": "Loading...",
-    "platform_prefix": "Platform: {platform}",
-    "user_prefix": "User: {id}",
-    "checkout_prefix": "Checkout: {id}"
+    "common": {
+      "from_date": "From Date",
+      "to_date": "To Date",
+      "sub_id": "Sub ID",
+      "checkout_id": "Checkout ID",
+      "platform": "Platform",
+      "status": "Status",
+      "cashback": "Cashback",
+      "amount": "Amount",
+      "platform_shopee": "Shopee",
+      "system": "System",
+      "anonymous_user": "User"
+    },
+    "platforms": {
+      "shopee": "Shopee",
+      "lazada": "Lazada",
+      "tiktok": "TikTok"
+    },
+    "navbar": {
+      "portal": "Portal",
+      "cashback": "Cashback"
+    },
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "completed": "Completed",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled"
+    },
+    "meta": {
+      "title": "Cashback — Nguyen Dinh Nguyen",
+      "description": "Unlimited cashback on shopping"
+    },
+    "header": {
+      "title": "Cashback",
+      "subtitle": "Unlimited cashback when shopping on Shopee"
+    },
+    "input": {
+      "placeholder": "Enter product URL",
+      "invalid_link": "Invalid URL. Please enter a URL from Shopee."
+    },
+    "buttons": {
+      "paste": "Paste",
+      "buy": "Apply Voucher",
+      "hide_details": "Hide details",
+      "show_details": "Show details ({count} products)",
+      "manual_sync": "Manual Sync"
+    },
+    "labels": {
+      "product_name": "Product Name",
+      "shop_name": "Shop",
+      "price": "Price",
+      "product_price": "Product Price",
+      "commission_rate": "Estimated Cashback",
+      "sales": "Sales",
+      "sales_count": "Sales: {count}",
+      "rating": "Rating",
+      "commission": "Cashback",
+      "last_update": "Last updated",
+      "updated_at": "Updated: {date}",
+      "qty": "QTY",
+      "order_id": "Order ID",
+      "user_id": "User ID",
+      "amount": "Amount",
+      "purchase_time": "Time",
+      "checkout_id": "Checkout ID",
+      "checkout_status": "Checkout Status",
+      "loading_history": "Loading history...",
+      "user_profile": "User Profile",
+      "total_cashback": "Total Cashback",
+      "recorded_orders": "Recorded Orders",
+      "order_unit": "orders",
+      "order_id_prefix": "Order ID: {id}",
+      "purchase_date_prefix": "Date: {date}",
+      "sub_id_user": "Sub ID (User)",
+      "total_order": "Total Amount",
+      "shopee_commission": "Cashback",
+      "products_count": "{count} products",
+      "shopee_order_list": "Shopee Order List",
+      "order_code_prefix": "Order ID: {id}",
+      "qty_shop_prefix": "QTY: {qty} • Shop: {shop}",
+      "commission_suffix": "+{amount}",
+      "qty_prefix": "QTY: {qty}",
+      "table_date": "Date Created",
+      "table_user_id": "User ID",
+      "table_checkout_id": "Checkout ID",
+      "table_platform": "Platform",
+      "table_cashback": "Cashback",
+      "table_status": "Status",
+      "empty_cashbacks": "No cashback records found",
+      "platform_prefix": "Platform: {platform}",
+      "user_prefix": "User: {id}",
+      "checkout_prefix": "Checkout: {id}",
+      "table_products": "Products",
+      "products_unit": "items",
+      "item_qty_price": "QTY: {qty} • Price: {price}",
+      "platform_rejected": "Decided by <platform>{platformName}</platform>"
+    },
+    "voucher": {
+      "notice_prefix": "Price does not include voucher. Click ",
+      "notice_highlight": "Apply Voucher",
+      "notice_suffix": " to get exclusive voucher!"
+    },
+    "history": {
+      "title": "Search History",
+      "empty": "No items yet.",
+      "clear": "Clear History"
+    },
+    "orders": {
+      "empty_order": "No cashback orders yet. Try converting a link and making a purchase!"
+    },
+    "toasts": {
+      "sync_success": "Sync completed! Found {count} order(s).",
+      "sync_failed": "Sync failed. Please try again later.",
+      "admin_sync_success": "System Shopee conversions sync completed!"
+    },
+    "tabs": {
+      "converter": "Converter",
+      "orders": "Orders",
+      "admin": "Admin",
+      "admin_conversions": "Conversions",
+      "payment": "Payment",
+      "admin_cashbacks": "Cashbacks",
+      "orders_details": "Order Details"
+    },
+    "sync": {
+      "shopee_conversions": "Sync Conversions",
+      "sub_id": "Sub ID (optional)",
+      "start_time": "Start Date",
+      "end_time": "End Date",
+      "now": "Sync Now",
+      "success": "Conversions sync completed successfully!",
+      "error": "Failed to sync conversions.",
+      "syncing": "Syncing..."
+    },
+    "report": {
+      "all_conversions": "All Conversions"
+    },
+    "warnings": {
+      "guest_mode": "You are currently searching as guest. Log in to earn cashback automatically."
+    },
+    "payment": {
+      "coming_soon": "Payment feature is under development. Please check back later!",
+      "badge": "Coming Soon"
+    },
+    "filters": {
+      "platform": "Platform",
+      "status": "Status",
+      "sub_id": "Sub ID",
+      "sub_id_placeholder": "e.g. user_1234",
+      "start_date": "From Date",
+      "end_date": "To Date",
+      "search_user_id": "Search by User ID",
+      "all_platforms": "All Platforms",
+      "all_statuses": "All Statuses"
+    },
+    "sort": {
+      "by_time": "Sort by Time",
+      "newest": "Newest First",
+      "oldest": "Oldest First"
+    },
+    "manual_sync": {
+      "title": "Note:",
+      "bullet1": "After you complete a purchase, Shopee may take <b>24h</b> to update your order.",
+      "bullet2": "The system automatically syncs your orders from Shopee at <b>00:00 daily</b>.",
+      "bullet3": "You can <b>manually sync</b> to fetch the latest data from Shopee."
+    },
+    "sync_modal": {
+      "title": "Sync Shopee Orders",
+      "range": "Date range: {range}",
+      "loading": "Synchronizing data from Shopee, please wait a moment...",
+      "success_prefix": "Sync completed! Found {count} conversions.",
+      "empty": "No new orders found in this date range.",
+      "close": "Close and Update",
+      "failed": "Failed to sync. Please try again later."
+    }
+  },
+  "auth": {
+    "buttons": {
+      "login": "Log In",
+      "logout": "Log Out",
+      "login_google": "Sign in with Google"
+    },
+    "protected": {
+      "require_login": "Please sign in to access this page.",
+      "unauthorized_admin": "You do not have administrative permissions to access this content."
+    },
+    "roles": {
+      "admin": "Admin",
+      "user": "User"
+    },
+    "prompts": {
+      "login_title": "Log In to Cashback Portal",
+      "login_subtitle": "Log in with Google to start earning cashback and managing your orders"
+    },
+    "toasts": {
+      "welcome": {
+        "0": "Welcome back, {name}!",
+        "1": "Glad to see you again, {name}!",
+        "2": "Hello {name}, have a wonderful day!"
+      },
+      "goodbye": {
+        "0": "Goodbye! Hope to see you again soon.",
+        "1": "Logged out successfully. Have a nice day!",
+        "2": "Take care! See you next time."
+      },
+      "login_failed": "Login failed. Please try again!"
+    }
   }
 }

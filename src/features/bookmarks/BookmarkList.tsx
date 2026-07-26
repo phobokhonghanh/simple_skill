@@ -24,19 +24,36 @@ import type {
 } from '@/features/bookmarks/types';
 import type { BookmarkDashboardLabels } from '@/features/bookmarks/types';
 
+/** Props cho Component Danh sách Bookmark (BookmarkList) */
 interface BookmarkListProps {
+  /** Mảng danh sách các Bookmark hiện tại */
   bookmarks: Bookmark[];
+  /** Cấu trúc phân trang */
   pagination: PaginationMetadata;
+  /** Bộ lọc hiện tại */
   filters: BookmarkFilters;
+  /** Bản dịch nhãn ngôn ngữ i18n */
   labels: BookmarkDashboardLabels;
+  /** Trạng thái đang tải dữ liệu */
   isLoading: boolean;
+  /** Quyền tạo Bookmark mới */
   canCreateBookmark: boolean;
+  /** Callback cập nhật bộ lọc */
   onUpdateFilters: (next: Partial<BookmarkFilters>) => void;
+  /** Callback chỉnh sửa Bookmark */
   onEdit: (bookmark: Bookmark) => void;
+  /** Callback xóa Bookmark */
   onDelete: (bookmarkId: string) => void;
+  /** Callback mở form tạo mới Bookmark */
   onCreateBookmark: () => void;
 }
 
+/**
+ * Component BookmarkList hiển thị danh sách các thẻ Bookmark kèm ô tìm kiếm, bộ lọc nâng cao và sắp xếp tại Client.
+ *
+ * @param props - BookmarkListProps.
+ * @returns JSX Element danh sách Bookmark.
+ */
 export function BookmarkList({
   bookmarks,
   filters,
@@ -48,7 +65,7 @@ export function BookmarkList({
   onDelete,
   onCreateBookmark,
 }: BookmarkListProps) {
-  // Client-side local sorting states
+  // Trạng thái sắp xếp địa phương ở Client-side
   const [localSortBy, setLocalSortBy] = React.useState<
     'createdAt' | 'title' | 'url'
   >(filters.sortBy ?? 'createdAt');
@@ -58,7 +75,7 @@ export function BookmarkList({
   const [isAdvancedSortOpen, setIsAdvancedSortOpen] = React.useState(false);
   const [prevBookmarks, setPrevBookmarks] = React.useState(bookmarks);
 
-  // Chuẩn React: Adjusting state during render (Tránh useEffect gây dư thừa render)
+  // Cập nhật lại state khi props bookmarks thay đổi từ Server
   if (bookmarks !== prevBookmarks) {
     setPrevBookmarks(bookmarks);
     setLocalSortBy(filters.sortBy ?? 'createdAt');
@@ -103,7 +120,6 @@ export function BookmarkList({
     );
   };
 
-  // Perform sorting on the current page's bookmarks locally
   const sortedBookmarks = React.useMemo(() => {
     return [...bookmarks].sort((a, b) => {
       let valA: string | number = a[localSortBy] ?? '';
@@ -125,7 +141,7 @@ export function BookmarkList({
 
   return (
     <div className="flex flex-col gap-4 p-4 sm:p-5">
-      {/* 1. Card Search & Advanced API Sort */}
+      {/* Thẻ Ô Tìm kiếm & Bộ lọc Sắp xếp API nâng cao */}
       <Card className="rounded-md border bg-background shadow-sm transition-colors focus-within:border-primary focus-within:ring-1 focus-within:ring-primary p-0 gap-0">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-1.5 gap-2">
           <form
@@ -215,11 +231,9 @@ export function BookmarkList({
         )}
       </Card>
 
-      {/* 2. Card Bookmarks List & Local Sort */}
+      {/* Thẻ Danh sách Bookmark & Tiêu đề Sắp xếp Địa phương */}
       <Card className="rounded-md border bg-card shadow-sm p-0 gap-0">
-        {/* Header of the list card */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-b bg-muted/30 px-3 py-2">
-          {/* Add Button (Left) */}
           <Button
             type="button"
             onClick={onCreateBookmark}
@@ -232,7 +246,6 @@ export function BookmarkList({
             <Plus className="h-4 w-4" />
           </Button>
 
-          {/* Local Sort Headers (Right) */}
           <div className="flex items-center gap-4 text-xs pr-1">
             <span className="hidden sm:inline-block text-muted-foreground font-medium mr-1">
               {labels.localSort}
@@ -248,91 +261,89 @@ export function BookmarkList({
             {labels.emptyBookmarks}
           </p>
         ) : (
-          <>
-            <ul className="divide-y">
-              {sortedBookmarks.map((bookmark) => {
-                const color = getCategoryColorPreset(bookmark.categoryColor);
+          <ul className="divide-y">
+            {sortedBookmarks.map((bookmark) => {
+              const color = getCategoryColorPreset(bookmark.categoryColor);
 
-                return (
-                  <li
-                    key={bookmark.id}
-                    className="grid gap-3 border-l-4 bg-background px-4 py-4 transition-colors hover:bg-muted/30 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center"
-                    style={{
-                      borderLeftColor: color.foreground,
-                      backgroundColor: color.background,
-                    }}
-                  >
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="truncate text-base font-semibold tracking-tight">
-                          {bookmark.title}
-                        </h3>
-                        <span
-                          className="rounded-md border px-2 py-0.5 text-xs font-medium"
-                          style={{
-                            borderColor: color.border,
-                            color: color.foreground,
-                            backgroundColor: color.background,
-                          }}
-                        >
-                          {bookmark.categoryName}
-                        </span>
-                      </div>
+              return (
+                <li
+                  key={bookmark.id}
+                  className="grid gap-3 border-l-4 bg-background px-4 py-4 transition-colors hover:bg-muted/30 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center"
+                  style={{
+                    borderLeftColor: color.foreground,
+                    backgroundColor: color.background,
+                  }}
+                >
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="truncate text-base font-semibold tracking-tight">
+                        {bookmark.title}
+                      </h3>
+                      <span
+                        className="rounded-md border px-2 py-0.5 text-xs font-medium"
+                        style={{
+                          borderColor: color.border,
+                          color: color.foreground,
+                          backgroundColor: color.background,
+                        }}
+                      >
+                        {bookmark.categoryName}
+                      </span>
+                    </div>
+                    <a
+                      href={bookmark.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 flex min-w-0 items-center gap-1 text-sm text-primary transition-colors hover:text-primary/80 hover:underline"
+                    >
+                      <LinkIcon className="h-3.5 w-3.5 shrink-0" />
+                      <span className="truncate">{bookmark.url}</span>
+                    </a>
+                    {bookmark.description && (
+                      <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                        {bookmark.description}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 lg:justify-end">
+                    <Button
+                      variant="outline"
+                      size="icon-sm"
+                      asChild
+                      title={labels.open}
+                    >
                       <a
                         href={bookmark.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-1 flex min-w-0 items-center gap-1 text-sm text-primary transition-colors hover:text-primary/80 hover:underline"
                       >
-                        <LinkIcon className="h-3.5 w-3.5 shrink-0" />
-                        <span className="truncate">{bookmark.url}</span>
+                        <ExternalLink className="h-4 w-4" />
                       </a>
-                      {bookmark.description && (
-                        <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-                          {bookmark.description}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 lg:justify-end">
-                      <Button
-                        variant="outline"
-                        size="icon-sm"
-                        asChild
-                        title={labels.open}
-                      >
-                        <a
-                          href={bookmark.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                        </a>
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon-sm"
-                        title={labels.edit}
-                        onClick={() => onEdit(bookmark)}
-                      >
-                        <Edit3 className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="icon-sm"
-                        title={labels.delete}
-                        onClick={() => onDelete(bookmark.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </>
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon-sm"
+                      title={labels.edit}
+                      onClick={() => onEdit(bookmark)}
+                    >
+                      <Edit3 className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon-sm"
+                      title={labels.delete}
+                      onClick={() => onDelete(bookmark.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         )}
       </Card>
     </div>

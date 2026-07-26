@@ -1,10 +1,20 @@
+/**
+ * Interface định nghĩa dữ liệu cho một Chứng chỉ chuyên môn.
+ */
 export interface Certification {
+  /** Tên chứng chỉ */
   name: string;
+  /** Mô tả chi tiết chứng chỉ */
   description: string;
+  /** Đường dẫn ảnh bằng chứng bằng chứng nhận */
   image: string;
+  /** Link xác thực chứng chỉ trực tuyến */
   url: string;
 }
 
+/**
+ * Danh sách tĩnh các Chứng chỉ chuyên môn đạt được.
+ */
 export const CERTIFICATIONS: Certification[] = [
   {
     name: 'Scrum Certified',

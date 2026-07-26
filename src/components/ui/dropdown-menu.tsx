@@ -6,12 +6,24 @@ import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui';
 import { cn } from '@/lib/utils';
 import { CheckIcon, ChevronRightIcon } from 'lucide-react';
 
+/**
+ * Root component DropdownMenu quản lý trạng thái mở/đóng menu thả xuống.
+ *
+ * @param props - Props nguyên bản của Radix DropdownMenuPrimitive.Root.
+ * @returns JSX Element Root cho DropdownMenu.
+ */
 function DropdownMenu({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
   return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />;
 }
 
+/**
+ * Component Portal cổng đẩy nội dung DropdownMenuContent ra ngoài cây DOM chính.
+ *
+ * @param props - Props nguyên bản của Radix DropdownMenuPrimitive.Portal.
+ * @returns JSX Element Portal.
+ */
 function DropdownMenuPortal({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Portal>) {
@@ -20,6 +32,12 @@ function DropdownMenuPortal({
   );
 }
 
+/**
+ * Component nút kích hoạt (Trigger) mở DropdownMenu.
+ *
+ * @param props - Props nguyên bản của Radix DropdownMenuPrimitive.Trigger.
+ * @returns JSX Element nút Trigger.
+ */
 function DropdownMenuTrigger({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
@@ -31,6 +49,12 @@ function DropdownMenuTrigger({
   );
 }
 
+/**
+ * Khối nội dung chứa danh sách lựa chọn của DropdownMenu.
+ *
+ * @param props - Props của Radix DropdownMenuPrimitive.Content gồm align, sideOffset và className.
+ * @returns JSX Element danh sách menu Content.
+ */
 function DropdownMenuContent({
   className,
   align = 'start',
@@ -53,6 +77,12 @@ function DropdownMenuContent({
   );
 }
 
+/**
+ * Component nhóm các mục lựa chọn trong DropdownMenu.
+ *
+ * @param props - Props nguyên bản của Radix DropdownMenuPrimitive.Group.
+ * @returns JSX Element nhóm các item.
+ */
 function DropdownMenuGroup({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Group>) {
@@ -61,6 +91,12 @@ function DropdownMenuGroup({
   );
 }
 
+/**
+ * Component item lựa chọn trong DropdownMenu.
+ *
+ * @param props - Props nguyên bản của Radix DropdownMenuPrimitive.Item kết hợp tùy chọn inset và variant.
+ * @returns JSX Element item lựa chọn.
+ */
 function DropdownMenuItem({
   className,
   inset,
@@ -84,6 +120,12 @@ function DropdownMenuItem({
   );
 }
 
+/**
+ * Component item lựa chọn dạng Checkbox (có tích chọn) trong DropdownMenu.
+ *
+ * @param props - Props nguyên bản của Radix DropdownMenuPrimitive.CheckboxItem.
+ * @returns JSX Element item Checkbox.
+ */
 function DropdownMenuCheckboxItem({
   className,
   children,
@@ -117,6 +159,12 @@ function DropdownMenuCheckboxItem({
   );
 }
 
+/**
+ * Component nhóm các nút lựa chọn độc quyền kiểu Radio Group trong DropdownMenu.
+ *
+ * @param props - Props nguyên bản của Radix DropdownMenuPrimitive.RadioGroup.
+ * @returns JSX Element nhóm Radio.
+ */
 function DropdownMenuRadioGroup({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.RadioGroup>) {
@@ -128,6 +176,12 @@ function DropdownMenuRadioGroup({
   );
 }
 
+/**
+ * Component item lựa chọn kiểu Radio trong DropdownMenu.
+ *
+ * @param props - Props nguyên bản của Radix DropdownMenuPrimitive.RadioItem.
+ * @returns JSX Element item Radio.
+ */
 function DropdownMenuRadioItem({
   className,
   children,
@@ -159,6 +213,12 @@ function DropdownMenuRadioItem({
   );
 }
 
+/**
+ * Component nhãn mô tả phân nhóm tiêu đề (Label) trong DropdownMenu.
+ *
+ * @param props - Props nguyên bản của Radix DropdownMenuPrimitive.Label.
+ * @returns JSX Element nhãn DropdownMenuLabel.
+ */
 function DropdownMenuLabel({
   className,
   inset,
@@ -179,6 +239,12 @@ function DropdownMenuLabel({
   );
 }
 
+/**
+ * Component đường kẻ phân cách (Separator) giữa các mục trong DropdownMenu.
+ *
+ * @param props - Props nguyên bản của Radix DropdownMenuPrimitive.Separator.
+ * @returns JSX Element đường kẻ ngang phân cách.
+ */
 function DropdownMenuSeparator({
   className,
   ...props
@@ -192,6 +258,12 @@ function DropdownMenuSeparator({
   );
 }
 
+/**
+ * Component hiển thị phím tắt (Shortcut) ở bên phải của DropdownMenuItem.
+ *
+ * @param props - Props nguyên bản của thẻ span.
+ * @returns JSX Element hiển thị phím tắt.
+ */
 function DropdownMenuShortcut({
   className,
   ...props
@@ -208,12 +280,24 @@ function DropdownMenuShortcut({
   );
 }
 
+/**
+ * Component menu con cấp 2 (Sub-menu) trong DropdownMenu.
+ *
+ * @param props - Props nguyên bản của Radix DropdownMenuPrimitive.Sub.
+ * @returns JSX Element Sub menu.
+ */
 function DropdownMenuSub({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Sub>) {
   return <DropdownMenuPrimitive.Sub data-slot="dropdown-menu-sub" {...props} />;
 }
 
+/**
+ * Component kích hoạt (Trigger) mở Sub menu trong DropdownMenu.
+ *
+ * @param props - Props nguyên bản của Radix DropdownMenuPrimitive.SubTrigger.
+ * @returns JSX Element SubTrigger.
+ */
 function DropdownMenuSubTrigger({
   className,
   inset,
@@ -238,6 +322,12 @@ function DropdownMenuSubTrigger({
   );
 }
 
+/**
+ * Khối nội dung chứa danh sách mục lựa chọn của Sub menu.
+ *
+ * @param props - Props nguyên bản của Radix DropdownMenuPrimitive.SubContent.
+ * @returns JSX Element SubContent.
+ */
 function DropdownMenuSubContent({
   className,
   ...props

@@ -1,15 +1,18 @@
 import { defineRouting } from 'next-intl/routing';
 import { createNavigation } from 'next-intl/navigation';
 
+/**
+ * Cấu hình định tuyến đa ngôn ngữ (i18n) cho ứng dụng Next.js.
+ * Bao gồm danh sách ngôn ngữ hỗ trợ ('en', 'vi') và ngôn ngữ mặc định ('en').
+ */
 export const routing = defineRouting({
-  // A list of all locales that are supported
   locales: ['en', 'vi'],
-
-  // Used when no locale matches
   defaultLocale: 'en',
 });
 
-// Lightweight wrappers around Next.js' navigation APIs
-// that will consider the routing configuration
+/**
+ * Các wrapper điều hướng i18n tích hợp cấu hình routing của next-intl.
+ * Bao gồm: Link, redirect, usePathname, useRouter, getPathname.
+ */
 export const { Link, redirect, usePathname, useRouter, getPathname } =
   createNavigation(routing);

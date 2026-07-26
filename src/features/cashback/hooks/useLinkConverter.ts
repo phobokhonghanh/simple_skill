@@ -2,35 +2,48 @@
 
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
+import {
+  SUPPORTED_DOMAINS,
+  TOAST_ORANGE_PRESET,
+  getFormattedSubId,
+} from '@/features/cashback/config';
 import { generateCashbackLink } from '@/features/cashback/api';
 import type { Product, HistoryItem, User } from '@/features/cashback/types';
-import { formatShopeeImageUrl } from '@/features/cashback/utils';
+import { formatImageUrl, safeLocalStorage } from '@/features/cashback/utils';
+import { useToast } from '@/components/providers/ToastProvider';
 
+/**
+ * Custom hook quản lý logic Chuyển đổi Link sản phẩm (Shopee, Lazada...) thành Link Hoàn tiền (Affiliate Link).
+ * Quản lý validate URL, lưu lịch sử tìm kiếm vào localStorage, copy link và thông báo kết quả.
+ *
+ * @param user - Thông tin người dùng hiện tại (null nếu chưa đăng nhập).
+ * @returns Đối tượng chứa các state link, product, history và các handler thao tác.
+ */
 export function useLinkConverter(user: User | null) {
   const t = useTranslations('cashback');
+  const tCommon = useTranslations('common');
+  const { warning: showWarningToast, custom: showCustomToast } = useToast();
   const [inputUrl, setInputUrl] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [validationError, setValidationError] = React.useState<string | null>(
     null,
   );
   const [apiError, setApiError] = React.useState<string | null>(null);
-  const [productInfo, setProductInfo] = React.useState<Product | null>(null);
+  const [product, setProduct] = React.useState<Product | null>(null);
   const [affiliateLink, setAffiliateLink] = React.useState<string | null>(null);
   const [copied, setCopied] = React.useState(false);
   const [currentUrl, setCurrentUrl] = React.useState<string | null>(null);
 
   const [history, setHistory] = React.useState<HistoryItem[]>(() => {
-    if (typeof window !== 'undefined') {
-      const storedHistory = localStorage.getItem('affiliate_history');
+    const storedHistory = safeLocalStorage.getItem('affiliate_history');
+    if (storedHistory) {
       try {
-        if (storedHistory) {
-          const parsed = JSON.parse(storedHistory);
-          if (Array.isArray(parsed)) {
-            return parsed as HistoryItem[];
-          }
+        const parsed = JSON.parse(storedHistory);
+        if (Array.isArray(parsed)) {
+          return parsed as HistoryItem[];
         }
       } catch (e) {
-        console.error('Failed to load history', e);
+        console.error('Không thể nạp lịch sử tạo link:', e);
       }
     }
     return [];
@@ -38,50 +51,37 @@ export function useLinkConverter(user: User | null) {
 
   const saveHistory = (newHistory: HistoryItem[]) => {
     setHistory(newHistory);
-    try {
-      localStorage.setItem('affiliate_history', JSON.stringify(newHistory));
-    } catch (e) {
-      console.error('Failed to save history', e);
-    }
+    safeLocalStorage.setItem('affiliate_history', JSON.stringify(newHistory));
   };
 
-  const validateLink = (url: string): boolean => {
-    if (!url.trim()) {
-      setValidationError(null);
-      return false;
-    }
+  const validateLink = React.useCallback(
+    (url: string): boolean => {
+      const trimmed = url.trim();
+      if (!trimmed) {
+        setValidationError(null);
+        return false;
+      }
 
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-      setValidationError(t('invalid_link'));
-      return false;
-    }
+      if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://')) {
+        setValidationError(t('input.invalid_link'));
+        return false;
+      }
 
-    try {
-      const hostname = new URL(url).hostname;
-      const isValid =
-        hostname.includes('shopee.vn') ||
-        hostname.includes('shp.ee') ||
-        hostname.includes('shopee.co.id') ||
-        hostname.includes('shopee.sg') ||
-        hostname.includes('shopee.tw');
+      const lowerUrl = trimmed.toLowerCase();
+      const isValid = SUPPORTED_DOMAINS.some((domain) =>
+        lowerUrl.includes(domain),
+      );
 
       if (!isValid) {
-        setValidationError(t('invalid_link'));
+        setValidationError(t('input.invalid_link'));
         return false;
       }
 
       setValidationError(null);
       return true;
-    } catch {
-      const isValid = url.includes('shopee.vn') || url.includes('shp.ee');
-      if (!isValid) {
-        setValidationError(t('invalid_link'));
-        return false;
-      }
-      setValidationError(null);
-      return true;
-    }
-  };
+    },
+    [t],
+  );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -93,85 +93,84 @@ export function useLinkConverter(user: User | null) {
     }
   };
 
-  const handleGenerate = async (urlToFetch: string) => {
-    if (!validateLink(urlToFetch)) return;
+  const handleConversionError = React.useCallback(() => {
+    setApiError(tCommon('errors.not_found'));
+    showWarningToast(tCommon('errors.unknown'));
+  }, [tCommon, showWarningToast]);
 
-    setLoading(true);
-    setApiError(null);
-    setProductInfo(null);
-    setAffiliateLink(null);
-    setCopied(false);
+  const handleGenerate = React.useCallback(
+    async (urlToFetch: string) => {
+      if (!validateLink(urlToFetch)) return;
 
-    const subIds = user ? [`ndinhnguyen-${user.id}`] : ['ndinhnguyen'];
+      setLoading(true);
+      setApiError(null);
+      setProduct(null);
+      setAffiliateLink(null);
+      setCopied(false);
 
-    try {
-      const resData = await generateCashbackLink({
-        link: urlToFetch,
-        subIds: subIds,
-      });
+      const subIds = getFormattedSubId(user?.id);
 
-      if (resData && resData.ok && resData.data) {
-        const affLink = resData.data.affiliate_link;
-        const product = resData.data.product;
+      try {
+        const resData = await generateCashbackLink({
+          link: urlToFetch,
+          subIds: subIds,
+        });
 
-        setAffiliateLink(affLink);
+        if (resData && resData.ok && resData.data) {
+          const affLink = resData.data.affiliate_link;
+          const productData = resData.data.product;
 
-        if (product) {
-          const formattedImageUrl = formatShopeeImageUrl(product.image);
-          const updatedProduct: Product = {
-            ...product,
-            image: formattedImageUrl,
-          };
+          setAffiliateLink(affLink);
 
-          setProductInfo(updatedProduct);
-          setCurrentUrl(urlToFetch);
-          setInputUrl('');
+          if (productData) {
+            productData.image = formatImageUrl(productData.image, 'shopee');
+            setProduct(productData);
+            setCurrentUrl(urlToFetch);
+            setInputUrl('');
 
-          const newItem: HistoryItem = {
-            url: urlToFetch.trim(),
-            affiliateLink: affLink,
-            timestamp: Date.now(),
-            product: {
-              itemId: product.itemId || null,
-              name: product.name,
-              image: formattedImageUrl,
-              price: product.price,
-              commission: product.commission || 0,
-              rating: product.rating,
-              sales: product.sales,
-              shop: product.shop,
-              lastUpdate: product.lastUpdate || null,
-            },
-          };
+            const newItem: HistoryItem = {
+              url: urlToFetch.trim(),
+              affiliateLink: affLink,
+              timestamp: Date.now(),
+              product: productData,
+            };
 
-          const updatedHistory = [
-            newItem,
-            ...history.filter((item) => {
-              if (product.itemId && item?.product?.itemId === product.itemId) {
-                return false;
-              }
-              return item.url !== urlToFetch.trim();
-            }),
-          ].slice(0, 5);
+            const updatedHistory = [
+              newItem,
+              ...history.filter((item) => {
+                if (productData.id && item?.product?.id === productData.id) {
+                  return false;
+                }
+                return item.url !== urlToFetch.trim();
+              }),
+            ].slice(0, 5);
 
-          saveHistory(updatedHistory);
+            saveHistory(updatedHistory);
+          } else {
+            handleConversionError();
+          }
         } else {
-          setApiError(t('not_found'));
+          handleConversionError();
         }
-      } else {
-        setApiError(t('not_found'));
+      } catch (err) {
+        console.error(err);
+        handleConversionError();
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error(err);
-      setApiError(t('not_found'));
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [user?.id, history, validateLink, handleConversionError],
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleGenerate(inputUrl);
+  const handleSubmit = (targetUrlOrEvent?: string | React.FormEvent) => {
+    if (typeof targetUrlOrEvent === 'string') {
+      void handleGenerate(targetUrlOrEvent);
+    } else if (targetUrlOrEvent && 'preventDefault' in targetUrlOrEvent) {
+      targetUrlOrEvent.preventDefault();
+      void handleGenerate(inputUrl);
+    } else {
+      void handleGenerate(inputUrl);
+    }
   };
 
   const handleCopy = async () => {
@@ -180,8 +179,9 @@ export function useLinkConverter(user: User | null) {
       await navigator.clipboard.writeText(affiliateLink);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      showCustomToast(tCommon('messages.copied_success'), TOAST_ORANGE_PRESET);
     } catch (e) {
-      console.error('Failed to copy', e);
+      console.error('Sao chép thất bại:', e);
     }
   };
 
@@ -193,7 +193,7 @@ export function useLinkConverter(user: User | null) {
     setInputUrl('');
     setValidationError(null);
     setApiError(null);
-    setProductInfo(item.product);
+    setProduct(item.product);
     setAffiliateLink(item.affiliateLink);
     setCurrentUrl(item.url);
   };
@@ -211,7 +211,7 @@ export function useLinkConverter(user: User | null) {
         validateLink(text);
       }
     } catch (e) {
-      console.warn('Failed to read clipboard', e);
+      console.warn('Không thể đọc dữ liệu clipboard:', e);
     }
   };
 
@@ -220,7 +220,7 @@ export function useLinkConverter(user: User | null) {
     loading,
     validationError,
     apiError,
-    productInfo,
+    product,
     affiliateLink,
     copied,
     history,

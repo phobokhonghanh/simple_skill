@@ -2,16 +2,22 @@
 
 import * as React from 'react';
 
+/** Interface đại diện cho một đồng xu bay hiệu ứng (Burst Coin) */
 interface BurstCoin {
   id: string;
   tx: number;
   ty: number;
 }
 
+/**
+ * Custom hook tạo hiệu ứng đồng xu rơi / bắn tung tóe (Coin burst animation) mỗi khi số dư cashback tăng lên.
+ *
+ * @param uiTotalCashback - Tổng số tiền cashback hiển thị hiện tại.
+ * @returns Mảng các đồng xu hiệu ứng burstCoins.
+ */
 export function useCoinAnimation(uiTotalCashback: number) {
   const [burstCoins, setBurstCoins] = React.useState<BurstCoin[]>([]);
 
-  // Spawn coin burst when total cashback increases
   const prevTotalRef = React.useRef(uiTotalCashback);
   React.useEffect(() => {
     if (uiTotalCashback > prevTotalRef.current) {

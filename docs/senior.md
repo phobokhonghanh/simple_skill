@@ -101,31 +101,6 @@ Thiết kế phải hỗ trợ:
 
 Ưu tiên hiệu năng.
 
-Animation phải nhẹ.
-
-Sử dụng GPU Acceleration.
-
-Ưu tiên animate bằng:
-
-- transform
-- opacity
-
-Không animate:
-
-- width
-- height
-- top
-- left
-- margin
-
-Hỗ trợ:
-
-- prefers-reduced-motion
-
-Không chạy animation vô hạn nếu không thực sự cần thiết.
-
-Đối với danh sách lớn cần cân nhắc Virtualization.
-
 ---
 
 # Responsive
@@ -165,41 +140,9 @@ Màu chủ đạo:
 
 ---
 
-# Motion Design
-
-Sử dụng Framer Motion khi thực sự cần.
-
-Animation nên có:
-
-- Fade
-- Slide
-- Scale
-- Number Count Up
-- Coin Animation
-
-Thời gian animation:
-
-150ms - 300ms
-
-Không tạo animation quá dài hoặc gây mất tập trung.
-
----
-
 # Chủ đề Cashback
 
 Thiết kế theo chủ đề hoàn tiền.
-
-Sử dụng hình ảnh đồng xu một cách tinh tế.
-
-Ví dụ:
-
-- Đồng xu phát sáng nhẹ
-- Đồng xu xoay khi hover
-- Đồng xu rơi khi nhận Cashback
-- Số tiền tăng dần bằng hiệu ứng Count Up
-- Hiệu ứng đồng xu xuất hiện khi Cashback thành công
-
-Không lạm dụng animation.
 
 Ưu tiên cảm giác chuyên nghiệp hơn là vui nhộn.
 
@@ -259,8 +202,6 @@ Nếu API chưa có:
 Hiển thị:
 
 - Coming Soon
-- Placeholder
-- Skeleton
 
 Không để giao diện trống.
 

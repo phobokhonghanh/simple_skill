@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 
+/** Danh sách các liên kết mạng xã hội và email liên hệ ở Footer */
 const SOCIAL_LINKS = [
   {
     name: 'GitHub',
@@ -23,20 +24,28 @@ const SOCIAL_LINKS = [
   },
 ];
 
+/** Năm bản quyền hiển thị */
 const COPYRIGHT_YEAR = 2026;
 
+/**
+ * Component Footer chân trang dùng chung cho toàn bộ website.
+ * Chứa danh sách các điều hướng trang chính (bookmarks, exp, cashback), các nút liên kết mạng xã hội và thông tin bản quyền.
+ *
+ * @returns JSX Element chân trang Footer.
+ */
 export function Footer() {
   const t = useTranslations('common');
 
   return (
     <footer className="w-full py-6 mt-auto border-t bg-background/50 backdrop-blur-sm">
       <div className="container mx-auto flex flex-col items-center justify-center gap-4 px-4">
+        {/* Khối điều hướng các liên kết trang chính */}
         <nav
-          aria-label={t('footer_resources')}
+          aria-label={t('footer.resources')}
           className="flex flex-col items-center gap-2"
         >
           <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            {t('footer_resources')}
+            {t('footer.resources')}
           </h2>
           <div className="flex flex-wrap items-center justify-center gap-2">
             <Button variant="ghost" size="sm" asChild>
@@ -50,6 +59,8 @@ export function Footer() {
             </Button>
           </div>
         </nav>
+
+        {/* Khối icon liên kết mạng xã hội */}
         <div className="flex items-center gap-2">
           {SOCIAL_LINKS.map((link) => (
             <Button
@@ -71,6 +82,8 @@ export function Footer() {
             </Button>
           ))}
         </div>
+
+        {/* Dòng bản quyền */}
         <p className="text-sm text-muted-foreground">
           © {COPYRIGHT_YEAR} Nguyen Dinh Nguyen
         </p>
