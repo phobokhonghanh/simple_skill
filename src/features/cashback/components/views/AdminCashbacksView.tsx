@@ -3,64 +3,45 @@
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
 import { AlertCircle, RotateCcw } from 'lucide-react';
-import type { CashbackRecord } from '@/features/cashback/types';
 import { DEFAULT_PAGE_SIZE } from '@/features/cashback/config';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ConversionsTable } from '@/features/cashback/components/tables/ConversionsTable';
 import { FilterBar } from '@/features/cashback/components/input/FilterBar';
+import { useAdminCashbacks } from '@/features/cashback/hooks';
 
-interface AdminCashbacksViewProps {
-  adminCashbacks: CashbackRecord[];
-  loadingAdminCashbacks: boolean;
-  adminCashbacksError: string | null;
-  adminCashbacksPage: number;
-  setAdminCashbacksPage: React.Dispatch<React.SetStateAction<number>>;
-  adminCashbacksTotal: number;
-  adminCashbacksTotalPages: number;
-  searchUserId: string;
-  setSearchUserId: (s: string) => void;
-  fetchAdminCashbacks: () => void;
-}
-
-export function AdminCashbacksView({
-  adminCashbacks,
-  loadingAdminCashbacks,
-  adminCashbacksError,
-  adminCashbacksPage,
-  setAdminCashbacksPage,
-  adminCashbacksTotal,
-  adminCashbacksTotalPages,
-  searchUserId,
-  setSearchUserId,
-  fetchAdminCashbacks,
-}: AdminCashbacksViewProps) {
+/**
+ * Component hiển thị danh sách Cashback hoàn tiền của tất cả người dùng dành cho Quản trị viên (Admin).
+ * Tự đóng gói logic nghiệp vụ với `useAdminCashbacks()` (0 Props).
+ */
+export function AdminCashbacksView() {
   const tCommon = useTranslations('common');
+  const state = useAdminCashbacks();
 
   const handleSearch = () => {
-    setAdminCashbacksPage(1);
-    void fetchAdminCashbacks();
+    state.setPage(1);
+    void state.fetchCashbacks();
   };
 
   return (
     <Card className="aff-card p-4 sm:p-5 rounded-2xl max-w-full overflow-hidden border-0 bg-transparent py-0 gap-0 shadow-none">
       {/* Search FilterBar */}
       <FilterBar
-        userId={searchUserId}
-        onUserIdChange={setSearchUserId}
+        userId={state.searchUserId}
+        onUserIdChange={state.setSearchUserId}
         onSearch={handleSearch}
-        loading={loadingAdminCashbacks}
+        loading={state.loading}
         className="mb-6"
       />
 
-      {adminCashbacksError ? (
+      {state.error ? (
         <div className="py-12 px-4 text-center border border-red-500/20 bg-red-500/5 rounded-2xl flex flex-col items-center justify-center space-y-3">
           <AlertCircle className="w-8 h-8 text-red-500" />
           <p className="text-xs sm:text-sm font-semibold text-red-600 dark:text-red-400">
-            {adminCashbacksError}
+            {state.error}
           </p>
           <Button
-            onClick={() => void fetchAdminCashbacks()}
+            onClick={() => void state.fetchCashbacks()}
             variant="outline"
             className="aff-btn-secondary text-xs h-8 px-3 rounded-xl border-red-500/30 text-red-600 dark:text-red-400 hover:bg-red-500/10 cursor-pointer flex items-center gap-1.5"
           >
@@ -70,16 +51,16 @@ export function AdminCashbacksView({
         </div>
       ) : (
         <ConversionsTable
-          records={adminCashbacks}
+          records={state.cashbacks}
           role="admin"
-          loading={loadingAdminCashbacks}
+          loading={state.loading}
           pagination={{
-            page: adminCashbacksPage,
-            totalPages: adminCashbacksTotalPages,
-            total: adminCashbacksTotal,
+            page: state.page,
+            totalPages: state.totalPages,
+            total: state.total,
             pageSize: DEFAULT_PAGE_SIZE,
           }}
-          onPageChange={setAdminCashbacksPage}
+          onPageChange={state.setPage}
         />
       )}
     </Card>

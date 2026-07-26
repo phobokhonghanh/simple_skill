@@ -11,8 +11,6 @@ import type {
   ConversionRecord,
   CashbackRecord,
   AdminSubTab,
-  UserRole,
-  CashbackTab,
 } from '@/features/cashback/types';
 import {
   DEFAULT_PAGE_SIZE,
@@ -24,21 +22,18 @@ import {
   getStartOfCurrentMonthStr,
 } from '@/features/cashback/utils';
 import { useToast } from '@/components/providers/ToastProvider';
+import { useAuth } from '@/components/providers/AuthProvider';
 
 /**
  * Custom hook quản lý toàn bộ các tính năng dành cho Quản trị viên (Admin Portal).
+ * Tự động lấy token và quyền hạn từ AuthContext.
  * Bao gồm đồng bộ thủ công đơn hàng từ Shopee API, tra cứu danh sách đơn chuyển đổi đối soát và quản lý danh sách Cashback của người dùng.
  *
- * @param token - Token xác thực Admin.
- * @param userRole - Quyền hạn tài khoản hiện tại ('admin' hoặc 'user').
- * @param activeTab - Tab trang Cashback đang hoạt động.
  * @returns Đối tượng chứa toàn bộ state và các hàm handler thao tác của Admin Portal.
  */
-export function useAdminPortal(
-  token: string | null,
-  userRole: UserRole | undefined,
-  activeTab: CashbackTab,
-) {
+export function useAdminPortal() {
+  const { token, user } = useAuth();
+  const userRole = user?.role;
   const t = useTranslations('cashback');
   const tCommon = useTranslations('common');
   const { custom: showCustomToast, error: showErrorToast } = useToast();
@@ -166,7 +161,7 @@ export function useAdminPortal(
     let isMounted = true;
     let timer: NodeJS.Timeout | null = null;
 
-    if (activeTab === 'admin' && token && userRole === 'admin') {
+    if (token && userRole === 'admin') {
       if (adminSubTab === 'cashbacks' && !adminCashbacksLoaded) {
         timer = setTimeout(() => {
           if (isMounted) {
@@ -180,7 +175,6 @@ export function useAdminPortal(
       if (timer) clearTimeout(timer);
     };
   }, [
-    activeTab,
     token,
     userRole,
     adminSubTab,

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { useCashbackAuth, useAdminPortal } from '@/features/cashback/hooks';
+import { useCashbackAuth } from '@/features/cashback/hooks';
 
 import { Header } from './components/layout/Header';
 import { ConverterTab } from './components/tabs/Converter';
@@ -27,20 +27,15 @@ export function CashbackDashboard() {
     }, []),
   );
 
-  const admin = useAdminPortal(auth.token, auth.user?.role, activeTab);
-
   /**
-   * Đăng xuất người dùng khỏi hệ thống và xóa toàn bộ dữ liệu tạm thời
-   * của phân hệ quản trị viên.
+   * Đăng xuất người dùng khỏi hệ thống.
    */
   const handleLogout = React.useCallback(async () => {
     React.startTransition(() => {
       setActiveTab('converter');
-      admin.setAdminConversions([]);
-      admin.setAdminCashbacks([]);
     });
     await auth.handleLogout();
-  }, [auth, admin]);
+  }, [auth]);
 
   return (
     <div className="affiliate-page-container relative overflow-x-hidden transition-colors duration-300 min-h-screen">
@@ -69,9 +64,9 @@ export function CashbackDashboard() {
         {/* Tab 3: Rút tiền / Thanh toán */}
         {activeTab === 'payment' && auth.user && <PaymentTab />}
 
-        {/* Tab 4: Bảng điều khiển Quản trị viên */}
+        {/* Tab 4: Bảng điều khiển Quản trị viên (Tự đóng gói 0 Props) */}
         {activeTab === 'admin' && auth.user && auth.user.role === 'admin' && (
-          <AdminTab token={auth.token} adminState={admin} />
+          <AdminTab />
         )}
       </div>
     </div>

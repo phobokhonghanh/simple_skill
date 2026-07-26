@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
 import { Loader2, ShieldCheck, RotateCw } from 'lucide-react';
-import type { AdminPortalState } from '@/features/cashback/hooks/useAdminPortal';
+import type { AdminSubTab } from '@/features/cashback/types';
 import { AdminConversionsView } from '@/features/cashback/components/views/AdminConversionsView';
 import { AdminCashbacksView } from '@/features/cashback/components/views/AdminCashbacksView';
 import { Button } from '@/components/ui/button';
@@ -12,23 +12,31 @@ import { DateInput } from '@/features/cashback/components/input/DateInput';
 import { ClientWrapper } from '@/components/ui/ClientWrapper';
 import { TabButton } from '@/features/cashback/components/buttons/TabButton';
 import { TabIndicator } from '@/features/cashback/components/TabIndicator';
-import { useTabIndicator } from '@/features/cashback/hooks/useTabIndicator';
-
-interface AdminTabProps {
-  token: string | null;
-  adminState: AdminPortalState;
-}
+import { useTabIndicator, useAdminSync } from '@/features/cashback/hooks';
 
 /**
  * Component hiển thị giao diện cổng quản trị viên (Admin Portal) của module hoàn tiền.
- * Hỗ trợ đồng bộ hóa dữ liệu thủ công, đối soát các đơn hàng từ Shopee và quản lý thông tin hoàn tiền người dùng.
+ * Kết hợp mô hình Lazy-Mounted Keep-Alive:
+ * - Lazy Fetch: Chỉ khởi tạo và gọi API của sub-tab khi người dùng bấm mở lần đầu tiên.
+ * - Cache RAM: Sau khi đã mở, duy trì component trong DOM (CSS hidden) để phản hồi 0ms và giữ state.
+ * - Clean Architecture: 0 Props truyền từ ngoài vào.
  */
-export function AdminTab({ adminState }: AdminTabProps) {
+export function AdminTab() {
   const t = useTranslations('cashback');
+  const [adminSubTab, setAdminSubTab] =
+    React.useState<AdminSubTab>('conversions');
+
+  // Đánh dấu các subtab đã từng được người dùng truy cập
+  const [visitedTabs, setVisitedTabs] = React.useState<Record<string, boolean>>({
+    conversions: true, // Subtab mặc định nạp lần đầu
+  });
+
+  const handleSubTabChange = (tab: AdminSubTab) => {
+    setAdminSubTab(tab);
+    setVisitedTabs((prev) => (prev[tab] ? prev : { ...prev, [tab]: true }));
+  };
 
   const {
-    adminSubTab,
-    setAdminSubTab,
     syncStart,
     setSyncStart,
     syncEnd,
@@ -37,48 +45,21 @@ export function AdminTab({ adminState }: AdminTabProps) {
     setSyncSubId,
     syncLoading,
     handleAdminSync,
-    adminConversions,
-    loadingAdminConversions,
-    adminError,
-    adminPage,
-    setAdminPage,
-    adminTotal,
-    adminTotalPages,
-    filterSubId,
-    setFilterSubId,
-    filterStart,
-    setFilterStart,
-    filterEnd,
-    setFilterEnd,
-    fetchAdminConversions,
-    adminCashbacks,
-    loadingAdminCashbacks,
-    adminCashbacksError,
-    adminCashbacksPage,
-    setAdminCashbacksPage,
-    adminCashbacksTotal,
-    adminCashbacksTotalPages,
-    searchUserId,
-    setSearchUserId,
-    fetchAdminCashbacks,
-  } = adminState;
+  } = useAdminSync();
 
   const { tabsRef, indicatorStyle } = useTabIndicator(adminSubTab);
 
   return (
     <ClientWrapper>
       <div className="space-y-6">
-        {/* Subtab selection */}
+        {/* Thanh chuyển Subtab (Conversions / Cashbacks) */}
         <div className="relative inline-flex border-b border-[var(--aff-border)] mb-6 overflow-x-auto gap-2 pb-0 scrollbar-none max-w-full">
           <TabButton
             ref={(el) => {
               tabsRef.current['conversions'] = el;
             }}
             isActive={adminSubTab === 'conversions'}
-            onClick={() => {
-              setAdminSubTab('conversions');
-              setAdminPage(1);
-            }}
+            onClick={() => handleSubTabChange('conversions')}
             label={t('tabs.admin_conversions')}
           />
           <TabButton
@@ -86,19 +67,16 @@ export function AdminTab({ adminState }: AdminTabProps) {
               tabsRef.current['cashbacks'] = el;
             }}
             isActive={adminSubTab === 'cashbacks'}
-            onClick={() => {
-              setAdminSubTab('cashbacks');
-              setAdminCashbacksPage(1);
-            }}
+            onClick={() => handleSubTabChange('cashbacks')}
             label={t('tabs.admin_cashbacks')}
           />
 
           <TabIndicator {...indicatorStyle} />
         </div>
 
-        {adminSubTab === 'conversions' && (
-          <div className="space-y-6">
-            {/* Sync trigger cards */}
+        {/* Subtab 1: Form Đồng bộ Shopee & Bảng Đơn Chuyển Đổi Đối Soát */}
+        {visitedTabs.conversions && (
+          <div className={adminSubTab === 'conversions' ? 'space-y-6' : 'hidden'}>
             <Card className="aff-card p-5 sm:p-6 rounded-2xl border-0 bg-transparent py-0 gap-0 shadow-none">
               <h3 className="font-extrabold text-base sm:text-lg text-[var(--aff-heading)] flex items-center gap-2 border-b border-[var(--aff-border)] pb-3 mb-5">
                 <ShieldCheck className="w-5 h-5 text-red-500" />
@@ -164,39 +142,16 @@ export function AdminTab({ adminState }: AdminTabProps) {
               </form>
             </Card>
 
-            {/* Render sub-view */}
-            <AdminConversionsView
-              adminConversions={adminConversions}
-              loadingAdminConversions={loadingAdminConversions}
-              adminError={adminError}
-              adminPage={adminPage}
-              setAdminPage={setAdminPage}
-              adminTotal={adminTotal}
-              adminTotalPages={adminTotalPages}
-              filterSubId={filterSubId}
-              setFilterSubId={setFilterSubId}
-              filterStart={filterStart}
-              setFilterStart={setFilterStart}
-              filterEnd={filterEnd}
-              setFilterEnd={setFilterEnd}
-              fetchAdminConversions={fetchAdminConversions}
-            />
+            {/* View Báo cáo đơn đối soát (0 Props, duy trì state & cache) */}
+            <AdminConversionsView />
           </div>
         )}
 
-        {adminSubTab === 'cashbacks' && (
-          <AdminCashbacksView
-            adminCashbacks={adminCashbacks}
-            loadingAdminCashbacks={loadingAdminCashbacks}
-            adminCashbacksError={adminCashbacksError}
-            adminCashbacksPage={adminCashbacksPage}
-            setAdminCashbacksPage={setAdminCashbacksPage}
-            adminCashbacksTotal={adminCashbacksTotal}
-            adminCashbacksTotalPages={adminCashbacksTotalPages}
-            searchUserId={searchUserId}
-            setSearchUserId={setSearchUserId}
-            fetchAdminCashbacks={fetchAdminCashbacks}
-          />
+        {/* Subtab 2: Bảng Quản lý Cashback Người Dùng (Lazy-Fetch khi bấm mở lần đầu, Giữ Cache RAM khi ẩn) */}
+        {visitedTabs.cashbacks && (
+          <div className={adminSubTab === 'cashbacks' ? 'block' : 'hidden'}>
+            <AdminCashbacksView />
+          </div>
         )}
       </div>
     </ClientWrapper>
