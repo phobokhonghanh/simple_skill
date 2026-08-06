@@ -1,5 +1,7 @@
 'use client';
 
+import * as React from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -13,11 +15,7 @@ import {
   DEFAULT_CATEGORY_COLOR,
   getCategoryColorPreset,
 } from '@/features/bookmarks/colors';
-import type { CategoryTreeNode } from '@/features/bookmarks/types';
-import type {
-  BookmarkDashboardLabels,
-  PanelMode,
-} from '@/features/bookmarks/types';
+import type { CategoryTreeNode, PanelMode } from '@/features/bookmarks/types';
 
 /** Props cho Component BookmarkForms */
 interface BookmarkFormsProps {
@@ -27,8 +25,6 @@ interface BookmarkFormsProps {
   selectedCategoryId: string;
   /** Cây danh mục dùng cho select dropdown */
   categoryTree: CategoryTreeNode[];
-  /** Nhãn ngôn ngữ i18n */
-  labels: BookmarkDashboardLabels;
   /** Trạng thái đang lưu/gửi dữ liệu */
   isPending: boolean;
   /** Callback hủy/đóng Form */
@@ -59,16 +55,14 @@ function CategoryOption({
 }
 
 /** Sub-component bộ chọn Màu đại diện cho Danh mục */
-function CategoryColorPicker({
-  defaultColor,
-  labels,
-}: {
-  defaultColor: string;
-  labels: BookmarkDashboardLabels;
-}) {
+function CategoryColorPicker({ defaultColor }: { defaultColor: string }) {
+  const tBookmarks = useTranslations('bookmarks');
+  const tCommon = useTranslations('common');
   return (
     <fieldset className="grid gap-2 md:col-span-2">
-      <legend className="text-sm font-medium">{labels.categoryColor}</legend>
+      <legend className="text-sm font-medium">
+        {tBookmarks('forms.category_color') || 'Category Color'}
+      </legend>
       <div className="flex flex-wrap gap-2">
         {CATEGORY_COLOR_PRESETS.map((preset) => {
           const isDefault = preset.id === defaultColor;
@@ -88,7 +82,7 @@ function CategoryColorPicker({
                 className="size-3 rounded-full"
                 style={{ backgroundColor: preset.foreground }}
               />
-              {labels.categoryColors[preset.id]}
+              {tCommon(preset.labelKey) || preset.id}
             </label>
           );
         })}
@@ -108,20 +102,24 @@ export function BookmarkForms({
   panelMode,
   selectedCategoryId,
   categoryTree,
-  labels,
   isPending,
   onCancel,
   onSubmit,
 }: BookmarkFormsProps) {
+  const tBookmarks = useTranslations('bookmarks');
+  const tCommon = useTranslations('common');
+
   if (panelMode.type === 'bookmark') {
     return (
       <Card className="bg-muted/25 border rounded-lg p-0 gap-0">
         <CardHeader className="px-4 py-3 border-b">
           <CardTitle className="text-sm font-semibold">
-            {labels.editingBookmark}
+            {panelMode.bookmark
+              ? tBookmarks('forms.edit_bookmark') || 'Edit Bookmark'
+              : tBookmarks('forms.add_bookmark') || 'Add New Bookmark'}
           </CardTitle>
           <CardDescription className="text-xs text-muted-foreground mt-0">
-            {labels.descriptionOptional}
+            {tBookmarks('forms.description_optional') || 'Description (optional)'}
           </CardDescription>
         </CardHeader>
         <CardContent className="p-4">
@@ -136,32 +134,35 @@ export function BookmarkForms({
               <input type="hidden" name="id" value={panelMode.bookmark.id} />
             )}
             <label className="grid gap-1 text-sm font-medium">
-              {labels.bookmarkTitle}
+              {tBookmarks('forms.title') || 'Title'}
               <input
                 name="title"
                 defaultValue={panelMode.bookmark?.title}
+                required
                 className="h-10 rounded-md border bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
             </label>
             <label className="grid gap-1 text-sm font-medium">
-              {labels.bookmarkUrl}
+              {tBookmarks('forms.url') || 'URL'}
               <input
                 name="url"
+                type="url"
                 defaultValue={panelMode.bookmark?.url}
+                required
                 className="h-10 rounded-md border bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
             </label>
             <label className="grid gap-1 text-sm font-medium md:col-span-2">
-              {labels.bookmarkDescription}
+              {tBookmarks('forms.description') || 'Description'}
               <textarea
                 name="description"
                 defaultValue={panelMode.bookmark?.description ?? ''}
-                placeholder={labels.descriptionOptional}
+                placeholder={tBookmarks('forms.description_optional') || 'Optional description'}
                 className="min-h-24 rounded-md border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
             </label>
             <label className="grid gap-1 text-sm font-medium">
-              {labels.bookmarkCategory}
+              {tBookmarks('forms.category') || 'Category'}
               <select
                 name="categoryId"
                 defaultValue={
@@ -178,10 +179,10 @@ export function BookmarkForms({
             </label>
             <div className="flex items-end gap-2">
               <Button type="submit" disabled={isPending} className="shadow-sm">
-                {labels.save}
+                {tCommon('buttons.save') || 'Save'}
               </Button>
               <Button type="button" variant="outline" onClick={onCancel}>
-                {labels.cancel}
+                {tCommon('buttons.cancel') || 'Cancel'}
               </Button>
             </div>
           </form>
@@ -198,10 +199,12 @@ export function BookmarkForms({
     <Card className="bg-muted/25 border rounded-lg p-0 gap-0">
       <CardHeader className="px-4 py-3 border-b">
         <CardTitle className="text-sm font-semibold">
-          {labels.editingCategory}
+          {panelMode.category
+            ? tBookmarks('forms.edit_category') || 'Edit Category'
+            : tBookmarks('forms.add_category') || 'Add New Category'}
         </CardTitle>
         <CardDescription className="text-xs text-muted-foreground mt-0">
-          {labels.parentCategory}
+          {tBookmarks('forms.parent_category') || 'Parent Category (Optional)'}
         </CardDescription>
       </CardHeader>
       <CardContent className="p-4">
@@ -216,33 +219,34 @@ export function BookmarkForms({
             <input type="hidden" name="id" value={panelMode.category.id} />
           )}
           <label className="grid gap-1 text-sm font-medium">
-            {labels.categoryName}
+            {tBookmarks('forms.category_name') || 'Category Name'}
             <input
               name="name"
               defaultValue={panelMode.category?.name}
+              required
               className="h-10 rounded-md border bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
           </label>
           <label className="grid gap-1 text-sm font-medium">
-            {labels.parentCategory}
+            {tBookmarks('forms.parent_category') || 'Parent Category'}
             <select
               name="parentId"
               defaultValue={panelMode.category?.parentId ?? ''}
               className="h-10 rounded-md border bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <option value="">{labels.noParent}</option>
+              <option value="">{tBookmarks('forms.no_parent') || '-- Root --'}</option>
               {categoryTree.map((category) => (
                 <CategoryOption key={category.id} category={category} />
               ))}
             </select>
           </label>
-          <CategoryColorPicker defaultColor={defaultColor} labels={labels} />
+          <CategoryColorPicker defaultColor={defaultColor} />
           <div className="flex items-end gap-2 md:col-span-2">
             <Button type="submit" disabled={isPending} className="shadow-sm">
-              {labels.save}
+              {tCommon('buttons.save') || 'Save'}
             </Button>
             <Button type="button" variant="outline" onClick={onCancel}>
-              {labels.cancel}
+              {tCommon('buttons.cancel') || 'Cancel'}
             </Button>
           </div>
         </form>

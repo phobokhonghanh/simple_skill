@@ -75,6 +75,7 @@
     },
     "messages": {
       "save_success": "Saved successfully.",
+      "delete_confirm_title": "Confirm Delete",
       "delete_confirm": "Are you sure you want to delete this item?",
       "copied_success": "Copied to clipboard."
     },
@@ -222,7 +223,8 @@
       "category_in_use": "This category still has bookmarks.",
       "category_has_children": "Delete child categories before deleting this category.",
       "category_not_found": "Category was not found.",
-      "bookmark_not_found": "Bookmark was not found."
+      "bookmark_not_found": "Bookmark was not found.",
+      "category_delete_confirm": "Are you sure you want to delete this category? All child category relationships will be affected."
     }
   },
   "cashback": {
@@ -264,14 +266,15 @@
       "subtitle": "Unlimited cashback when shopping on Shopee"
     },
     "input": {
-      "placeholder": "Enter product URL",
+      "placeholder": "Enter product URL from Shopee, Lazada, Tiki...",
       "invalid_link": "Invalid URL. Please enter a URL from Shopee."
     },
     "buttons": {
       "paste": "Paste",
       "buy": "Apply Voucher",
-      "hide_details": "Hide details",
-      "show_details": "Show details ({count} products)",
+      "copy_link": "Copy link",
+      "hide_details": "Hide",
+      "show_details": "Details ({count})",
       "manual_sync": "Manual Sync"
     },
     "labels": {
@@ -332,7 +335,9 @@
     "history": {
       "title": "Search History",
       "empty": "No items yet.",
-      "clear": "Clear History"
+      "clear": "Clear History",
+      "show_more": "Show more history",
+      "show_less": "Show less history"
     },
     "orders": {
       "empty_order": "No cashback orders yet. Try converting a link and making a purchase!"
@@ -349,6 +354,9 @@
       "admin_conversions": "Conversions",
       "payment": "Payment",
       "admin_cashbacks": "Cashbacks",
+      "admin_payments": "Payment Management",
+      "bank_profile": "Bank Profile",
+      "payment_history": "Payment History",
       "orders_details": "Order Details"
     },
     "sync": {
@@ -368,8 +376,83 @@
       "guest_mode": "You are currently searching as guest. Log in to earn cashback automatically."
     },
     "payment": {
-      "coming_soon": "Payment feature is under development. Please check back later!",
-      "badge": "Coming Soon"
+      "title": "Payouts & Cashbacks",
+      "subtitle": "Manage bank payout accounts and cashback payout history",
+      "accumulated_balance": "Pending Accumulated Balance",
+      "completed_payments": "Paid",
+      "pending_payments": "Pending Payout",
+      "threshold_notice": "Automatic payout threshold is 50,000 VND",
+      "payout_schedule_notice": "Payouts will be aggregated on friday when pending balance reaches minimum <orange>50.000 vnd</orange>.",
+      "missing_bank_warning": "🎉 You have reached the payout threshold! Please update your bank details to receive payments.",
+      "configure_bank_now": "Update Bank Profile Now",
+      "bank_profile_title": "Bank Account Configuration",
+      "bank_profile_desc": "Provide correct account number to receive automatic payouts",
+      "select_bank": "Select Bank",
+      "search_bank_placeholder": "Search bank code or name...",
+      "account_number": "Account Number",
+      "account_number_placeholder": "Enter account number...",
+      "account_name": "Account Name",
+      "account_name_placeholder": "NAME IN CAPITAL WITHOUT ACCENTS (e.g. NGUYEN VAN A)",
+      "save_bank_info": "Save Bank Info",
+      "saving": "Saving...",
+      "bank_info_saved": "Bank information updated successfully!",
+      "err_select_bank": "Please select a bank",
+      "err_account_number": "Please enter account number",
+      "err_account_number_format": "Account number must contain only letters and numbers",
+      "err_account_name": "Please enter account name",
+      "err_update_failed": "Update failed. Please try again.",
+      "no_bank_found": "No banks found",
+      "no_bank_configured": "User has not configured bank account",
+      "warning_title": "WARNING",
+      "payment_history_title": "Payment Payout History",
+      "history_subtitle": "Track all payout batches from the system",
+      "empty_payments": "No payout records found",
+      "payment_id": "Payment ID",
+      "amount": "Amount",
+      "cashback_count": "Attached Orders",
+      "created_at": "Created At",
+      "status": "Status",
+      "filters": {
+        "status": "Status"
+      },
+      "status_all": "All",
+      "status_pending": "Pending",
+      "status_completed": "Completed",
+      "status_cancelled": "Cancelled",
+      "status_pending_admin": "Pending Transfer",
+      "loading_payments": "Loading payment batch list...",
+      "attached_orders": "{count} attached orders",
+      "prev_page": "Previous",
+      "next_page": "Next",
+      "page_info": "Page {page} of {total}",
+      "checkout_id": "Checkout: {id}",
+      "attached_orders_title": "Attached cashbacks list ({count})",
+      "reconcile_now": "Trigger Auto Reconciliation",
+      "reconciling": "Reconciling...",
+      "reconcile_success": "Auto reconciliation completed! Created {count} payout batches totaling {amount} VND.",
+      "reconcile_result_toast": "Successfully created {count} payout batches totaling {amount} VND ({processed} cashbacks updated).",
+      "vietqr_title": "VietQR Payment Code",
+      "vietqr_subtitle": "Scan with Banking App to transfer funds",
+      "confirm_completed": "Confirm Transfer Completed",
+      "confirm_completed_desc": "Change status to Completed and freeze current bank snapshot.",
+      "cancel_payment": "Cancel Payout Batch",
+      "cancel_payment_desc": "Cancel payout batch and release attached cashbacks for re-reconciliation.",
+      "already_completed": "Payout batch already completed",
+      "already_cancelled": "Payout batch already cancelled",
+      "bank_snapshot_notice": "This bank profile was frozen (Snapshot) at the time of payout completion.",
+      "view_details": "View Details",
+      "payment_details": "Payout Batch Details",
+      "admin_title": "Payment & Reconciliation Management",
+      "admin_subtitle": "Trigger automatic payouts and process VietQR transfer requests",
+      "admin_payout_title": "Payment & Reconciliation Management",
+      "admin_payout_subtitle": "Trigger automatic payouts and process VietQR transfer requests",
+      "filter_user_placeholder": "Filter by User ID...",
+      "filter_label": "Filter:",
+      "no_bank_provided": "Bank details missing",
+      "admin_modal_title": "Payout Command Details (Admin)",
+      "payout_amount": "Required Transfer",
+      "memo_label": "Memo: Payment {id}",
+      "login_required_admin": "Please log in with Admin privileges to access."
     },
     "filters": {
       "platform": "Platform",
@@ -407,7 +490,9 @@
     "buttons": {
       "login": "Log In",
       "logout": "Log Out",
-      "login_google": "Sign in with Google"
+      "login_google": "Sign in with Google",
+      "payment_setting": "Payment Setting",
+      "back_to_cashback": "Back to Cashback"
     },
     "protected": {
       "require_login": "Please sign in to access this page.",

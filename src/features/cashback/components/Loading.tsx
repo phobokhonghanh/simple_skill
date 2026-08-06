@@ -33,7 +33,7 @@ export function Loading({
 
   return (
     <div
-      className={`aff-card p-5 sm:p-6 rounded-2xl space-y-5 animate-pulse ${className}`}
+      className={`p-4 sm:p-5 rounded-none space-y-5 animate-pulse ${className}`}
     >
       <div className="flex flex-col sm:flex-row gap-5">
         <div className="w-full sm:w-32 h-32 rounded-xl bg-neutral-200 dark:bg-neutral-800/60 flex-shrink-0" />

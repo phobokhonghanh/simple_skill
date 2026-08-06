@@ -4,12 +4,12 @@ import * as React from 'react';
 
 import { useCashbackAuth } from '@/features/cashback/hooks';
 
+import { CashbackPageLayout } from './components/layout/CashbackPageLayout';
 import { Header } from './components/layout/Header';
 import { ConverterTab } from './components/tabs/Converter';
 import { OrdersTab } from './components/tabs/Orders';
 import { PaymentTab } from './components/tabs/Payment';
 import { AdminTab } from './components/tabs/Admin';
-import { NavBar } from '@/features/cashback/NavBar';
 import type { CashbackTab } from '@/features/cashback/types';
 
 import '@/features/cashback/cashback.css';
@@ -38,37 +38,33 @@ export function CashbackDashboard() {
   }, [auth]);
 
   return (
-    <div className="affiliate-page-container relative overflow-x-hidden transition-colors duration-300 min-h-screen">
-      {/* Thanh điều hướng Sticky Header */}
-      <NavBar
+    <CashbackPageLayout
+      user={auth.user}
+      handleLogout={handleLogout}
+      onLoginClick={auth.initiateGoogleLogin}
+    >
+      {/* Header Block & Thẻ cá nhân & Thanh chọn Tab */}
+      <Header
         user={auth.user}
-        handleLogout={handleLogout}
-        onLoginClick={auth.initiateGoogleLogin}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
       />
-      <div className="max-w-6xl mx-auto py-6 px-4 sm:px-6 lg:px-8 space-y-6">
-        {/* Header Block & Thẻ cá nhân & Thanh chọn Tab */}
-        <Header
-          user={auth.user}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-        />
 
-        {/* Tab 1: Converter Form & Lịch sử chuyển đổi link (Tự đóng gói 0 Props) */}
-        {activeTab === 'converter' && <ConverterTab />}
+      {/* Tab 1: Converter Form & Lịch sử chuyển đổi link (Tự đóng gói 0 Props) */}
+      {activeTab === 'converter' && <ConverterTab />}
 
-        {/* Tab 2: Danh sách đơn hàng cá nhân (Tự đóng gói 0 Prop-Drilling) */}
-        {activeTab === 'orders' && auth.user && (
-          <OrdersTab token={auth.token} />
-        )}
+      {/* Tab 2: Danh sách đơn hàng cá nhân (Tự đóng gói 0 Prop-Drilling) */}
+      {activeTab === 'orders' && auth.user && (
+        <OrdersTab token={auth.token} />
+      )}
 
-        {/* Tab 3: Rút tiền / Thanh toán */}
-        {activeTab === 'payment' && auth.user && <PaymentTab />}
+      {/* Tab 3: Rút tiền / Thanh toán */}
+      {activeTab === 'payment' && auth.user && <PaymentTab />}
 
-        {/* Tab 4: Bảng điều khiển Quản trị viên (Tự đóng gói 0 Props) */}
-        {activeTab === 'admin' && auth.user && auth.user.role === 'admin' && (
-          <AdminTab />
-        )}
-      </div>
-    </div>
+      {/* Tab 4: Bảng điều khiển Quản trị viên (Tự đóng gói 0 Props) */}
+      {activeTab === 'admin' && auth.user && auth.user.role === 'admin' && (
+        <AdminTab />
+      )}
+    </CashbackPageLayout>
   );
 }

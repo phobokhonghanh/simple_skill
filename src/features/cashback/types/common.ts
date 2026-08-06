@@ -12,3 +12,10 @@ export interface Pagination {
   pageSize: number;
   totalPages: number;
 }
+
+export interface ApiResponse<T> {
+  ok: boolean;
+  code: string;
+  data?: T | null;
+  pagination?: Pagination | null;
+}

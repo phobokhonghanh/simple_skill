@@ -15,7 +15,7 @@ export interface FraudNoticeProps {
 export function FraudNotice({ platform, className = '' }: FraudNoticeProps) {
   const t = useTranslations('cashback');
   const platformName = platform
-    ? platform.charAt(0).toUpperCase() + platform.slice(1)
+    ? platform
     : t('common.platform_shopee');
 
   return (

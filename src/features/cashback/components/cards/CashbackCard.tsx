@@ -43,73 +43,88 @@ export function CashbackCard({
     [record, externalSummary],
   );
 
-  const { checkoutId, purchaseDateStr, platform, orders, utmContent } = summary;
+  const { checkoutId, orderSn, purchaseDateStr, platform, orders, utmContent } = summary;
 
   return (
     <div
-      className={`aff-card p-4 rounded-xl border border-[var(--aff-border)] bg-neutral-50/50 dark:bg-neutral-900/30 space-y-3 text-left max-w-full overflow-hidden ${className}`}
+      className={`bg-white dark:bg-neutral-900 border border-gray-200/80 dark:border-neutral-800 rounded-md p-3 sm:p-3.5 shadow-xs space-y-2 text-left max-w-full overflow-hidden ${className}`}
     >
+      {/* Row 1: Platform (Left), Status + Fraud Notice directly under status (Right) */}
       <div className="flex justify-between items-start gap-2 max-w-full overflow-hidden">
-        <div className="min-w-0 flex-1">
-          <p className="text-2xs font-mono text-[var(--aff-muted)] truncate max-w-[150px] break-all">
-            {t('labels.checkout_prefix', { id: checkoutId })}
-          </p>
-          <p className="text-3xs text-[var(--aff-muted)] mt-0.5">
-            {purchaseDateStr}
-          </p>
-          {isAdmin && utmContent && (
-            <p className="text-3xs font-mono text-[var(--aff-muted)] mt-0.5 truncate max-w-[180px] break-all">
-              {t('common.sub_id')}: {utmContent}
-            </p>
-          )}
-        </div>
-        <div className="flex flex-col items-end gap-1">
+        <span className="text-xs font-medium text-orange-600 dark:text-orange-400 bg-transparent border-0 shrink-0 mt-0.5">
+          {platform}
+        </span>
+        <div className="flex flex-col items-end gap-0.5 shrink-0">
           <StatusBadge status={summary.displayStatus} />
-          {summary.hasFraud && <FraudNotice platform={platform} />}
+          {summary.hasFraud && <FraudNotice platform={platform} className="mt-0.5" />}
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[var(--aff-border)] text-xs">
-        <div>
-          <span className="text-3xs uppercase tracking-wider text-[var(--aff-muted)] font-bold">
-            {t('common.amount')}
-          </span>
-          <p className="font-bold text-[var(--aff-text)] mt-0.5">
-            {formatCurrency(summary.totalAmount)}
-          </p>
-        </div>
-        <div className="text-right">
-          <span className="text-3xs uppercase tracking-wider text-[var(--aff-muted)] font-bold">
-            {t('common.cashback')}
-          </span>
-          <p className="font-black text-amber-500 dark:text-amber-400 mt-0.5">
-            {formatCurrency(summary.displayCashback, { showPlus: true })}
-          </p>
-        </div>
+      {/* Row 2: Thời gian */}
+      <div className="flex items-center justify-between text-xs gap-2 pt-0.5 text-gray-500 dark:text-neutral-400 font-normal">
+        <span className="shrink-0">
+          {t('labels.purchase_time')}:
+        </span>
+        <span className="text-right truncate font-normal">
+          {purchaseDateStr}
+        </span>
       </div>
 
+      {/* Row 3: Mã đơn hàng (ordersn) */}
+      <div className="flex items-center justify-between text-xs gap-2 text-gray-500 dark:text-neutral-400 font-normal">
+        <span className="shrink-0">
+          {t('labels.order_id')}:
+        </span>
+        <span className="text-right truncate font-normal">
+          {orderSn || checkoutId}
+        </span>
+      </div>
+
+      {/* Row 4: Tổng tiền */}
+      <div className="flex items-center justify-between text-xs gap-2 text-gray-500 dark:text-neutral-400 font-normal">
+        <span className="shrink-0">
+          {t('labels.total_order')}:
+        </span>
+        <span className="text-right font-normal">
+          {formatCurrency(summary.totalAmount)}
+        </span>
+      </div>
+
+      {/* Row 5: Hoàn tiền */}
+      <div className="flex items-center justify-between text-xs gap-2 text-gray-500 dark:text-neutral-400 font-normal">
+        <span className="shrink-0">
+          {t('common.cashback')}:
+        </span>
+        <span className="text-right font-normal">
+          {formatCurrency(summary.displayCashback, { showPlus: summary.displayCashback > 0 })}
+        </span>
+      </div>
+
+      {/* Row 6: Toggle Button with border-t - ONLY shows count number e.g. Chi tiết (6) / Ẩn */}
       {onToggleExpand && (
-        <Button
-          variant="outline"
-          onClick={onToggleExpand}
-          className="w-full h-auto py-1.5 border border-[var(--aff-border)] rounded-lg text-3xs font-bold text-[var(--aff-muted)] flex items-center justify-center gap-1 cursor-pointer active:bg-orange-500/5 hover:text-orange-500 hover:border-orange-500/20 hover:bg-transparent"
-        >
-          <span>
-            {isExpanded
-              ? t('buttons.hide_details')
-              : t('buttons.show_details', { count: summary.totalItems })}
-          </span>
-          {isExpanded ? (
-            <ChevronUp className="w-3.5 h-3.5" />
-          ) : (
-            <ChevronDown className="w-3.5 h-3.5" />
-          )}
-        </Button>
+        <div className="pt-2 mt-1 border-t border-gray-100 dark:border-neutral-800 text-center">
+          <button
+            type="button"
+            onClick={onToggleExpand}
+            className="w-full py-0.5 text-gray-500 dark:text-neutral-400 hover:text-gray-900 dark:hover:text-neutral-100 font-medium text-xs flex items-center justify-center gap-1 transition-colors cursor-pointer select-none border-0 bg-transparent shadow-none"
+          >
+            <span>
+              {isExpanded
+                ? t('buttons.hide_details')
+                : t('buttons.show_details', { count: summary.totalItems })}
+            </span>
+            {isExpanded ? (
+              <ChevronUp className="w-3.5 h-3.5" />
+            ) : (
+              <ChevronDown className="w-3.5 h-3.5" />
+            )}
+          </button>
+        </div>
       )}
 
-      {/* Expanded products lists */}
+      {/* Expanded products list */}
       {isExpanded && orders && orders.length > 0 && (
-        <OrderItemsList orders={orders} platform={platform} variant="mobile" />
+        <OrderItemsList orders={orders} platform={platform} checkoutId={checkoutId} variant="mobile" />
       )}
     </div>
   );

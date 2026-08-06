@@ -52,65 +52,67 @@ export function FilterBar({
   return (
     <form
       onSubmit={handleSubmit}
-      className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end text-left ${className}`}
+      className={`space-y-3 ${className}`}
     >
-      {onStartDateChange && (
-        <DateInput
-          label={t('common.from_date')}
-          value={startDate || ''}
-          onChange={onStartDateChange}
-          className="w-full px-3 py-1.5 text-xs"
-        />
-      )}
-
-      {onEndDateChange && (
-        <DateInput
-          label={t('common.to_date')}
-          value={endDate || ''}
-          onChange={onEndDateChange}
-          className="w-full px-3 py-1.5 text-xs"
-        />
-      )}
-
-      {onSubIdChange && (
-        <div className="space-y-1.5">
-          <label className="text-2xs font-bold text-[var(--aff-muted)]">
-            {t('common.sub_id')}
-          </label>
-          <input
-            type="text"
-            placeholder={subIdPlaceholder || t('filters.sub_id_placeholder')}
-            value={subId || ''}
-            onChange={(e) => onSubIdChange(e.target.value)}
-            className="aff-input w-full px-3 py-1.5 rounded-xl text-xs"
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end text-left">
+        {onStartDateChange && (
+          <DateInput
+            label={t('common.from_date')}
+            value={startDate || ''}
+            onChange={onStartDateChange}
+            className="w-full px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm"
           />
-        </div>
-      )}
+        )}
 
-      {onUserIdChange && (
-        <div className="space-y-1.5 flex-1 w-full">
-          <label className="text-2xs font-bold text-[var(--aff-muted)]">
-            {t('labels.user_id')}
-          </label>
-          <input
-            type="text"
-            placeholder={userIdPlaceholder || t('filters.search_user_id')}
-            value={userId || ''}
-            onChange={(e) => onUserIdChange(e.target.value)}
-            className="aff-input w-full px-3 py-1.5 rounded-xl text-xs"
+        {onEndDateChange && (
+          <DateInput
+            label={t('common.to_date')}
+            value={endDate || ''}
+            onChange={onEndDateChange}
+            className="w-full px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm"
           />
-        </div>
-      )}
+        )}
 
-      <div>
-        <Button
-          type="submit"
-          disabled={loading}
-          className="aff-btn-primary py-1.5 px-4 rounded-xl text-xs cursor-pointer flex items-center justify-center gap-1 font-bold w-full h-[34px] disabled:opacity-50"
-        >
-          <Search className="w-3.5 h-3.5" />
-          <span>{tCommon('buttons.search')}</span>
-        </Button>
+        {onSubIdChange && (
+          <div className="space-y-1.5 col-span-2 sm:col-span-1">
+            <label className="text-xs font-bold text-gray-500 dark:text-neutral-400">
+              {t('common.sub_id')}
+            </label>
+            <input
+              type="text"
+              placeholder={subIdPlaceholder || t('filters.sub_id_placeholder')}
+              value={subId || ''}
+              onChange={(e) => onSubIdChange(e.target.value)}
+              className="w-full px-3 py-1.5 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-md text-xs sm:text-sm text-gray-900 dark:text-neutral-100 placeholder:text-gray-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all shadow-xs h-9"
+            />
+          </div>
+        )}
+
+        {onUserIdChange && (
+          <div className="space-y-1.5 col-span-2 sm:col-span-1">
+            <label className="text-xs font-bold text-gray-500 dark:text-neutral-400">
+              {t('labels.user_id')}
+            </label>
+            <input
+              type="text"
+              placeholder={userIdPlaceholder || t('filters.search_user_id')}
+              value={userId || ''}
+              onChange={(e) => onUserIdChange(e.target.value)}
+              className="w-full px-3 py-1.5 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-md text-xs sm:text-sm text-gray-900 dark:text-neutral-100 placeholder:text-gray-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all shadow-xs h-9"
+            />
+          </div>
+        )}
+
+        <div className="col-span-2 sm:col-span-1">
+          <Button
+            type="submit"
+            disabled={loading}
+            className="bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white py-1.5 px-4 rounded-md text-xs sm:text-sm cursor-pointer flex items-center justify-center gap-1.5 font-bold w-full h-9 disabled:opacity-50 transition-colors border-0 shadow-xs"
+          >
+            <Search className="w-4 h-4 stroke-[2.5]" />
+            <span>{tCommon('buttons.search')}</span>
+          </Button>
+        </div>
       </div>
     </form>
   );

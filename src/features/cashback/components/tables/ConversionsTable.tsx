@@ -101,160 +101,118 @@ export function ConversionsTable({
   return (
     <div className="space-y-4 max-w-full overflow-hidden">
       {/* Desktop Table View */}
-      <div className="hidden sm:block overflow-x-auto">
+      <div className="hidden sm:block overflow-x-auto rounded-md border border-gray-200/80 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-xs">
         <table className="w-full text-center border-collapse text-xs sm:text-sm">
-          <thead>
-            <tr className="border-b border-[var(--aff-border)] text-[var(--aff-muted)] font-semibold text-2xs tracking-wider">
+          <thead className="bg-gray-50 dark:bg-neutral-800/50 border-b border-gray-200 dark:border-neutral-800">
+            <tr>
               {isAdmin && (
-                <th className="py-3 px-2 text-center">{t('common.sub_id')}</th>
+                <th className="py-3 px-2 text-[11px] sm:text-xs font-semibold text-gray-500 dark:text-neutral-400 text-center">
+                  Sub ID
+                </th>
               )}
-
-              <th className="py-3 px-2 text-center">
+              <th className="py-3 px-2 text-[11px] sm:text-xs font-semibold text-gray-500 dark:text-neutral-400 text-center">
                 <button
                   type="button"
                   onClick={() =>
                     setSortByTime(sortByTime === 'desc' ? 'asc' : 'desc')
                   }
-                  aria-label={t('sort.by_time')}
-                  className="inline-flex items-center gap-1 cursor-pointer select-none hover:text-[var(--aff-text)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--aff-orange)] rounded px-1.5 py-0.5"
+                  className="hover:bg-transparent text-gray-500 dark:text-neutral-400 hover:text-gray-900 dark:hover:text-neutral-100 font-semibold p-0 text-[11px] sm:text-xs flex items-center justify-center gap-1 mx-auto"
                 >
                   <span>{t('labels.purchase_time')}</span>
                   <ChevronsUpDown className="w-3.5 h-3.5 opacity-60" />
                 </button>
               </th>
-
-              <th className="py-3 px-2 text-center">
-                <div className="inline-flex items-center gap-1 relative cursor-pointer group focus-within:ring-2 focus-within:ring-[var(--aff-orange)] rounded px-1.5 py-0.5">
-                  <span className="capitalize">
-                    {filterPlatform === 'all'
-                      ? t('common.platform')
-                      : filterPlatform}
-                  </span>
-                  <ChevronDown className="w-3.5 h-3.5 text-[var(--aff-muted)] shrink-0" />
-                  <select
-                    value={filterPlatform}
-                    onChange={(e) => setFilterPlatform(e.target.value)}
-                    aria-label={t('common.platform')}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer focus:outline-none"
-                  >
-                    {PLATFORM_OPTIONS.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {t(opt.labelKey)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              <th className="py-3 px-2 text-[11px] sm:text-xs font-semibold text-gray-500 dark:text-neutral-400 text-center">
+                <select
+                  value={filterPlatform}
+                  onChange={(e) => setFilterPlatform(e.target.value)}
+                  className="bg-transparent border-0 font-semibold cursor-pointer text-gray-500 dark:text-neutral-400 hover:text-gray-900 focus:ring-0 p-0 text-[11px] sm:text-xs text-center"
+                >
+                  {PLATFORM_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {t(opt.labelKey)}
+                    </option>
+                  ))}
+                </select>
               </th>
-
-              <th className="py-3 px-2 text-center">
-                {t('labels.checkout_id')}
+              <th className="py-3 px-2 text-[11px] sm:text-xs font-semibold text-gray-500 dark:text-neutral-400 text-center">
+                {t('labels.order_id')}
               </th>
-
-              <th className="py-3 px-2 text-center">
+              <th className="py-3 px-2 text-[11px] sm:text-xs font-semibold text-gray-500 dark:text-neutral-400 text-center">
                 {t('labels.total_order')}
               </th>
-
-              <th className="py-3 px-2 text-center">{t('common.cashback')}</th>
-
-              <th className="py-3 px-2 text-center">
-                <div className="inline-flex items-center gap-1 relative cursor-pointer group focus-within:ring-2 focus-within:ring-[var(--aff-orange)] rounded px-1.5 py-0.5">
-                  <span className="capitalize">
-                    {getStatusFilterLabel(filterStatus)}
-                  </span>
-                  <ChevronDown className="w-3.5 h-3.5 text-[var(--aff-muted)] shrink-0" />
-                  <select
-                    value={filterStatus}
-                    onChange={(e) => setFilterStatus(e.target.value)}
-                    aria-label={t('common.status')}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer focus:outline-none"
-                  >
-                    {STATUS_OPTIONS.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {t(opt.labelKey)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              <th className="py-3 px-2 text-[11px] sm:text-xs font-semibold text-gray-500 dark:text-neutral-400 text-center">
+                {t('common.cashback')}
+              </th>
+              <th className="py-3 px-2 text-[11px] sm:text-xs font-semibold text-gray-500 dark:text-neutral-400 text-center">
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="bg-transparent border-0 font-semibold cursor-pointer text-gray-500 dark:text-neutral-400 hover:text-gray-900 focus:ring-0 p-0 text-[11px] sm:text-xs text-center"
+                >
+                  {STATUS_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {getStatusFilterLabel(opt.value)}
+                    </option>
+                  ))}
+                </select>
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-gray-100 dark:divide-neutral-800">
             {loading ? (
-              Array.from({ length: 5 }).map((_, idx) => (
-                <tr
-                  key={`skeleton-${idx}`}
-                  className="border-b border-[var(--aff-border)] animate-pulse"
+              <tr>
+                <td
+                  colSpan={isAdmin ? 7 : 6}
+                  className="py-12 text-center text-xs text-gray-500 dark:text-neutral-400"
                 >
-                  {isAdmin && (
-                    <td className="py-4 px-2 text-center">
-                      <div className="h-3 w-16 bg-neutral-200 dark:bg-neutral-800 rounded mx-auto" />
-                    </td>
-                  )}
-                  <td className="py-4 px-2 text-center">
-                    <div className="h-3 w-20 bg-neutral-200 dark:bg-neutral-800 rounded mx-auto" />
-                  </td>
-                  <td className="py-4 px-2 text-center">
-                    <div className="h-3 w-14 bg-neutral-200 dark:bg-neutral-800 rounded mx-auto" />
-                  </td>
-                  <td className="py-4 px-2 text-center">
-                    <div className="h-3 w-24 bg-neutral-200 dark:bg-neutral-800 rounded mx-auto" />
-                  </td>
-                  <td className="py-4 px-2 text-center">
-                    <div className="h-3 w-16 bg-neutral-200 dark:bg-neutral-800 rounded mx-auto" />
-                  </td>
-                  <td className="py-4 px-2 text-center">
-                    <div className="h-3 w-16 bg-neutral-200 dark:bg-neutral-800 rounded mx-auto" />
-                  </td>
-                  <td className="py-4 px-2 text-center">
-                    <div className="h-4 w-16 bg-neutral-200 dark:bg-neutral-800 rounded-full mx-auto" />
-                  </td>
-                </tr>
-              ))
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+                    <span>{t('labels.loading_history')}</span>
+                  </div>
+                </td>
+              </tr>
             ) : filteredRecords.length === 0 ? (
               <tr>
                 <td
                   colSpan={isAdmin ? 7 : 6}
-                  className="py-16 text-center border-b border-[var(--aff-border)]"
+                  className="py-12 text-center text-xs text-gray-500 dark:text-neutral-400"
                 >
-                  <div className="flex flex-col items-center justify-center space-y-3">
-                    <div className="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center text-orange-500">
-                      <ShoppingBag className="w-6 h-6" />
-                    </div>
-                    <p className="text-xs sm:text-sm font-medium text-[var(--aff-muted)] max-w-sm mx-auto">
-                      {t('orders.empty_order')}
-                    </p>
+                  <div className="flex flex-col items-center justify-center space-y-2">
+                    <ShoppingBag className="w-6 h-6 text-orange-500/60" />
+                    <span>{t('orders.empty_order')}</span>
                   </div>
                 </td>
               </tr>
             ) : (
               filteredRecords.map((rec) => {
                 const isExpanded = expandedRecordId === rec.checkoutId;
-
                 return (
                   <React.Fragment key={rec.id}>
                     <tr
-                      className={`hover:bg-neutral-50 dark:hover:bg-neutral-900/40 transition-colors ${
-                        isExpanded ? '' : 'border-b border-[var(--aff-border)]'
-                      }`}
+                      onClick={() =>
+                        setExpandedRecordId(
+                          isExpanded ? null : rec.checkoutId,
+                        )
+                      }
+                      className="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors cursor-pointer"
                     >
                       {isAdmin && (
-                        <td className="py-4 px-2 font-bold font-mono text-2xs truncate max-w-[120px] text-center">
+                        <td className="py-4 px-2 font-normal text-xs sm:text-sm text-gray-700 dark:text-neutral-300 truncate max-w-[120px] text-center">
                           {rec.utmContent || t('common.system')}
                         </td>
                       )}
 
-                      <td className="py-4 px-2 font-medium text-center">
+                      <td className="py-4 px-2 font-normal text-xs sm:text-sm text-gray-500 dark:text-neutral-400 text-center">
                         {rec.purchaseDateStr}
                       </td>
 
-                      <td
-                        className={`py-4 px-2 font-bold capitalize text-center ${getPlatformStyle(rec.platform).color}`}
-                      >
+                      <td className={`py-4 px-2 font-medium text-xs sm:text-sm text-center ${getPlatformStyle(rec.platform).color}`}>
                         {rec.platform}
                       </td>
 
-                      <td className="py-4 px-2 font-mono text-2xs truncate max-w-[120px] text-center">
-                        {rec.checkoutId}
+                      <td className="py-4 px-2 text-xs sm:text-sm text-gray-500 dark:text-neutral-400 font-normal truncate max-w-[130px] text-center">
+                        {rec.orderSn}
                       </td>
 
                       <td
@@ -267,7 +225,7 @@ export function ConversionsTable({
                         className="py-4 px-2 text-center cursor-pointer select-none relative"
                       >
                         <div className="inline-block text-center group">
-                          <span className="font-semibold block group-hover:underline">
+                          <span className="font-normal text-xs sm:text-sm text-gray-500 block">
                             {formatCurrency(rec.totalAmount)}
                           </span>
                           <span className="text-[10px] text-[var(--aff-muted)] block">
@@ -301,15 +259,17 @@ export function ConversionsTable({
                       </td>
                     </tr>
 
-                    {isExpanded && rec.orders && (
+                    {/* Detailed expandable view */}
+                    {isExpanded && rec.orders && rec.orders.length > 0 && (
                       <tr>
                         <td
                           colSpan={isAdmin ? 7 : 6}
-                          className="bg-neutral-50/50 dark:bg-neutral-900/30 p-4 border-b border-[var(--aff-border)]"
+                          className="bg-neutral-50/50 dark:bg-neutral-900/30 p-4 border-b border-gray-100 dark:border-neutral-800"
                         >
                           <OrderItemsList
                             orders={rec.orders}
                             platform={rec.platform}
+                            checkoutId={rec.checkoutId}
                             variant="desktop"
                           />
                         </td>
@@ -325,15 +285,15 @@ export function ConversionsTable({
 
       {/* Mobile List View */}
       <div className="sm:hidden space-y-4 max-w-full overflow-hidden">
-        <div className="grid grid-cols-3 gap-2 mb-4 text-left">
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold text-[var(--aff-muted)] tracking-wider block">
+        <div className="grid grid-cols-3 gap-1.5 mb-4 text-left">
+          <div className="space-y-1 min-w-0">
+            <label className="text-[11px] font-bold text-gray-500 dark:text-neutral-400 block truncate">
               {t('common.platform')}
             </label>
             <select
               value={filterPlatform}
               onChange={(e) => setFilterPlatform(e.target.value)}
-              className="aff-input w-full px-2.5 py-1.5 rounded-xl text-xs bg-white dark:bg-zinc-900 border border-[var(--aff-border)] h-[34px] cursor-pointer"
+              className="w-full px-1.5 py-1 rounded-md text-[11px] bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 h-8.5 cursor-pointer text-gray-900 dark:text-neutral-100 truncate"
             >
               {PLATFORM_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -343,15 +303,15 @@ export function ConversionsTable({
             </select>
           </div>
 
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold text-[var(--aff-muted)] tracking-wider block">
+          <div className="space-y-1 min-w-0">
+            <label className="text-[11px] font-bold text-gray-500 dark:text-neutral-400 block truncate">
               {t('common.status')}
             </label>
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
               aria-label={t('common.status')}
-              className="aff-input w-full px-2.5 py-1.5 rounded-xl text-xs bg-white dark:bg-zinc-900 border border-[var(--aff-border)] h-[34px] cursor-pointer"
+              className="w-full px-1.5 py-1 rounded-md text-[11px] bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 h-8.5 cursor-pointer text-gray-900 dark:text-neutral-100 truncate"
             >
               {STATUS_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -361,23 +321,19 @@ export function ConversionsTable({
             </select>
           </div>
 
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold text-[var(--aff-muted)] tracking-wider block">
+          <div className="space-y-1 min-w-0">
+            <label className="text-[11px] font-bold text-gray-500 dark:text-neutral-400 block truncate">
               {t('labels.purchase_time')}
             </label>
-            <Button
-              variant="outline"
-              onClick={() =>
-                setSortByTime(sortByTime === 'desc' ? 'asc' : 'desc')
-              }
-              className="w-full flex items-center justify-center gap-1 py-1.5 px-2 rounded-xl border border-[var(--aff-border)] text-xs h-[34px] bg-white dark:bg-zinc-900 cursor-pointer hover:bg-zinc-50 hover:text-[var(--aff-text)] active:scale-100"
+            <select
+              value={sortByTime}
+              onChange={(e) => setSortByTime(e.target.value as 'asc' | 'desc')}
+              aria-label={t('labels.purchase_time')}
+              className="w-full px-1.5 py-1 rounded-md text-[11px] bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 h-8.5 cursor-pointer text-gray-900 dark:text-neutral-100 truncate"
             >
-              {sortByTime === 'desc' ? (
-                <ChevronDown className="w-3.5 h-3.5 shrink-0" />
-              ) : (
-                <ChevronUp className="w-3.5 h-3.5 shrink-0" />
-              )}
-            </Button>
+              <option value="desc">{t('sort.newest')}</option>
+              <option value="asc">{t('sort.oldest')}</option>
+            </select>
           </div>
         </div>
 

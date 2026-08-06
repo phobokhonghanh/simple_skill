@@ -12,6 +12,7 @@ import type { ConversionOrder, ConversionItem } from '@/features/cashback/types'
 interface OrderItemsListProps {
   orders: ConversionOrder[];
   platform?: string;
+  checkoutId?: string;
   variant: 'desktop' | 'mobile';
 }
 
@@ -31,45 +32,44 @@ function OrderItemRow({ item, variant, platform = 'shopee' }: OrderItemRowProps)
   const isItemFraud = item.is_fraud === 1;
   const imageUrl = formatImageUrl(imgVal, platform);
 
+  const actualCommission = isItemFraud ? 0 : (commissionVal ?? 0);
+
   if (variant === 'desktop') {
     return (
-      <div className="flex items-center justify-between gap-4 py-1 hover:bg-neutral-100/50 dark:hover:bg-neutral-800/30 rounded-lg px-2">
-        <div className="flex items-center gap-3 min-w-0 flex-1">
-          <div className="w-10 h-10 rounded border border-[var(--aff-border)] bg-white flex-shrink-0 flex items-center justify-center overflow-hidden relative">
-            {imgVal ? (
-              <Image
-                src={imageUrl}
-                alt={nameVal}
-                width={40}
-                height={40}
-                className="w-full h-full object-contain p-0.5"
-                unoptimized
-              />
-            ) : (
-              <ShoppingBag className="w-4 h-4 text-orange-500" />
-            )}
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-xs font-bold text-[var(--aff-heading)] line-clamp-1 break-all">
-              {nameVal}
-            </p>
-            <span className="text-[10px] text-[var(--aff-muted)] block mt-0.5">
-              {t('labels.qty_shop_prefix', {
-                qty: item.qty ?? 0,
-                shop: shopVal,
-              })}
-            </span>
-          </div>
+      <div className="flex items-start gap-3 py-2 border-b border-gray-100 dark:border-neutral-800/80 last:border-b-0 hover:bg-neutral-100/30 dark:hover:bg-neutral-800/20 rounded-md px-2 min-w-0 text-left">
+        {/* Product Image on left */}
+        <div className="w-12 h-12 rounded-md border border-gray-200 dark:border-neutral-800 bg-white flex-shrink-0 flex items-center justify-center overflow-hidden relative mt-0.5">
+          {imgVal ? (
+            <Image
+              src={imageUrl}
+              alt={nameVal}
+              width={48}
+              height={48}
+              className="w-full h-full object-contain p-0.5"
+              unoptimized
+            />
+          ) : (
+            <ShoppingBag className="w-4 h-4 text-orange-500" />
+          )}
         </div>
-        <div className="text-right flex-shrink-0">
-          <p className="text-xs font-semibold">
-            {formatCurrency(item.actual_amount)}
+
+        {/* Right side: 3 lines parallel to image */}
+        <div className="min-w-0 flex-1 space-y-0.5 text-xs text-gray-500 dark:text-neutral-400 font-normal">
+          {/* Line 1: Tên sản phẩm - 1 dòng duy nhất và ... nếu quá dài */}
+          <p className="text-xs sm:text-sm font-normal text-gray-900 dark:text-neutral-100 truncate">
+            {nameVal}
           </p>
-          <span className="text-[10px] text-amber-500 dark:text-amber-400 font-bold block mt-0.5">
-            {formatCurrency(isItemFraud ? 0 : commissionVal, {
-              showPlus: true,
-            })}
-          </span>
+
+          {/* Line 2: x1                          50.000đ */}
+          <div className="flex items-center justify-between text-xs">
+            <span>x{item.qty ?? 1}</span>
+            <span>{formatCurrency(item.actual_amount)}</span>
+          </div>
+
+          {/* Line 3:                                10.000đ (Hoàn tiền) */}
+          <div className="flex items-center justify-end text-xs">
+            <span>{formatCurrency(actualCommission, { showPlus: actualCommission > 0 })}</span>
+          </div>
         </div>
       </div>
     );
@@ -77,35 +77,41 @@ function OrderItemRow({ item, variant, platform = 'shopee' }: OrderItemRowProps)
 
   // Mobile row
   return (
-    <div className="flex gap-2 items-start justify-between min-w-0">
-      <div className="flex gap-2 min-w-0 flex-1">
-        <div className="w-7 h-7 rounded bg-white border border-[var(--aff-border)] flex-shrink-0 flex items-center justify-center overflow-hidden relative">
-          {imgVal ? (
-            <Image
-              src={imageUrl}
-              alt={nameVal}
-              width={28}
-              height={28}
-              className="w-full h-full object-contain"
-              unoptimized
-            />
-          ) : (
-            <ShoppingBag className="w-3.5 h-3.5 text-orange-500" />
-          )}
+    <div className="py-2 flex items-start gap-2.5 min-w-0 border-b border-gray-100 dark:border-neutral-800/80 last:border-b-0 text-left">
+      {/* Product Image on left */}
+      <div className="w-12 h-12 rounded-md bg-white border border-gray-200 dark:border-neutral-800 flex-shrink-0 flex items-center justify-center overflow-hidden relative mt-0.5">
+        {imgVal ? (
+          <Image
+            src={imageUrl}
+            alt={nameVal}
+            width={48}
+            height={48}
+            className="w-full h-full object-contain"
+            unoptimized
+          />
+        ) : (
+          <ShoppingBag className="w-4 h-4 text-orange-500" />
+        )}
+      </div>
+
+      {/* Right side: 3 lines parallel to image */}
+      <div className="min-w-0 flex-1 space-y-0.5 text-xs text-gray-500 dark:text-neutral-400 font-normal">
+        {/* Line 1: Tên sản phẩm - 1 dòng duy nhất và ... nếu quá dài */}
+        <p className="text-xs font-normal text-gray-900 dark:text-neutral-100 truncate">
+          {nameVal}
+        </p>
+
+        {/* Line 2: x1                          50.000đ */}
+        <div className="flex items-center justify-between">
+          <span>x{item.qty ?? 1}</span>
+          <span>{formatCurrency(item.actual_amount)}</span>
         </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-3xs font-bold text-[var(--aff-heading)] line-clamp-1 break-words">
-            {nameVal}
-          </p>
-          <span className="text-4xs text-[var(--aff-muted)] block mt-0.5">
-            {t('labels.qty_prefix', { qty: item.qty ?? 0 })} •{' '}
-            {formatCurrency(item.actual_amount)}
-          </span>
+
+        {/* Line 3:                                10.000đ (Hoàn tiền) */}
+        <div className="flex items-center justify-end">
+          <span>{formatCurrency(actualCommission, { showPlus: actualCommission > 0 })}</span>
         </div>
       </div>
-      <span className="text-3xs font-bold text-amber-500 dark:text-amber-400 whitespace-nowrap flex-shrink-0">
-        {formatCurrency(isItemFraud ? 0 : commissionVal, { showPlus: true })}
-      </span>
     </div>
   );
 }
@@ -113,6 +119,7 @@ function OrderItemRow({ item, variant, platform = 'shopee' }: OrderItemRowProps)
 export function OrderItemsList({
   orders,
   platform = 'shopee',
+  checkoutId,
   variant,
 }: OrderItemsListProps) {
   const t = useTranslations('cashback');
@@ -125,9 +132,9 @@ export function OrderItemsList({
 
           return (
             <div key={orderIdVal || oIdx} className="space-y-2 text-left">
-              <div className="flex justify-between items-center text-xs font-semibold text-[var(--aff-muted)]">
+              <div className="flex justify-between items-center text-xs font-semibold text-gray-500 dark:text-neutral-400">
                 <span>
-                  {t('labels.order_id_prefix', { id: orderIdVal || '' })}
+                  {t('labels.checkout_id')}: {checkoutId || orderIdVal || ''}
                 </span>
               </div>
               <div className="grid grid-cols-1 gap-2 pt-1">
@@ -144,27 +151,18 @@ export function OrderItemsList({
 
   // Mobile variant
   return (
-    <div className="pt-2 border-t border-dashed border-[var(--aff-border)] space-y-3 animate-in fade-in duration-200">
+    <div className="pt-2 border-t border-dashed border-gray-200 dark:border-neutral-800 space-y-3 animate-in fade-in duration-200">
       {orders.map((ord, oIdx) => {
         const orderIdVal = ord.id || ord.order_sn || ord.order_id;
-        const isOrderFraud =
-          ord.items?.some((it) => it.is_fraud === 1) ?? false;
-        const orderStatus = isOrderFraud ? 'rejected' : ord.order_status;
 
         return (
-          <div key={orderIdVal || oIdx} className="space-y-2.5">
-            <div className="flex justify-between items-center text-3xs font-mono text-[var(--aff-muted)] gap-2">
-              <div className="flex flex-col text-left">
-                <span className="truncate max-w-[140px]">
-                  {t('labels.order_id')}: {orderIdVal || '—'}
-                </span>
-                {isOrderFraud && (
-                  <FraudNotice platform={platform} className="mt-0.5" />
-                )}
-              </div>
-              <StatusBadge status={orderStatus} />
+          <div key={orderIdVal || oIdx} className="space-y-2">
+            <div className="flex items-center justify-between text-xs text-gray-500 dark:text-neutral-400 gap-2 text-left pt-1 font-normal">
+              <span className="truncate font-normal">
+                {t('labels.checkout_id')}: {checkoutId || orderIdVal || '—'}
+              </span>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-1">
               {ord.items?.map((item, itemIdx) => (
                 <OrderItemRow key={itemIdx} item={item} variant="mobile" platform={platform} />
               ))}

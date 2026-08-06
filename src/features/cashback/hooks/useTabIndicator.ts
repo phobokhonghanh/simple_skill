@@ -27,6 +27,11 @@ export function useTabIndicator<T extends string>(
         left: activeEl.offsetLeft,
         width: activeEl.offsetWidth,
       });
+      activeEl.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
     }
   }, [activeTab]);
 

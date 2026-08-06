@@ -12,6 +12,8 @@ import {
 export { formatCurrency, formatNumber } from '@/lib/format';
 export {
   formatDate,
+  formatDateOnly,
+  formatDayMonth,
   formatDateString,
   dateToUnixSeconds,
   getCurrentDateStr,
@@ -19,6 +21,17 @@ export {
   getStartOfCurrentMonthStr,
 } from '@/lib/date';
 export { scrollToElement } from '@/lib/dom';
+
+/**
+ * Ẩn bớt số tài khoản ngân hàng (Ví dụ: "0935996512" -> "*********512").
+ */
+export const maskAccountNumber = (accNo?: string | null): string => {
+  if (!accNo) return '';
+  const clean = accNo.trim();
+  if (clean.length <= 4) return clean;
+  const last4 = clean.slice(-3);
+  return `*********${last4}`;
+};
 
 /**
  * Wrapper an toàn cho `localStorage` xử lý các môi trường SSR (Server-Side Rendering) và lỗi vượt quá dung lượng bộ nhớ.
@@ -234,6 +247,7 @@ export interface CashbackSummary extends ConversionStats {
   raw: CashbackRecord;
   id: string;
   checkoutId: string;
+  orderSn: string;
   purchaseTime?: number | null;
   purchaseDateStr: string;
   platform: string;
@@ -256,6 +270,8 @@ export const extractCashbackSummary = (
   const rawStatus = rec.status || 'pending';
   const orders = rec.conversion?.orders;
   const utmContent = rec.conversion?.utm_content;
+  const firstOrder = orders?.[0];
+  const orderSn = firstOrder?.order_sn || firstOrder?.order_id || firstOrder?.id || rec.checkoutId || '';
 
   const stats = calculateConversionStats(orders, rawCashback, rawStatus);
   const purchaseDateStr = formatDate(purchaseTime);
@@ -264,6 +280,7 @@ export const extractCashbackSummary = (
     raw: rec,
     id: rec.id,
     checkoutId: rec.checkoutId,
+    orderSn,
     purchaseTime,
     purchaseDateStr,
     platform,

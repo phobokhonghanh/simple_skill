@@ -10,6 +10,7 @@ export interface CashbackRecord {
   cashback: number;
   status: string;
   checkoutId: string;
+  paymentId?: string | null;
   conversion: ConversionRecord;
   createdAt: string;
   updatedAt: string;

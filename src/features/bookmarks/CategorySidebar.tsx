@@ -1,5 +1,7 @@
 'use client';
 
+import * as React from 'react';
+import { useTranslations } from 'next-intl';
 import {
   ChevronRight,
   Edit3,
@@ -15,7 +17,6 @@ import {
   type CategoryColorId,
 } from '@/features/bookmarks/colors';
 import type { CategoryTreeNode } from '@/features/bookmarks/types';
-import type { BookmarkDashboardLabels } from '@/features/bookmarks/types';
 
 /** Props cho Component CategorySidebar */
 interface CategorySidebarProps {
@@ -25,8 +26,6 @@ interface CategorySidebarProps {
   selectedCategoryId: string;
   /** ID danh mục đang lọc */
   filterCategoryId: string;
-  /** Các nhãn ngôn ngữ i18n */
-  labels: BookmarkDashboardLabels;
   /** Callback chọn danh mục */
   onSelect: (categoryId: string) => void;
   /** Callback lọc theo danh mục */
@@ -62,13 +61,15 @@ export function CategorySidebar({
   nodes,
   selectedCategoryId,
   filterCategoryId,
-  labels,
   onSelect,
   onFilter,
   onCreateCategory,
   onEdit,
   onDelete,
 }: CategorySidebarProps) {
+  const tBookmarks = useTranslations('bookmarks');
+  const tCommon = useTranslations('common');
+
   const renderNode = (node: CategoryTreeNode) => {
     const isSelected = selectedCategoryId === node.id;
     const isFiltered = filterCategoryId === node.id;
@@ -90,7 +91,7 @@ export function CategorySidebar({
           <button
             type="button"
             onClick={() => onSelect(node.id)}
-            className="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-md px-3 py-2 text-left text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-md px-3 py-2 text-left text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
           >
             <span className="flex min-w-0 items-center gap-2">
               <ChevronRight
@@ -126,7 +127,7 @@ export function CategorySidebar({
           >
             <button
               type="button"
-              className={`rounded-md p-1 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring ${
+              className={`rounded-md p-1 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring cursor-pointer ${
                 isFiltered
                   ? isSelected
                     ? 'text-primary bg-background/25'
@@ -135,7 +136,7 @@ export function CategorySidebar({
                     ? 'text-background/80 hover:bg-background/20'
                     : 'text-muted-foreground hover:bg-background'
               }`}
-              title={labels.viewBookmarks}
+              title={tBookmarks('actions.view_bookmarks') || 'View Bookmarks'}
               onClick={(e) => {
                 e.stopPropagation();
                 onFilter(node.id);
@@ -145,22 +146,22 @@ export function CategorySidebar({
             </button>
             <button
               type="button"
-              className={`rounded-md p-1 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring ${
+              className={`rounded-md p-1 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring cursor-pointer ${
                 isSelected ? 'hover:bg-background/20' : 'hover:bg-background'
               }`}
-              title={labels.edit}
+              title={tCommon('buttons.edit') || 'Edit'}
               onClick={() => onEdit(node)}
             >
               <Edit3 className="h-3.5 w-3.5" />
             </button>
             <button
               type="button"
-              className={`rounded-md p-1 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring ${
+              className={`rounded-md p-1 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring cursor-pointer ${
                 isSelected
                   ? 'text-background hover:bg-background/20'
                   : 'text-destructive hover:bg-destructive/10'
               }`}
-              title={labels.delete}
+              title={tCommon('buttons.delete') || 'Delete'}
               onClick={() => onDelete(node.id)}
             >
               <Trash2 className="h-3.5 w-3.5" />
@@ -180,13 +181,15 @@ export function CategorySidebar({
     <aside className="p-4 lg:sticky lg:top-0">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-base font-semibold">{labels.categories}</h2>
+          <h2 className="text-base font-semibold">
+            {tBookmarks('categories_title') || 'Categories'}
+          </h2>
         </div>
         <Button
           type="button"
           variant="outline"
           size="icon-sm"
-          title={labels.addCategory}
+          title={tBookmarks('add_category') || 'Add Category'}
           onClick={onCreateCategory}
         >
           <FolderPlus className="h-4 w-4" />
@@ -198,17 +201,17 @@ export function CategorySidebar({
           onSelect('');
           onFilter('');
         }}
-        className={`mb-3 flex w-full items-center rounded-md px-3 py-2 text-left text-sm outline-none transition-all duration-200 hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring ${
+        className={`mb-3 flex w-full items-center rounded-md px-3 py-2 text-left text-sm outline-none transition-all duration-200 hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring cursor-pointer ${
           filterCategoryId
             ? 'text-foreground hover:bg-muted/80'
             : 'bg-foreground text-background shadow-sm'
         }`}
       >
-        {labels.allCategories}
+        {tBookmarks('all_categories') || 'All Categories'}
       </button>
       {nodes.length === 0 ? (
         <p className="px-3 text-sm text-muted-foreground">
-          {labels.emptyCategories}
+          {tBookmarks('empty_categories') || 'No categories created yet.'}
         </p>
       ) : (
         <ul className="space-y-1">{nodes.map((node) => renderNode(node))}</ul>

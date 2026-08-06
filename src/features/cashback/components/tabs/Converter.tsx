@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
-import { History, Trash2 } from 'lucide-react';
+import { Trash2, Clock, ChevronDown } from 'lucide-react';
 import type { HistoryItem } from '@/features/cashback/types';
 import { Button } from '@/components/ui/button';
 import { ClientWrapper } from '@/components/ui/ClientWrapper';
@@ -18,6 +18,7 @@ import { useLinkConverter } from '@/features/cashback/hooks';
  */
 export function ConverterTab() {
   const t = useTranslations('cashback');
+  const [showAllHistory, setShowAllHistory] = React.useState(false);
   const {
     inputUrl,
     loading,
@@ -41,61 +42,65 @@ export function ConverterTab() {
     scrollToElement('converted-product-section');
   };
 
+  const visibleHistory = showAllHistory ? history : history.slice(0, 3);
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-      {/* Cột trái: Thanh tìm kiếm & Thông tin sản phẩm sau khi chuyển đổi */}
-      <div className="lg:col-span-2 space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6">
+      {/* Khối 1: Thanh Tìm Kiếm (Không có div khung bao quanh) */}
+      <ClientWrapper>
+        <SearchBar
+          key={inputUrl}
+          onSearch={onSearchSubmit}
+          loading={loading}
+          initialValue={inputUrl}
+        />
+      </ClientWrapper>
+
+      {/* Khối 2: Kết quả Thông Tin Sản Phẩm (Hiển thị khi đang load hoặc đã tìm thấy SP) */}
+      {(loading || product) && (
         <ClientWrapper>
-          <SearchBar
-            key={inputUrl}
-            onSearch={onSearchSubmit}
-            loading={loading}
-            initialValue={inputUrl}
-          />
+          <section id="converted-product-section" className="scroll-mt-20">
+            <ProductCard
+              product={product}
+              affiliateLink={affiliateLink}
+              loading={loading}
+              copied={copied}
+              variant="detailed"
+              onCopy={handleCopy}
+            />
+          </section>
         </ClientWrapper>
+      )}
 
-        <section id="converted-product-section" className="scroll-mt-20">
-          <ProductCard
-            product={product}
-            affiliateLink={affiliateLink}
-            loading={loading}
-            copied={copied}
-            variant="detailed"
-            onCopy={handleCopy}
-          />
-        </section>
-      </div>
+      {/* Khối 3: Lịch Sử Tìm Kiếm */}
+      <ClientWrapper>
+        <div className="bg-white dark:bg-neutral-900 border border-gray-200/80 dark:border-neutral-800 rounded-md p-4 sm:p-6 shadow-xs space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-gray-100 dark:border-neutral-800">
+            <h3 className="font-bold text-base sm:text-lg text-gray-900 dark:text-neutral-100 flex items-center gap-2">
+              <Clock className="w-5 h-5 text-gray-700 dark:text-neutral-300 stroke-[2.2]" />
+              <span>{t('history.title')}</span>
+            </h3>
+            {history.length > 0 && (
+              <Button
+                variant="ghost"
+                onClick={handleClearHistory}
+                className="h-auto p-0 text-red-500 hover:text-red-600 hover:bg-transparent text-xs sm:text-sm font-semibold flex items-center gap-1.5 cursor-pointer select-none"
+              >
+                <Trash2 className="w-4 h-4" />
+                <span>{t('history.clear')}</span>
+              </Button>
+            )}
+          </div>
 
-      {/* Cột phải: Lịch sử các đường link đã chuyển đổi gần đây */}
-      <div className="lg:col-span-1">
-        <ClientWrapper>
-          <div className="aff-card p-5 sm:p-6 rounded-2xl space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-[var(--aff-heading)]">
-                <History className="w-4.5 h-4.5 text-[var(--aff-orange)]" />
-                <h3 className="font-bold text-sm sm:text-base">
-                  {t('history.title')}
-                </h3>
-              </div>
-              {history.length > 0 && (
-                <Button
-                  variant="ghost"
-                  onClick={handleClearHistory}
-                  className="h-auto p-0 text-red-500 hover:text-red-600 hover:bg-transparent text-xs font-semibold flex items-center gap-1 cursor-pointer"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                  <span>{t('history.clear')}</span>
-                </Button>
-              )}
+          {history.length === 0 ? (
+            <div className="text-center py-8 text-xs sm:text-sm text-gray-400 dark:text-neutral-500 border border-dashed border-gray-200 dark:border-neutral-800 rounded-md">
+              {t('history.empty')}
             </div>
-
-            {history.length === 0 ? (
-              <div className="text-center py-8 text-xs sm:text-sm text-[var(--aff-muted)] border border-dashed border-[var(--aff-border)] rounded-xl">
-                {t('history.empty')}
-              </div>
-            ) : (
-              <div className="space-y-3 max-h-[380px] overflow-y-auto p-1">
-                {history.map((item, index) => (
+          ) : (
+            <div className="space-y-4">
+              {/* Khung bọc duy nhất cho toàn bộ danh sách sản phẩm lịch sử */}
+              <div className="border border-gray-200/80 dark:border-neutral-800 rounded-md overflow-hidden divide-y divide-gray-100 dark:divide-neutral-800/80 bg-white dark:bg-neutral-900">
+                {visibleHistory.map((item, index) => (
                   <ProductCard
                     key={item.url + index}
                     product={item.product}
@@ -104,10 +109,30 @@ export function ConverterTab() {
                   />
                 ))}
               </div>
-            )}
-          </div>
-        </ClientWrapper>
-      </div>
+
+              {history.length > 3 && (
+                <div className="pt-2 text-center">
+                  <button
+                    type="button"
+                    onClick={() => setShowAllHistory(!showAllHistory)}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold text-gray-600 dark:text-neutral-400 hover:text-gray-900 dark:hover:text-neutral-100 transition-colors cursor-pointer select-none"
+                  >
+                    <span>
+                      {showAllHistory ? t('history.show_less') : t('history.show_more')}
+                    </span>
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        showAllHistory ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </ClientWrapper>
     </div>
   );
 }
+

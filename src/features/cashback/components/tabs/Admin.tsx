@@ -6,13 +6,14 @@ import { Loader2, ShieldCheck, RotateCw } from 'lucide-react';
 import type { AdminSubTab } from '@/features/cashback/types';
 import { AdminConversionsView } from '@/features/cashback/components/views/AdminConversionsView';
 import { AdminCashbacksView } from '@/features/cashback/components/views/AdminCashbacksView';
+import { AdminPaymentsView } from '@/features/cashback/components/views/AdminPaymentsView';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { DateInput } from '@/features/cashback/components/input/DateInput';
 import { ClientWrapper } from '@/components/ui/ClientWrapper';
 import { TabButton } from '@/features/cashback/components/buttons/TabButton';
 import { TabIndicator } from '@/features/cashback/components/TabIndicator';
-import { useTabIndicator, useAdminSync } from '@/features/cashback/hooks';
+import { useTabIndicator, useAdminSync, useCashbackAuth } from '@/features/cashback/hooks';
 
 /**
  * Component hiển thị giao diện cổng quản trị viên (Admin Portal) của module hoàn tiền.
@@ -23,6 +24,7 @@ import { useTabIndicator, useAdminSync } from '@/features/cashback/hooks';
  */
 export function AdminTab() {
   const t = useTranslations('cashback');
+  const auth = useCashbackAuth();
   const [adminSubTab, setAdminSubTab] =
     React.useState<AdminSubTab>('conversions');
 
@@ -52,8 +54,8 @@ export function AdminTab() {
   return (
     <ClientWrapper>
       <div className="space-y-6">
-        {/* Thanh chuyển Subtab (Conversions / Cashbacks) */}
-        <div className="relative inline-flex border-b border-[var(--aff-border)] mb-6 overflow-x-auto gap-2 pb-0 scrollbar-none max-w-full">
+        {/* Thanh chuyển Subtab (Conversions / Cashbacks / Payments) */}
+        <div className="relative inline-flex border-b border-[var(--aff-border)] mb-0 overflow-x-auto gap-2 pb-0 scrollbar-none max-w-full">
           <TabButton
             ref={(el) => {
               tabsRef.current['conversions'] = el;
@@ -69,6 +71,14 @@ export function AdminTab() {
             isActive={adminSubTab === 'cashbacks'}
             onClick={() => handleSubTabChange('cashbacks')}
             label={t('tabs.admin_cashbacks')}
+          />
+          <TabButton
+            ref={(el) => {
+              tabsRef.current['payments'] = el;
+            }}
+            isActive={adminSubTab === 'payments'}
+            onClick={() => handleSubTabChange('payments')}
+            label={t('tabs.admin_payments')}
           />
 
           <TabIndicator {...indicatorStyle} />
@@ -147,10 +157,23 @@ export function AdminTab() {
           </div>
         )}
 
-        {/* Subtab 2: Bảng Quản lý Cashback Người Dùng (Lazy-Fetch khi bấm mở lần đầu, Giữ Cache RAM khi ẩn) */}
+        {/* Subtab 2: Bảng Quản lý Cashback Người Dùng */}
         {visitedTabs.cashbacks && (
           <div className={adminSubTab === 'cashbacks' ? 'block' : 'hidden'}>
             <AdminCashbacksView />
+          </div>
+        )}
+
+        {/* Subtab 3: Bảng Quản lý Thanh toán & Đối soát Admin */}
+        {visitedTabs.payments && (
+          <div className={adminSubTab === 'payments' ? 'block' : 'hidden'}>
+            {auth.token ? (
+              <AdminPaymentsView token={auth.token} />
+            ) : (
+              <div className="p-8 text-center text-xs text-[var(--aff-muted)]">
+                {t('payment.login_required_admin')}
+              </div>
+            )}
           </div>
         )}
       </div>

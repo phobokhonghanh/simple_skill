@@ -33,12 +33,12 @@ export function DateInput({
 
   const inputEl = (
     <div
-      className={`relative flex items-center justify-between aff-input cursor-pointer rounded-xl bg-[var(--aff-surface)] border-2 border-[var(--aff-border)] transition-all duration-200 ${className}`}
+      className={`relative flex items-center justify-between cursor-pointer rounded-md bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 transition-all duration-200 ${className}`}
     >
-      <span className="select-none text-xs text-[var(--aff-text)] truncate pr-6">
+      <span className="select-none text-xs sm:text-sm text-gray-900 dark:text-neutral-100 truncate pr-6">
         {displayValue || '--/--/----'}
       </span>
-      <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--aff-muted)]">
+      <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-neutral-500">
         <Calendar className="w-3.5 h-3.5" />
       </div>
       <input
@@ -64,10 +64,10 @@ export function DateInput({
     return (
       <div className="space-y-1.5 text-left">
         <label
-          className={`text-2xs font-bold text-[var(--aff-muted)] tracking-wider flex items-center gap-1 ${labelClassName}`}
+          className={`text-xs font-bold text-gray-500 dark:text-neutral-400 flex items-center gap-1 ${labelClassName}`}
         >
           {showLabelIcon && (
-            <Calendar className="w-3.5 h-3.5 text-[var(--aff-muted)]" />
+            <Calendar className="w-3.5 h-3.5 text-gray-500 dark:text-neutral-400" />
           )}
           <span>{label}</span>
         </label>

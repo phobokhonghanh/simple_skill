@@ -6,7 +6,7 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 const nextConfig: NextConfig = {
   output: 'export',
   trailingSlash: true,
-  allowedDevOrigins: ['192.168.2.21'],
+  allowedDevOrigins: ['192.168.2.21', '100.122.90.44'],
   images: {
     unoptimized: true,
     remotePatterns: [

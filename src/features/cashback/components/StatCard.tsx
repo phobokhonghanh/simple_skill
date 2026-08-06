@@ -25,18 +25,18 @@ export function StatCard({
 }: StatCardProps) {
   return (
     <div
-      className={`relative aff-card p-6 rounded-2xl flex flex-col items-center justify-center text-center gap-3 overflow-hidden ${className}`}
+      className={`relative bg-white dark:bg-neutral-900 border border-gray-200/80 dark:border-neutral-800 shadow-xs p-3 sm:p-5 rounded-md flex flex-col items-center justify-center text-center gap-2 sm:gap-3 overflow-hidden ${className}`}
     >
       <div
-        className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${iconBgClass}`}
+        className={`w-9 h-9 sm:w-12 sm:h-12 rounded-md flex items-center justify-center shrink-0 ${iconBgClass}`}
       >
         {icon}
       </div>
-      <div className="space-y-1 z-10">
-        <span className="text-xs tracking-wider text-[var(--aff-muted)] block font-bold">
+      <div className="space-y-0.5 sm:space-y-1 z-10">
+        <span className="text-[11px] sm:text-sm font-medium text-gray-500 dark:text-neutral-400 block">
           {title}
         </span>
-        <span className="text-xl sm:text-2xl font-extrabold block">
+        <span className="text-xs sm:text-base font-bold block text-gray-900 dark:text-neutral-100">
           {value}
         </span>
       </div>

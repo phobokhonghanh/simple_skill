@@ -38,6 +38,13 @@ export const formatCurrency = (
 };
 
 /**
+ * Định dạng số tiền VNĐ.
+ */
+export const formatVND = (amount?: number | null): string => {
+  return formatCurrency(amount, { currency: 'VNĐ' });
+};
+
+/**
  * Các tùy chọn cấu hình định dạng số chung.
  */
 export interface FormatNumberOptions {
@@ -65,3 +72,5 @@ export const formatNumber = (
   if (trimTrailingZeros && value % 1 === 0) return value.toString();
   return value.toFixed(digits);
 };
+
+export { formatDate } from './date';

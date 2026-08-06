@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
-import { syncAdminOrders } from '@/features/cashback/api';
+import { syncAdminOrders, reconcilePayments } from '@/features/cashback/api';
 import { TOAST_ORANGE_PRESET } from '@/features/cashback/config';
 import {
   dateToUnixSeconds,
@@ -53,6 +53,10 @@ export function useAdminSync(onSyncSuccess?: () => void) {
         setSyncSuccess(true);
         setSyncMessage(t('sync.success'));
         showCustomToast(t('toasts.admin_sync_success'), TOAST_ORANGE_PRESET);
+        // Tự động kích hoạt đối soát thanh toán hệ thống sau khi đồng bộ đơn hàng thành công
+        reconcilePayments(token).catch((err) =>
+          console.error('Auto reconcile error after sync:', err),
+        );
         onSyncSuccess?.();
       } else {
         setSyncSuccess(false);

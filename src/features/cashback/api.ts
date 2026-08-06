@@ -4,6 +4,14 @@ import type {
   ConversionReportEnvelope,
   CashbackListResponse,
   ConversionRecord,
+  Bank,
+  UserPaymentInfo,
+  UpdatePaymentInfoRequest,
+  PaymentListEnvelope,
+  PaymentDetailEnvelope,
+  ReconcileEnvelope,
+  PaymentStatus,
+  DashboardEnvelope,
 } from '@/features/cashback/types';
 import {
   DEFAULT_API_URL,
@@ -23,13 +31,20 @@ export const API_ENDPOINTS = {
   userShopeeConversions: '/api/shopee/conversions',
   adminShopeeConversions: '/api/admin/shopee/conversions',
   shopeeSync: '/api/admin/shopee/conversions/sync',
+  banks: '/api/banks',
+  userPaymentInfo: '/api/user/payment-info',
+  userDashboard: '/api/user/dashboard',
+  adminDashboard: '/api/admin/dashboard',
+  userPayments: '/api/payments',
+  adminReconcile: '/api/admin/payments/reconcile',
+  adminPayments: '/api/admin/payments',
 } as const;
 
 type QueryParams = Record<string, string | number | boolean | undefined | null>;
 
 interface ApiRequestOptions {
   endpoint: string;
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   token?: string;
   params?: QueryParams;
   body?: unknown;
@@ -84,11 +99,32 @@ async function apiRequest<T>(options: ApiRequestOptions): Promise<T> {
       },
     );
 
+    if (response.status === 401) {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+      }
+      return { ok: false, code: 'auth_required' } as T;
+    }
+
     if (!response.ok) {
       return { ok: false, code: errorCode } as T;
     }
 
-    return (await response.json()) as T;
+    const data = (await response.json()) as T;
+    if (
+      data &&
+      typeof data === 'object' &&
+      'ok' in data &&
+      data.ok === false &&
+      'code' in data &&
+      (data.code === 'auth_required' || data.code === 'unauthorized')
+    ) {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+      }
+    }
+
+    return data;
   } catch (err) {
     console.error(`API Error [${endpoint}]:`, err);
     return { ok: false, code: 'network_error' } as T;
@@ -262,3 +298,158 @@ export const syncUserOrders = async (
   }
   return { ok: false, code: res?.code || 'sync_failed' };
 };
+
+/**
+ * Public: Lấy danh sách Ngân hàng Việt Nam hỗ trợ chuyển khoản.
+ */
+export const getBanks = async (): Promise<{
+  ok: boolean;
+  code: string;
+  data?: Bank[];
+}> =>
+  apiRequest<{ ok: boolean; code: string; data?: Bank[] }>({
+    endpoint: API_ENDPOINTS.banks,
+    method: 'GET',
+  });
+
+/**
+ * User: Lấy thông tin tài khoản ngân hàng cá nhân hiện tại.
+ */
+export const getUserPaymentInfo = async (
+  token: string,
+): Promise<{ ok: boolean; code: string; data?: UserPaymentInfo }> =>
+  apiRequest<{ ok: boolean; code: string; data?: UserPaymentInfo }>({
+    endpoint: API_ENDPOINTS.userPaymentInfo,
+    method: 'GET',
+    token,
+  });
+
+/**
+ * User: Cập nhật thông tin tài khoản ngân hàng cá nhân.
+ * Note: Body chỉ chứa 3 trường bank_code, account_number, account_name.
+ */
+export const updateUserPaymentInfo = async (
+  token: string,
+  payload: UpdatePaymentInfoRequest,
+): Promise<{ ok: boolean; code: string; data?: UserPaymentInfo }> =>
+  apiRequest<{ ok: boolean; code: string; data?: UserPaymentInfo }>({
+    endpoint: API_ENDPOINTS.userPaymentInfo,
+    method: 'PUT',
+    token,
+    body: payload,
+    errorCode: 'update_payment_info_failed',
+  });
+
+/**
+ * User: Lấy danh sách đợt thanh toán cá nhân.
+ */
+export const getUserPayments = async (
+  token: string,
+  params?: { page?: number; pageSize?: number; status?: string },
+): Promise<PaymentListEnvelope> =>
+  apiRequest<PaymentListEnvelope>({
+    endpoint: API_ENDPOINTS.userPayments,
+    method: 'GET',
+    token,
+    params,
+  });
+
+/**
+ * User: Lấy chi tiết 1 đợt thanh toán cá nhân.
+ */
+export const getUserPaymentDetail = async (
+  token: string,
+  id: string,
+): Promise<PaymentDetailEnvelope> =>
+  apiRequest<PaymentDetailEnvelope>({
+    endpoint: `${API_ENDPOINTS.userPayments}/${id}`,
+    method: 'GET',
+    token,
+  });
+
+/**
+ * Admin: Kích hoạt đợt đối soát tự động tạo đợt thanh toán cho user đủ >= 50k VNĐ.
+ */
+export const reconcilePayments = async (
+  token: string,
+): Promise<ReconcileEnvelope> =>
+  apiRequest<ReconcileEnvelope>({
+    endpoint: API_ENDPOINTS.adminReconcile,
+    method: 'POST',
+    token,
+    errorCode: 'reconcile_failed',
+  });
+
+/**
+ * Admin: Lấy danh sách tất cả đợt thanh toán hệ thống.
+ */
+export const getAdminPayments = async (
+  token: string,
+  params?: {
+    page?: number;
+    pageSize?: number;
+    userId?: string;
+    status?: string;
+  },
+): Promise<PaymentListEnvelope> =>
+  apiRequest<PaymentListEnvelope>({
+    endpoint: API_ENDPOINTS.adminPayments,
+    method: 'GET',
+    token,
+    params,
+  });
+
+/**
+ * Admin: Lấy chi tiết đợt thanh toán hệ thống.
+ */
+export const getAdminPaymentDetail = async (
+  token: string,
+  id: string,
+): Promise<PaymentDetailEnvelope> =>
+  apiRequest<PaymentDetailEnvelope>({
+    endpoint: `${API_ENDPOINTS.adminPayments}/${id}`,
+    method: 'GET',
+    token,
+  });
+
+/**
+ * Admin: Cập nhật trạng thái đợt thanh toán ('Completed' | 'Cancelled').
+ */
+export const updateAdminPaymentStatus = async (
+  token: string,
+  id: string,
+  status: PaymentStatus,
+): Promise<PaymentDetailEnvelope> =>
+  apiRequest<PaymentDetailEnvelope>({
+    endpoint: `${API_ENDPOINTS.adminPayments}/${id}/status`,
+    method: 'PATCH',
+    token,
+    body: { status },
+    errorCode: 'update_status_failed',
+  });
+
+/**
+ * User: Lấy thông tin thống kê dashboard cá nhân (countOrders, totalCashback, totalPaymentsPending, totalPaymentsCompleted).
+ */
+export const getUserDashboard = async (
+  token: string,
+): Promise<DashboardEnvelope> =>
+  apiRequest<DashboardEnvelope>({
+    endpoint: API_ENDPOINTS.userDashboard,
+    method: 'GET',
+    token,
+  });
+
+/**
+ * Admin: Lấy thông tin thống kê dashboard hệ thống.
+ */
+export const getAdminDashboard = async (
+  token: string,
+): Promise<DashboardEnvelope> =>
+  apiRequest<DashboardEnvelope>({
+    endpoint: API_ENDPOINTS.adminDashboard,
+    method: 'GET',
+    token,
+  });
+
+

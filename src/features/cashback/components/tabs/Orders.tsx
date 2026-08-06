@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
-import { TrendingUp, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
+import { RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ConversionsTable } from '@/features/cashback/components/tables/ConversionsTable';
 import { ClientWrapper } from '@/components/ui/ClientWrapper';
@@ -35,6 +35,10 @@ export function OrdersTab({ token }: OrdersTabProps) {
     ordersFetch.setPage(1);
   };
 
+  const handleSyncSuccess = React.useCallback(() => {
+    void ordersFetch.fetchOrders();
+  }, [ordersFetch]);
+
   return (
     <ClientWrapper>
       <div className="space-y-6 max-w-full overflow-hidden">
@@ -46,16 +50,15 @@ export function OrdersTab({ token }: OrdersTabProps) {
         />
 
         {/* Orders Table Container */}
-        <div className="aff-card p-6 sm:p-8 rounded-2xl max-w-full overflow-hidden">
-          <div className="flex items-center justify-between border-b border-[var(--aff-border)] pb-4 mb-4">
-            <h3 className="font-extrabold text-base sm:text-lg text-[var(--aff-heading)] flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-[var(--aff-orange)]" />
+        <div className="bg-white dark:bg-neutral-900 border border-gray-200/80 dark:border-neutral-800 rounded-md p-4 sm:p-5 shadow-xs max-w-full overflow-hidden">
+          <div className="flex items-center justify-between border-b border-gray-100 dark:border-neutral-800 pb-4 mb-4">
+            <h3 className="font-bold text-sm sm:text-base text-gray-900 dark:text-neutral-100">
               <span>{t('tabs.orders_details')}</span>
             </h3>
             <Button
               onClick={() => setShowSyncModal(true)}
               disabled={ordersFetch.loading}
-              className="bg-[var(--aff-orange)] hover:bg-[var(--aff-orange-hover)] text-white font-bold text-xs py-1.5 px-3 rounded-xl flex items-center gap-2 transition-all cursor-pointer h-9 shadow-sm shrink-0"
+              className="bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold text-xs sm:text-sm py-1.5 px-3 rounded-md flex items-center gap-2 transition-all cursor-pointer h-9 shadow-xs shrink-0 border-0"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               <span>{t('buttons.manual_sync')}</span>
@@ -80,10 +83,10 @@ export function OrdersTab({ token }: OrdersTabProps) {
           />
 
           {/* Instruction Note */}
-          <div className="mt-6 border border-orange-500/20 dark:border-orange-500/10 rounded-2xl overflow-hidden bg-orange-500/5 dark:bg-orange-500/10">
+          <div className="mt-6 border border-orange-500/20 dark:border-orange-500/10 rounded-md overflow-hidden bg-orange-50/80 dark:bg-orange-950/30">
             <button
               onClick={() => setIsNoteOpen(!isNoteOpen)}
-              className="w-full flex items-center justify-between p-4 font-bold text-xs text-amber-600 dark:text-amber-400 hover:bg-orange-500/5 dark:hover:bg-orange-500/5 transition-all text-left cursor-pointer select-none"
+              className="w-full flex items-center justify-between p-3.5 sm:p-4 font-bold text-xs sm:text-sm text-amber-600 dark:text-amber-400 hover:bg-orange-500/5 dark:hover:bg-orange-500/5 transition-all text-left cursor-pointer select-none"
             >
               <span>{t('manual_sync.title')}</span>
               {isNoteOpen ? (
@@ -100,12 +103,12 @@ export function OrdersTab({ token }: OrdersTabProps) {
                   : 'max-h-0'
               }`}
             >
-              <div className="p-4 pt-2 text-xs text-[var(--aff-muted)] leading-relaxed text-left">
+              <div className="p-4 pt-2 text-xs sm:text-sm text-gray-600 dark:text-neutral-300 leading-relaxed text-left">
                 <ul className="list-disc pl-4 space-y-1.5">
                   <li>
                     {t.rich('manual_sync.bullet1', {
                       b: (chunks) => (
-                        <strong className="font-bold text-[var(--aff-text)]">
+                        <strong className="font-bold text-gray-900 dark:text-neutral-100">
                           {chunks}
                         </strong>
                       ),
@@ -114,7 +117,7 @@ export function OrdersTab({ token }: OrdersTabProps) {
                   <li>
                     {t.rich('manual_sync.bullet2', {
                       b: (chunks) => (
-                        <strong className="font-bold text-[var(--aff-text)]">
+                        <strong className="font-bold text-gray-900 dark:text-neutral-100">
                           {chunks}
                         </strong>
                       ),
@@ -123,7 +126,7 @@ export function OrdersTab({ token }: OrdersTabProps) {
                   <li>
                     {t.rich('manual_sync.bullet3', {
                       b: (chunks) => (
-                        <strong className="font-bold text-[var(--aff-text)]">
+                        <strong className="font-bold text-gray-900 dark:text-neutral-100">
                           {chunks}
                         </strong>
                       ),
@@ -142,7 +145,7 @@ export function OrdersTab({ token }: OrdersTabProps) {
           token={token}
           startDate={ordersFetch.startDate}
           endDate={ordersFetch.endDate}
-          onSuccess={() => void ordersFetch.fetchOrders()}
+          onSuccess={handleSyncSuccess}
         />
       </div>
     </ClientWrapper>

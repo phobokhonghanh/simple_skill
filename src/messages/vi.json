@@ -75,7 +75,8 @@
     },
     "messages": {
       "save_success": "Đã lưu thành công.",
-      "delete_confirm": "Bạn có chắc chắn muốn xóa mục này?",
+      "delete_confirm_title": "Xác nhận xóa",
+      "delete_confirm": "Bạn có chắc chắn muốn xóa mục này không?",
       "copied_success": "Đã sao chép vào bộ nhớ tạm."
     },
     "footer": {
@@ -222,7 +223,8 @@
       "category_in_use": "Danh mục này vẫn còn bookmark.",
       "category_has_children": "Hãy xóa danh mục con trước khi xóa danh mục này.",
       "category_not_found": "Không tìm thấy danh mục.",
-      "bookmark_not_found": "Không tìm thấy bookmark."
+      "bookmark_not_found": "Không tìm thấy bookmark.",
+      "category_delete_confirm": "Bạn có chắc chắn muốn xóa danh mục này? Tất cả dữ liệu danh mục con liên quan có thể bị ảnh hưởng."
     }
   },
   "cashback": {
@@ -264,14 +266,15 @@
       "subtitle": "Hoàn tiền không giới hạn khi mua hàng trên Shopee"
     },
     "input": {
-      "placeholder": "Nhập URL sản phẩm",
+      "placeholder": "Nhập URL sản phẩm từ Shopee, Lazada, Tiki...",
       "invalid_link": "URL không hợp lệ. Vui lòng nhập url từ trang Shopee."
     },
     "buttons": {
       "paste": "Dán",
       "buy": "Áp Voucher",
-      "hide_details": "Ẩn chi tiết",
-      "show_details": "Xem chi tiết ({count} sản phẩm)",
+      "copy_link": "Sao chép link",
+      "hide_details": "Ẩn",
+      "show_details": "Chi tiết ({count})",
       "manual_sync": "Đồng bộ thủ công"
     },
     "labels": {
@@ -301,7 +304,7 @@
       "order_id_prefix": "Mã đơn: {id}",
       "purchase_date_prefix": "Ngày: {date}",
       "sub_id_user": "Sub ID (User)",
-      "total_order": "Tổng Đơn",
+      "total_order": "Tổng đơn",
       "shopee_commission": "Hoàn tiền",
       "products_count": "{count} sản phẩm",
       "shopee_order_list": "Danh sách đơn hàng Shopee",
@@ -332,7 +335,9 @@
     "history": {
       "title": "Lịch sử tìm kiếm",
       "empty": "Chưa có sản phẩm nào.",
-      "clear": "Xoá lịch sử"
+      "clear": "Xoá lịch sử",
+      "show_more": "Xem thêm lịch sử",
+      "show_less": "Thu gọn lịch sử"
     },
     "orders": {
       "empty_order": "Chưa có đơn hàng hoàn tiền. Hãy thử chuyển đổi link sản phẩm và mua hàng nhé!"
@@ -349,7 +354,10 @@
       "admin": "Đồng bộ đơn hàng",
       "payment": "Thanh toán",
       "admin_cashbacks": "Quản lý hoàn tiền",
-      "admin_conversions": "Báo cáo đơn hàng"
+      "admin_conversions": "Báo cáo đơn hàng",
+      "admin_payments": "Quản lý thanh toán",
+      "bank_profile": "Cấu hình ngân hàng",
+      "payment_history": "Lịch sử thanh toán"
     },
     "sync": {
       "shopee_conversions": "Đồng bộ đơn hàng Shopee",
@@ -368,8 +376,83 @@
       "guest_mode": "Bạn đang tìm kiếm với tư cách khách. Đăng nhập để tự động tích lũy hoàn tiền."
     },
     "payment": {
-      "coming_soon": "Tính năng thanh toán đang được phát triển. Vui lòng quay lại sau!",
-      "badge": "Sắp ra mắt"
+      "title": "Thanh Toán & Tích Lũy",
+      "subtitle": "Quản lý tài khoản nhận thanh toán và lịch sử nhận tiền hoàn",
+      "accumulated_balance": "Tích lũy chờ thanh toán",
+      "completed_payments": "Đã thanh toán",
+      "pending_payments": "Chờ thanh toán",
+      "threshold_notice": "Ngưỡng nhận thanh toán tự động là 50.000 VNĐ",
+      "payout_schedule_notice": "Thanh toán sẽ được tổng hợp vào thứ 6 khi số tiền chờ thanh toán đạt đến mức tối thiểu <orange>50.000 vnd</orange>.",
+      "missing_bank_warning": "🎉 Bạn đã đạt ngưỡng nhận thanh toán! Vui lòng cập nhật thông tin ngân hàng để nhận tiền.",
+      "configure_bank_now": "Cập nhật ngân hàng ngay",
+      "bank_profile_title": "Cấu hình Tài khoản Ngân hàng",
+      "bank_profile_desc": "Cung cấp đúng số tài khoản để nhận tiền hoàn tự động",
+      "select_bank": "Chọn ngân hàng",
+      "search_bank_placeholder": "Tìm mã hoặc tên ngân hàng...",
+      "account_number": "Số tài khoản",
+      "account_number_placeholder": "Nhập số tài khoản...",
+      "account_name": "Tên chủ tài khoản",
+      "account_name_placeholder": "NHAP TEN KHONG DAU (VD: NGUYEN VAN A)",
+      "save_bank_info": "Lưu thông tin ngân hàng",
+      "saving": "Đang lưu...",
+      "bank_info_saved": "Đã cập nhật thông tin ngân hàng thành công!",
+      "err_select_bank": "Vui lòng chọn ngân hàng",
+      "err_account_number": "Vui lòng nhập số tài khoản",
+      "err_account_number_format": "Số tài khoản chỉ được chứa chữ cái và số",
+      "err_account_name": "Vui lòng nhập tên chủ tài khoản",
+      "err_update_failed": "Cập nhật thất bại. Vui lòng thử lại.",
+      "no_bank_found": "Không tìm thấy ngân hàng",
+      "no_bank_configured": "Người dùng chưa cấu hình tài khoản ngân hàng",
+      "warning_title": "CẢNH BÁO",
+      "payment_history_title": "Lịch sử thanh toán",
+      "history_subtitle": "Theo dõi tất cả các đợt thanh toán tiền hoàn từ hệ thống",
+      "empty_payments": "Chưa có đợt thanh toán nào",
+      "payment_id": "Mã đợt thanh toán",
+      "amount": "Số tiền",
+      "cashback_count": "Số đơn đính kèm",
+      "created_at": "Thời gian tạo",
+      "status": "Trạng thái",
+      "filters": {
+        "status": "Trạng thái"
+      },
+      "status_all": "Tất cả",
+      "status_pending": "Chờ xử lý",
+      "status_completed": "Hoàn thành",
+      "status_cancelled": "Đã hủy",
+      "status_pending_admin": "Chờ chuyển",
+      "loading_payments": "Đang tải danh sách đợt thanh toán...",
+      "attached_orders": "{count} đơn đính kèm",
+      "prev_page": "Trang trước",
+      "next_page": "Trang sau",
+      "page_info": "Trang {page} / {total}",
+      "checkout_id": "Checkout: {id}",
+      "attached_orders_title": "Danh sách đơn hoàn tiền ({count})",
+      "reconcile_now": "Kích hoạt đối soát tự động",
+      "reconciling": "Đang đối soát...",
+      "reconcile_success": "Đã kích hoạt đối soát thành công! Tạo {count} đợt thanh toán mới với tổng tiền {amount} VNĐ.",
+      "reconcile_result_toast": "Tạo thành công {count} đợt thanh toán mới với tổng tiền {amount} VNĐ ({processed} đơn hoàn tiền đã cập nhật).",
+      "vietqr_title": "Mã VietQR Thanh Toán",
+      "vietqr_subtitle": "Quét mã bằng App Ngân hàng để chuyển khoản",
+      "confirm_completed": "Xác nhận Đã chuyển khoản",
+      "confirm_completed_desc": "Đổi trạng thái sang Hoàn thành và đóng băng thông tin ngân hàng.",
+      "cancel_payment": "Hủy đợt thanh toán",
+      "cancel_payment_desc": "Hủy đợt thanh toán và trả cashback về trạng thái chờ đối soát.",
+      "already_completed": "Đợt thanh toán đã hoàn thành",
+      "already_cancelled": "Đợt thanh toán đã bị hủy",
+      "bank_snapshot_notice": "Thông tin ngân hàng này đã được chụp đóng băng (Snapshot) tại thời điểm chuyển khoản.",
+      "view_details": "Xem chi tiết",
+      "payment_details": "Chi tiết đợt thanh toán",
+      "admin_title": "Quản lý Thanh toán & Đối soát",
+      "admin_subtitle": "Kích hoạt đợt chuyển khoản tự động và xử lý lệnh chuyển tiền VietQR",
+      "admin_payout_title": "Quản lý Thanh toán & Đối soát",
+      "admin_payout_subtitle": "Kích hoạt đợt chuyển khoản tự động và xử lý lệnh chuyển tiền VietQR",
+      "filter_user_placeholder": "Lọc theo User ID...",
+      "filter_label": "Lọc:",
+      "no_bank_provided": "Chưa điền ngân hàng",
+      "admin_modal_title": "Chi tiết Lệnh Thanh toán (Admin)",
+      "payout_amount": "Cần Chuyển Khoản",
+      "memo_label": "Nội dung: Payment {id}",
+      "login_required_admin": "Vui lòng đăng nhập với quyền Admin để truy cập."
     },
     "filters": {
       "platform": "Nền tảng",
@@ -379,8 +462,8 @@
       "start_date": "Từ ngày",
       "end_date": "Đến ngày",
       "search_user_id": "Tìm User ID",
-      "all_platforms": "Tất cả các sàn",
-      "all_statuses": "Tất cả trạng thái"
+      "all_platforms": "Sàn",
+      "all_statuses": "Trạng thái"
     },
     "sort": {
       "by_time": "Sắp xếp thời gian",
@@ -407,7 +490,9 @@
     "buttons": {
       "login": "Đăng nhập",
       "logout": "Đăng xuất",
-      "login_google": "Đăng nhập Google"
+      "login_google": "Đăng nhập Google",
+      "payment_setting": "Thiết lập thanh toán",
+      "back_to_cashback": "Quay lại trang hoàn tiền"
     },
     "protected": {
       "require_login": "Vui lòng đăng nhập để truy cập trang này.",

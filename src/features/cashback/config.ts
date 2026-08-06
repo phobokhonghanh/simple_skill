@@ -48,12 +48,26 @@ export const CASHBACK_STATUSES = {
   WAITING_FOR_PAYMENT: 'waiting for payment',
 } as const;
 
+/** Các trạng thái của đợt thanh toán (Payment) */
+export const PAYMENT_STATUSES = {
+  PENDING: 'Pending',
+  COMPLETED: 'Completed',
+  CANCELLED: 'Cancelled',
+} as const;
+
 /** Type mô tả trạng thái đơn hoàn tiền */
 export type CashbackStatus =
   (typeof CASHBACK_STATUSES)[keyof typeof CASHBACK_STATUSES];
 
+/** Type mô tả trạng thái đợt thanh toán */
+export type PaymentStatus =
+  (typeof PAYMENT_STATUSES)[keyof typeof PAYMENT_STATUSES];
+
 /** Danh sách giá trị trạng thái hoàn tiền hợp lệ */
-export const KNOWN_STATUS_VALUES = Object.values(CASHBACK_STATUSES) as string[];
+export const KNOWN_STATUS_VALUES: string[] = [
+  ...Object.values(CASHBACK_STATUSES),
+  ...Object.values(PAYMENT_STATUSES).map((s) => s.toLowerCase()),
+];
 
 /**
  * Trả về mảng sub_id được chuẩn hóa gửi kèm request API affiliate.
@@ -82,4 +96,12 @@ export const STATUS_OPTIONS = [
   { value: CASHBACK_STATUSES.COMPLETED, labelKey: 'status.completed' },
   { value: CASHBACK_STATUSES.REJECTED, labelKey: 'status.rejected' },
   { value: CASHBACK_STATUSES.CANCELLED, labelKey: 'status.cancelled' },
+] as const;
+
+/** Danh sách tùy chọn trạng thái phục vụ lọc đợt thanh toán (User & Admin) */
+export const PAYMENT_STATUS_OPTIONS = [
+  { value: '', labelKey: 'status_all' },
+  { value: PAYMENT_STATUSES.PENDING, labelKey: 'status_pending' },
+  { value: PAYMENT_STATUSES.COMPLETED, labelKey: 'status_completed' },
+  { value: PAYMENT_STATUSES.CANCELLED, labelKey: 'status_cancelled' },
 ] as const;

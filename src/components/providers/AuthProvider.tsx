@@ -193,6 +193,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, [handleGoogleLogin]);
 
+  const isClearingSessionRef = React.useRef(false);
+
+  const clearUnauthorizedSession = React.useCallback(() => {
+    if (isClearingSessionRef.current) return;
+    isClearingSessionRef.current = true;
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    localStorage.removeItem(AUTH_USER_KEY);
+    setAuthState({ token: null, user: null });
+    processingTokenRef.current = null;
+    showErrorToast(tAuth('protected.require_login'));
+    setTimeout(() => {
+      isClearingSessionRef.current = false;
+    }, 1000);
+  }, [showErrorToast, tAuth]);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleUnauthorized = () => {
+      clearUnauthorizedSession();
+    };
+
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+    return () => {
+      window.removeEventListener('auth:unauthorized', handleUnauthorized);
+    };
+  }, [clearUnauthorizedSession]);
+
   const handleLogout = React.useCallback(async () => {
     const currentToken = authState.token;
     localStorage.removeItem(AUTH_TOKEN_KEY);
@@ -280,6 +308,16 @@ export function ProtectedRoute({
 }: ProtectedRouteProps) {
   const tAuth = useTranslations('auth');
   const { isAuthenticated, isAdmin, initiateGoogleLogin } = useAuth();
+  const emptySubscribe = React.useCallback(() => () => {}, []);
+  const mounted = React.useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+
+  if (!mounted) {
+    return null;
+  }
 
   if (!isAuthenticated) {
     if (fallback) return <>{fallback}</>;

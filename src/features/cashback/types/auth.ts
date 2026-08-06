@@ -8,6 +8,10 @@ export interface User {
   name: string;
   picture: string;
   role: UserRole;
+  bankCode?: string | null;
+  bankName?: string | null;
+  accountNumber?: string | null;
+  accountName?: string | null;
   createdAt?: string | null;
   updatedAt?: string | null;
 }

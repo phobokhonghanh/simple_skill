@@ -12,7 +12,15 @@ export const formatDate = (
   if (!dateInput) return fallback;
   let date: Date;
   if (typeof dateInput === 'number') {
-    date = new Date(dateInput * 1000);
+    // Tự động phân biệt Unix timestamp tính bằng giây (< 1e11) và milliseconds (>= 1e11)
+    date = dateInput > 1e11 ? new Date(dateInput) : new Date(dateInput * 1000);
+  } else if (
+    typeof dateInput === 'string' &&
+    !isNaN(Number(dateInput)) &&
+    dateInput.trim() !== ''
+  ) {
+    const num = Number(dateInput);
+    date = num > 1e11 ? new Date(num) : new Date(num * 1000);
   } else {
     date = new Date(dateInput);
   }
@@ -26,6 +34,71 @@ export const formatDate = (
   const minutes = String(date.getMinutes()).padStart(2, '0');
 
   return `${day}/${month}/${year} ${hours}:${minutes}`;
+};
+
+/**
+ * Định dạng timestamp (giây) hoặc chuỗi ngày ISO thành dạng chỉ ngày tháng năm (DD/MM/YYYY).
+ *
+ * @param dateInput - Unix timestamp (tính bằng giây), timestamp milisec, hoặc chuỗi ngày ISO.
+ * @param fallback - Chuỗi dự phòng khi dateInput rỗng (mặc định '—').
+ * @returns Chuỗi ngày chỉ bao gồm DD/MM/YYYY (ví dụ: "06/08/2026").
+ */
+export const formatDateOnly = (
+  dateInput?: string | number | null,
+  fallback = '',
+): string => {
+  if (!dateInput) return fallback;
+  let date: Date;
+  if (typeof dateInput === 'number') {
+    date = dateInput > 1e11 ? new Date(dateInput) : new Date(dateInput * 1000);
+  } else if (
+    typeof dateInput === 'string' &&
+    !isNaN(Number(dateInput)) &&
+    dateInput.trim() !== ''
+  ) {
+    const num = Number(dateInput);
+    date = num > 1e11 ? new Date(num) : new Date(num * 1000);
+  } else {
+    date = new Date(dateInput);
+  }
+
+  if (isNaN(date.getTime())) return fallback;
+
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+};
+
+/**
+ * Định dạng timestamp hoặc chuỗi ngày ISO thành dạng ngắn DD/MM (ví dụ: "06/08").
+ */
+export const formatDayMonth = (
+  dateInput?: string | number | null,
+  fallback = '',
+): string => {
+  if (!dateInput) return fallback;
+  let date: Date;
+  if (typeof dateInput === 'number') {
+    date = dateInput > 1e11 ? new Date(dateInput) : new Date(dateInput * 1000);
+  } else if (
+    typeof dateInput === 'string' &&
+    !isNaN(Number(dateInput)) &&
+    dateInput.trim() !== ''
+  ) {
+    const num = Number(dateInput);
+    date = num > 1e11 ? new Date(num) : new Date(num * 1000);
+  } else {
+    date = new Date(dateInput);
+  }
+
+  if (isNaN(date.getTime())) return fallback;
+
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+
+  return `${day}/${month}`;
 };
 
 /**

@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useTranslations } from 'next-intl';
 import {
   Edit3,
   ExternalLink,
@@ -13,16 +14,17 @@ import {
   Loader2,
   ChevronDown,
   Plus,
+  Bookmark as BookmarkIcon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { getCategoryColorPreset } from '@/features/bookmarks/colors';
 import type {
   Bookmark,
   PaginationMetadata,
   BookmarkFilters,
 } from '@/features/bookmarks/types';
-import type { BookmarkDashboardLabels } from '@/features/bookmarks/types';
 
 /** Props cho Component Danh sách Bookmark (BookmarkList) */
 interface BookmarkListProps {
@@ -32,8 +34,6 @@ interface BookmarkListProps {
   pagination: PaginationMetadata;
   /** Bộ lọc hiện tại */
   filters: BookmarkFilters;
-  /** Bản dịch nhãn ngôn ngữ i18n */
-  labels: BookmarkDashboardLabels;
   /** Trạng thái đang tải dữ liệu */
   isLoading: boolean;
   /** Quyền tạo Bookmark mới */
@@ -57,7 +57,6 @@ interface BookmarkListProps {
 export function BookmarkList({
   bookmarks,
   filters,
-  labels,
   isLoading,
   canCreateBookmark,
   onUpdateFilters,
@@ -65,6 +64,9 @@ export function BookmarkList({
   onDelete,
   onCreateBookmark,
 }: BookmarkListProps) {
+  const tBookmarks = useTranslations('bookmarks');
+  const tCommon = useTranslations('common');
+
   // Trạng thái sắp xếp địa phương ở Client-side
   const [localSortBy, setLocalSortBy] = React.useState<
     'createdAt' | 'title' | 'url'
@@ -166,7 +168,7 @@ export function BookmarkList({
                 name="q"
                 defaultValue={filters.query}
                 disabled={isLoading}
-                placeholder={labels.searchPlaceholder}
+                placeholder={tBookmarks('search_placeholder') || 'Search bookmarks...'}
                 className="h-9 w-full bg-transparent pl-9 pr-3 text-sm outline-none disabled:opacity-75"
               />
             </div>
@@ -175,7 +177,7 @@ export function BookmarkList({
               disabled={isLoading}
               size="sm"
               className="h-8 px-3 shrink-0"
-              title={labels.searchPlaceholder}
+              title={tBookmarks('search_placeholder') || 'Search'}
             >
               <Search className="h-4 w-4" />
             </Button>
@@ -187,7 +189,7 @@ export function BookmarkList({
               onClick={() => setIsAdvancedSortOpen(!isAdvancedSortOpen)}
               className="flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
-              <span>{labels.advancedSort}</span>
+              <span>{tBookmarks('sort.advanced') || 'Advanced Sort'}</span>
               <ChevronDown
                 className={`h-3.5 w-3.5 transition-transform ${isAdvancedSortOpen ? 'rotate-180' : ''}`}
               />
@@ -198,7 +200,7 @@ export function BookmarkList({
         {isAdvancedSortOpen && (
           <div className="flex flex-wrap items-center gap-3 border-t bg-muted/20 px-3 py-2.5 animate-in slide-in-from-top-1">
             <span className="text-xs text-muted-foreground font-medium">
-              {labels.advancedSortLabel}:
+              {tBookmarks('sort.label') || 'Sort By'}:
             </span>
             <select
               value={filters.sortBy ?? 'createdAt'}
@@ -210,9 +212,9 @@ export function BookmarkList({
               }
               className="h-7 rounded bg-background px-2 text-xs outline-none border border-input focus:ring-1 focus:ring-ring"
             >
-              <option value="createdAt">{labels.sortCreatedAt}</option>
-              <option value="title">{labels.bookmarkTitle}</option>
-              <option value="url">{labels.bookmarkUrl}</option>
+              <option value="createdAt">{tBookmarks('sort.created_at') || 'Date Created'}</option>
+              <option value="title">{tBookmarks('forms.title') || 'Title'}</option>
+              <option value="url">{tBookmarks('forms.url') || 'URL'}</option>
             </select>
             <select
               value={filters.sortOrder ?? 'desc'}
@@ -224,15 +226,15 @@ export function BookmarkList({
               }
               className="h-7 rounded bg-background px-2 text-xs outline-none border border-input focus:ring-1 focus:ring-ring"
             >
-              <option value="asc">{labels.sortAsc}</option>
-              <option value="desc">{labels.sortDesc}</option>
+              <option value="asc">{tBookmarks('sort.asc') || 'Ascending'}</option>
+              <option value="desc">{tBookmarks('sort.desc') || 'Descending'}</option>
             </select>
           </div>
         )}
       </Card>
 
       {/* Thẻ Danh sách Bookmark & Tiêu đề Sắp xếp Địa phương */}
-      <Card className="rounded-md border bg-card shadow-sm p-0 gap-0">
+      <Card className="rounded-md border bg-card shadow-sm p-0 gap-0 overflow-hidden">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b bg-muted/30 px-3 py-2">
           <Button
             type="button"
@@ -241,25 +243,32 @@ export function BookmarkList({
             size="icon-sm"
             variant="secondary"
             className="h-8 w-8 shrink-0 bg-background shadow-sm hover:bg-muted"
-            title={labels.addBookmark}
+            title={tBookmarks('add_bookmark') || 'Add Bookmark'}
           >
             <Plus className="h-4 w-4" />
           </Button>
 
           <div className="flex items-center gap-4 text-xs pr-1">
             <span className="hidden sm:inline-block text-muted-foreground font-medium mr-1">
-              {labels.localSort}
+              {tBookmarks('sort.local') || 'Local Sort:'}
             </span>
-            {renderLocalSortHeader('title', labels.bookmarkTitle)}
-            {renderLocalSortHeader('url', labels.bookmarkUrl)}
-            {renderLocalSortHeader('createdAt', labels.sortCreatedAt)}
+            {renderLocalSortHeader('title', tBookmarks('forms.title') || 'Title')}
+            {renderLocalSortHeader('url', tBookmarks('forms.url') || 'URL')}
+            {renderLocalSortHeader('createdAt', tBookmarks('sort.created_at') || 'Date')}
           </div>
         </div>
 
         {sortedBookmarks.length === 0 ? (
-          <p className="px-4 py-10 text-center text-sm text-muted-foreground">
-            {labels.emptyBookmarks}
-          </p>
+          <div className="p-6">
+            <EmptyState
+              icon={BookmarkIcon}
+              title={tBookmarks('empty_bookmarks') || 'No Bookmarks Found'}
+              description={tBookmarks('empty_bookmarks_desc') || 'Try searching with another keyword or add a new bookmark.'}
+              actionLabel={canCreateBookmark ? (tBookmarks('add_bookmark') || 'Add Bookmark') : undefined}
+              onAction={canCreateBookmark ? onCreateBookmark : undefined}
+              actionIcon={Plus}
+            />
+          </div>
         ) : (
           <ul className="divide-y">
             {sortedBookmarks.map((bookmark) => {
@@ -311,7 +320,7 @@ export function BookmarkList({
                       variant="outline"
                       size="icon-sm"
                       asChild
-                      title={labels.open}
+                      title={tCommon('buttons.open') || 'Open'}
                     >
                       <a
                         href={bookmark.url}
@@ -325,7 +334,7 @@ export function BookmarkList({
                       type="button"
                       variant="outline"
                       size="icon-sm"
-                      title={labels.edit}
+                      title={tCommon('buttons.edit') || 'Edit'}
                       onClick={() => onEdit(bookmark)}
                     >
                       <Edit3 className="h-4 w-4" />
@@ -334,7 +343,7 @@ export function BookmarkList({
                       type="button"
                       variant="destructive"
                       size="icon-sm"
-                      title={labels.delete}
+                      title={tCommon('buttons.delete') || 'Delete'}
                       onClick={() => onDelete(bookmark.id)}
                     >
                       <Trash2 className="h-4 w-4" />

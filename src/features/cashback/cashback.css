@@ -1,9 +1,15 @@
-/* === Affiliate Page Theme Variables === */
+/* === Centralized Theme Design Tokens for Cashback Module === */
 .affiliate-page-container {
+  /* Font Family Central Config (Change here to affect all text in cashback) */
+  --aff-font-family: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Color System */
   --aff-orange: #ff5722;
   --aff-orange-hover: #f4511e;
   --aff-orange-glow: rgba(255, 87, 34, 0.15);
   --aff-orange-border: rgba(255, 87, 34, 0.25);
+  --aff-money: #f59e0b;
+
   --aff-bg: oklch(98.5% 0.005 30deg);
   --aff-surface: oklch(100% 0 0deg);
   --aff-border: oklch(92% 0.01 30deg);
@@ -16,10 +22,12 @@
 
   background-color: var(--aff-bg);
   color: var(--aff-text);
+  font-family: var(--aff-font-family);
   min-height: 100vh;
 }
 
 .dark .affiliate-page-container {
+  --aff-money: #fbbf24;
   --aff-bg: oklch(15% 0.008 30deg);
   --aff-surface: oklch(19% 0.012 30deg / 85%);
   --aff-border: oklch(28% 0.015 30deg / 70%);
@@ -29,6 +37,16 @@
   --aff-card-shadow:
     0 4px 24px -2px rgba(0, 0, 0, 0.3), 0 2px 10px -1px rgba(255, 87, 34, 0.03);
   --aff-history-item-hover: oklch(23% 0.015 30deg / 80%);
+}
+
+/* Scrollbar-none Utility for smooth mobile tab sliding without scrollbars */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 
 /* === Custom Classes === */
@@ -43,11 +61,6 @@
   background-color: var(--aff-surface);
   border: 1px solid var(--aff-border);
   box-shadow: var(--aff-card-shadow);
-  transition: border-color 0.2s ease;
-}
-
-.aff-card:hover {
-  border-color: var(--aff-orange-border);
 }
 
 .aff-input {
@@ -217,3 +230,101 @@
   position: relative;
   overflow: hidden;
 }
+
+/* === Centralized Reusable Feature UI Classes === */
+.aff-card-container {
+  background-color: var(--aff-surface);
+  border: 1px solid var(--aff-border);
+  border-radius: 0.375rem; /* rounded-md */
+  padding: 1rem;
+  box-shadow: var(--aff-card-shadow);
+  max-width: 100%;
+  overflow: hidden;
+}
+@media (min-width: 640px) {
+  .aff-card-container {
+    padding: 1.25rem;
+  }
+}
+
+.aff-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-bottom: 1px solid var(--aff-border);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+@media (min-width: 640px) {
+  .aff-card-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.aff-card-title {
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--aff-heading);
+}
+@media (min-width: 640px) {
+  .aff-card-title {
+    font-size: 1rem;
+  }
+}
+
+.aff-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  background-color: var(--aff-bg);
+  padding: 0.25rem;
+  border-radius: 0.375rem;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.aff-filter-pill {
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  color: var(--aff-muted);
+  font-weight: 500;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+.aff-filter-pill:hover {
+  color: var(--aff-heading);
+}
+
+.aff-filter-pill.active {
+  background-color: var(--aff-surface);
+  color: var(--aff-orange);
+  font-weight: 700;
+  border-color: var(--aff-border);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.aff-item-row {
+  padding: 0.875rem 1rem;
+  border-radius: 0.375rem;
+  background-color: var(--aff-surface);
+  border: 1px solid var(--aff-border);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.aff-notice-box {
+  border: 1px solid var(--aff-orange-border);
+  background-color: var(--aff-orange-glow);
+  padding: 0.875rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  color: var(--aff-text);
+  line-height: 1.6;
+}
+

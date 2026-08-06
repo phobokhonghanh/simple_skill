@@ -126,6 +126,9 @@ export function useLinkConverter() {
 
           if (productData) {
             productData.image = formatImageUrl(productData.image, 'shopee');
+            if (!productData.lastUpdate) {
+              productData.lastUpdate = String(Date.now());
+            }
             setProduct(productData);
             setCurrentUrl(urlToFetch);
             setInputUrl('');
@@ -195,7 +198,15 @@ export function useLinkConverter() {
     setInputUrl('');
     setValidationError(null);
     setApiError(null);
-    setProduct(item.product);
+    const prod = item.product
+      ? {
+          ...item.product,
+          lastUpdate:
+            item.product.lastUpdate ||
+            (item.timestamp ? String(item.timestamp) : String(Date.now())),
+        }
+      : null;
+    setProduct(prod);
     setAffiliateLink(item.affiliateLink);
     setCurrentUrl(item.url);
   };

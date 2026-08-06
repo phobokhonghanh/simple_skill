@@ -7,3 +7,6 @@ export * from './cashback';
 export * from './navigation';
 export * from './common';
 export * from './convert';
+export * from './bank';
+export * from './payment';
+export * from './dashboard';

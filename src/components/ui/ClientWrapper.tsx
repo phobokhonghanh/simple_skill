@@ -1,30 +1,33 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import * as React from 'react';
 
 /** Props cho ClientWrapper */
 export interface ClientWrapperProps {
   /** Component con chỉ render ở phía Client */
   children: React.ReactNode;
-  /** UI dự phòng tùy chọn trong quá trình hydrations */
+  /** UI dự phòng tùy chọn trong quá trình hydration */
   fallback?: React.ReactNode;
 }
 
-const ClientWrapperComponent = ({ children }: ClientWrapperProps) => {
-  return <>{children}</>;
-};
-
 /**
- * Component Wrapper thực thi render hoàn toàn ở Client-side (vô hiệu hóa SSR).
- * Sử dụng next/dynamic với `ssr: false` nhằm tránh lỗi Hydration Mismatch cho các phần tử phụ thuộc vào browser API.
+ * Component Wrapper thực thi render an toàn ở Client-side, loại bỏ lỗi Hydration Mismatch trong Next.js.
  *
  * @param props - ClientWrapperProps chứa children và fallback.
- * @returns JSX Element render động ở Client.
+ * @returns JSX Element render ở Client sau khi đã mounted.
  */
-export const ClientWrapper = dynamic(
-  () => Promise.resolve(ClientWrapperComponent),
-  {
-    ssr: false,
-  },
-);
+const emptySubscribe = () => () => {};
+
+export function ClientWrapper({ children, fallback = null }: ClientWrapperProps) {
+  const mounted = React.useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+
+  if (!mounted) {
+    return <>{fallback}</>;
+  }
+
+  return <>{children}</>;
+}

@@ -93,7 +93,7 @@ export function Header({
       {/* Tab Switcher if logged in */}
       <ClientWrapper>
         {user && (
-          <div className="relative inline-flex border-b border-[var(--aff-border)] mb-6 overflow-x-auto gap-2 pb-0 scrollbar-none max-w-full">
+          <div className="relative inline-flex border-b border-[var(--aff-border)] mb-0 overflow-x-auto gap-2 pb-0 scrollbar-none max-w-full">
             {tabConfigs
               .filter(
                 (tab) => !tab.requiredRole || user.role === tab.requiredRole,

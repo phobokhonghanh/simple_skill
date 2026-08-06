@@ -24,22 +24,28 @@ export function OrderStats({
   const t = useTranslations('cashback');
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4">
       <StatCard
         title={t('labels.total_cashback')}
         value={
-          <span className="text-amber-500 dark:text-amber-400">
+          <span className="text-orange-500 dark:text-orange-400 font-bold text-xs sm:text-base">
             {formatCurrency(totalCashback)}
           </span>
         }
-        icon={<Coin size={28} className="coin-2d" animate={false} />}
+        icon={<Coin size={24} className="coin-2d" animate={false} />}
         sparkline={sparklinePaths}
+        className="rounded-md p-3 sm:p-4 gap-1.5 sm:gap-2"
       />
       <StatCard
         title={t('labels.recorded_orders')}
-        value={`${totalOrders} ${t('labels.order_unit')}`}
-        icon={<ShoppingBag className="w-6 h-6" />}
-        iconBgClass="bg-orange-500/10 text-orange-600 dark:text-orange-400"
+        value={
+          <span className="text-gray-900 dark:text-neutral-100 font-bold text-xs sm:text-base">
+            {`${totalOrders} ${t('labels.order_unit')}`}
+          </span>
+        }
+        icon={<ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 dark:text-neutral-300" />}
+        iconBgClass="bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300"
+        className="rounded-md p-3 sm:p-4 gap-1.5 sm:gap-2"
       />
     </div>
   );

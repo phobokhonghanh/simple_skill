@@ -56,9 +56,10 @@ export function useFetchOrders<T = CashbackRecord | ConversionRecord>({
   userId,
 }: UseFetchOrdersOptions = {}) {
   const tCommon = useTranslations('common');
+  const tAuth = useTranslations('auth');
   const { error: showErrorToast } = useToast();
   const { token: contextToken } = useAuth();
-  const token = explicitToken ?? (role === 'admin' ? contextToken : null);
+  const token = explicitToken ?? contextToken;
 
   const showErrorToastRef = React.useRef(showErrorToast);
   React.useEffect(() => {
@@ -136,7 +137,7 @@ export function useFetchOrders<T = CashbackRecord | ConversionRecord>({
       } else {
         const errMsg =
           res && typeof res === 'object' && 'code' in res && res.code === 'auth_required'
-            ? tCommon('auth.protected.require_login')
+            ? tAuth('protected.require_login')
             : tCommon('errors.not_found');
         setError(errMsg);
         showErrorToastRef.current(errMsg);
@@ -159,6 +160,7 @@ export function useFetchOrders<T = CashbackRecord | ConversionRecord>({
     subId,
     userId,
     tCommon,
+    tAuth,
   ]);
 
   React.useEffect(() => {
