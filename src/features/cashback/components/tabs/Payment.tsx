@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { CircleDollarSign } from 'lucide-react';
 import { ClientWrapper } from '@/components/ui/ClientWrapper';
 import Coin from '@/features/cashback/components/Coin';
@@ -13,6 +13,7 @@ import { formatCurrency } from '@/features/cashback/utils';
 
 export function PaymentTab() {
   const tPay = useTranslations('cashback.payment');
+  const locale = useLocale();
   const { token } = useCashbackAuth();
   // Always fetch user's own dashboard stats for Payment tab regardless of role
   const { stats: dashStats } = useUserDashboard(token, false);
@@ -33,7 +34,7 @@ export function PaymentTab() {
 
   const handleOpenPaymentSetting = () => {
     if (typeof window !== 'undefined') {
-      window.open('/cashback/payment-setting', '_blank');
+      window.open(`/${locale}/cashback/payment-setting`, '_blank');
     }
   };
 
