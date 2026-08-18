@@ -194,11 +194,15 @@ export function AdminPaymentsView({ token }: AdminPaymentsViewProps) {
 
   React.useEffect(() => {
     const activeBtn = statusFilterRef.current[statusFilter];
-    if (activeBtn) {
-      activeBtn.scrollIntoView({
+    if (activeBtn && activeBtn.parentElement) {
+      const container = activeBtn.parentElement;
+      const containerWidth = container.clientWidth;
+      const elLeft = activeBtn.offsetLeft;
+      const elWidth = activeBtn.offsetWidth;
+      const targetScrollLeft = elLeft - containerWidth / 2 + elWidth / 2;
+      container.scrollTo({
+        left: targetScrollLeft,
         behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center',
       });
     }
   }, [statusFilter]);

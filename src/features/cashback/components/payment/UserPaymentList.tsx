@@ -3,21 +3,17 @@
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
 import {
-  Building2,
-  Calendar,
-  Layers,
   Eye,
   Loader2,
   AlertCircle,
   Copy,
   Check,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { StatusBadge } from '../StatusBadge';
 import { Pagination } from '@/components/ui/Pagination';
 import { PaymentDetailModal } from './PaymentDetailModal';
 import { PAYMENT_STATUS_OPTIONS } from '@/features/cashback/config';
-import { formatCurrency, formatDate, formatDateOnly } from '@/features/cashback/utils';
+import { formatCurrency, formatDateOnly } from '@/features/cashback/utils';
 import type { PaymentRecord, PaymentDetailRecord } from '@/features/cashback/types';
 
 function PaymentCodeCell({
@@ -119,11 +115,15 @@ export function UserPaymentList({
 
   React.useEffect(() => {
     const activeBtn = statusFilterRef.current[statusFilter];
-    if (activeBtn) {
-      activeBtn.scrollIntoView({
+    if (activeBtn && activeBtn.parentElement) {
+      const container = activeBtn.parentElement;
+      const containerWidth = container.clientWidth;
+      const elLeft = activeBtn.offsetLeft;
+      const elWidth = activeBtn.offsetWidth;
+      const targetScrollLeft = elLeft - containerWidth / 2 + elWidth / 2;
+      container.scrollTo({
+        left: targetScrollLeft,
         behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center',
       });
     }
   }, [statusFilter]);

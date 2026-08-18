@@ -199,7 +199,7 @@ export function ProductCard({
             {/* Thời gian cập nhật ở trên nút bấm, thuộc cùng khối thông tin sản phẩm */}
             <div className="flex items-center gap-1 text-[11px] sm:text-xs text-gray-400 dark:text-neutral-500 font-medium shrink-0 ml-auto">
               <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              <span>{t('labels.updated_at', { date: formatDate(product.lastUpdate || Date.now()) })}</span>
+              <span>{t('labels.updated_at', { date: formatDate(product.lastUpdate || 0) })}</span>
             </div>
           </div>
         </div>

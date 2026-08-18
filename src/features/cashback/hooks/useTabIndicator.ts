@@ -27,11 +27,6 @@ export function useTabIndicator<T extends string>(
         left: activeEl.offsetLeft,
         width: activeEl.offsetWidth,
       });
-      activeEl.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center',
-      });
     }
   }, [activeTab]);
 
@@ -44,6 +39,21 @@ export function useTabIndicator<T extends string>(
     window.addEventListener('resize', updateIndicator);
     return () => window.removeEventListener('resize', updateIndicator);
   }, [updateIndicator]);
+
+  React.useEffect(() => {
+    const activeEl = tabsRef.current[activeTab];
+    if (activeEl && activeEl.parentElement) {
+      const container = activeEl.parentElement;
+      const containerWidth = container.clientWidth;
+      const elLeft = activeEl.offsetLeft;
+      const elWidth = activeEl.offsetWidth;
+      const targetScrollLeft = elLeft - containerWidth / 2 + elWidth / 2;
+      container.scrollTo({
+        left: targetScrollLeft,
+        behavior: 'smooth',
+      });
+    }
+  }, [activeTab]);
 
   return { tabsRef, indicatorStyle };
 }
